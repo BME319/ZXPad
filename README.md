@@ -1,4 +1,3 @@
 # ZXPad 
 
-aaa===bbb
-
+aaa=bbb
