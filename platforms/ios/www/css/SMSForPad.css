@@ -1,0 +1,78 @@
+div#Menu {
+	width: 30%;
+	height: 600px;
+	float: left;
+}
+div#Detail {
+	background-color: #EEEEEE;
+	width: 70%;
+	float: left;
+	height: 600px;
+}
+.circle {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	background-color: #FA5656;
+	border-radius: 15px;
+	text-align: center;
+}
+.SMStd {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+¡¡
+}
+.ForSend {
+	padding: 15px 10px;
+	margin-right: 20px;
+	background: #74DE81;
+	position: relative;
+	border-radius: 15px;
+	float: right;
+	font-size:20px;
+	word-break:break-all;
+}
+.SendTri {
+	position: absolute;
+	right: -14px;
+	bottom: 10px;
+	width: 0px;
+	height: 0px;
+	border: 8px solid;
+	border-color: transparent transparent #74DE81 #74DE81;
+}
+.ForReceive {
+	padding: 15px 10px;
+	margin-left: 20px;
+	background: #beceeb;
+	position: relative;
+	border-radius: 15px;
+	float: left;
+	font-size:20px;
+	word-break:break-all;
+}
+.ReceiveTri {
+	position: absolute;
+	left: -14px;
+	bottom: 10px;
+	width: 0px;
+	height: 0px;
+	border: 8px solid;
+	border-color: transparent #beceeb #beceeb transparent;
+}
+.HidTbl {
+	visibility: hidden;
+}
+.RevealTbl {
+	visibility: display;
+}
+.NormalField{
+	overflow-y: scroll; 
+	height: 480px;
+}
+
+.ShortField{
+	overflow-y: auto; 
+	height: 280px;
+}

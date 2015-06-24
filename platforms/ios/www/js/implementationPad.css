@@ -1,0 +1,23 @@
+/* CSS Document */
+
+    
+    
+
+.barbox{height:18px;line-height:18px;overflow:hidden;width:60%;margin:0px auto;padding:20px 0 0 0px;}
+.barbox dd{float:left;}
+.barbox dd.last{color:#0048CC;font-size:14px;margin-left:10px;}
+.barbox dd.barline{width:100px;background:#E3E3E3;height:12px;overflow:hidden;margin:3px 10px 0 10px;display:inline;border-bottom:solid 1px #F4F4F4;border-right:solid 1px #F4F4F4;}
+.barbox dd.barline div.charts{height:10px;overflow:hidden;background:url(images/barbg.gif) repeat-x;}
+.barbox dd.barline div.charts.barred{background-position:0 0;border:1px solid #C2142C;}
+.barbox dd.barline div.charts.baryellow{background-position:0 -10px;border:1px solid #EFA804;}
+.barbox dd.barline div.charts.barblue{background-position:0 -20px;border:1px solid #0A83E6;}
+
+
+
+.imgtest div{display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:2px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;}
+.imgtest img{width:100%;min-height:100%; text-align:center;}
+.imgtest p{font-size:18px;color:#033;margin:-60px 0px 0px 180px;}
+   
+      
+
+ #thumbs li{display:inline;float:left;margin-right:0px;height:24px;font-size:20px;}

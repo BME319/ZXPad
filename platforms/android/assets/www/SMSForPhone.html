@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<title>融云测试</title>
+<head>
+<meta http-equiv="pragma" content="no-cache"  />
+<meta http-equiv="content-type" content="no-cache, must-revalidate" />
+<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
+<link href="css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-2.1.3.js"></script>
+<script src="js/jquery.mobile-1.4.2.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/CommonUtility.js"></script>
+<link rel="stylesheet" type="text/css" href="css/scrollbar.css">
+<link rel="stylesheet" type="text/css" href="css/scroll.css">
+<link rel="stylesheet" type="text/css" href="css/SMSForPhone.css">
+<script type="application/javascript" src="js/SMS.js"></script>
+<script type="application/javascript" src="js/iscroll.js"></script>
+<script>
+	var ThisUserId = localStorage.getItem("DoctorId");
+	console.log(ThisUserId);
+	var TheOtherId = localStorage.getItem("PatientId");
+	console.log(TheOtherId);
+//强制使用长链接
+//      window.WEB_XHR_POLLING = true;
+//强制使用flash
+//      window.WEB_SOCKET_FORCE_FLASH = true;
+    </script>
+
+<script src="http://res.websdk.rong.io/RongIMClient-0.9.6.min.js"></script>
+</head>
+<body>
+<div data-role="page">
+
+<div data-role="header">
+ <h1>手机消息对话</h1>
+</div>
+
+ 
+  <div data-role="content">
+    <div class="NormalField" id="MainField"> </div>
+    <table width="100%">
+      <tr>
+        <td align="center" width="84%"><textarea id="SMSContent" style="font-size:20px;"></textarea></td>
+        <!--<td align="center" width="84%"><input type="text" id="SMSContent" MultiLine="true"/></td>-->
+       <td align="center" width="10%"><button type="button" id="SMSbtn"> 发送</button></td>
+      </tr>
+    </table>
+  </div>
+  
+  <div data-role="footer">
+  <h1>在此处插入页脚文本</h1>
+  </div>
+  
+
+</div>
+</body>
+<script>
+	//var ThisUserId = "MP001";
+	//var TheOtherId = "MD001";
+	var piUserId = "a";
+	var piTerminalName = "a";
+	var piTerminalIP = "a";
+	var piDeviceType = 100;
+	
+	var ClickFlag = true;
+	var AppKey = "sfci50a7chxxi";
+	
+	$(document).ready(function(event){
+	  GetSMSDialogue(ThisUserId, TheOtherId);
+	  document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
+	  
+	  var SMSBtn = document.getElementById('SMSbtn');	
+	  SMSBtn.addEventListener("mouseover", ChangeFlagToF, false);
+	  SMSBtn.addEventListener("mouseout", ChangeFlagToT, false);
+		//SMSBtn.addEventListener("click", submitSMS, false);
+		
+	  var ContentTxt = document.getElementById('SMSContent');
+	  ContentTxt.addEventListener("focus", InTxt, false);
+	 ContentTxt.addEventListener("blur", OutOfTxt, false);
+	})
+			
+	window.onload = PhoeMessagePush;
+	
+</script>
+</html>
