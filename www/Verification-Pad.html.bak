@@ -16,6 +16,15 @@
    	<link rel="stylesheet" type="text/css" href="css/scroll.css">
    	<script type="application/javascript" src="js/iscroll.js"></script>
     <script type="text/javascript" src="js/LogOnRelated-Pad.js"></script>
+    <script type="text/javascript">
+		$().ready(function() {
+            window.localStorage.removeItem("AutoLogOn");
+			var width = $('#Figure').width()*0.9;
+			var height =$('#Figure').width()*0.7;
+			$('img').width(width);
+			$('img').height(height);
+        });
+	</script>
     <style type="text/css">
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -46,11 +55,11 @@ a:focus {
 }
 
 .testgrid2 .ui-block-a {
-	width:35%;
+	width:30%;
 }
 
 .testgrid2 .ui-block-b {
-	width:65%;
+	width:70%;
 }
 
 .ui-bar-f
@@ -61,23 +70,15 @@ background-color:#000;
 }
 
 </style>
-<script type="text/javascript">
-    $().ready(function() {
-			var width = $('#Figure').width()*0.9;
-			var height =$('#Figure').width()*0.7;
-			$('img').width(width);
-			$('img').height(height);
-        });
-    
-</script>
 </head>
- 
+
 <body>
 	<div>
     	<div data-role="header" data-theme="a">
+        	<!--<a href="XXX" data-rel="back" data-icon="back" data-iconpos="notext" data-shadow="false" data-iconshadow="false" style="margin-top:15px; background-color:#000; border:none"></a>-->
         	<a href="XXX" data-rel="back" data-icon="back" data-iconpos="notext" data-shadow="false" data-iconshadow="false" style="margin-top:15px;"></a>
             <h2>
-            注册</h2>
+            找回密码</h2>
         </div>
         <div data-role="content" style="margin-top: 50px">
         	<div class="testgrid1">
@@ -90,38 +91,27 @@ background-color:#000;
                             <p class="text-nowrap">用户名：</p>
                         </div>
                         <div class="ui-block-b">
-                            <input class="form-control" data-val="true" data-val-required="请输入用户名." id="UserId" name="UserId" type="text"/>
-                            <label for="AlertUserId" id="AlertUserId" style="color:red; display:none">请输入11位手机号码</label>
+                            <input class="form-control" data-val="true" data-val-required="The UserId field is required." id="UserId" name="UserId" type="text" value="" />
                         </div>
                     </div>
                     <div class="testgrid2">
                         <div class = "ui-block-a">
-                            <p class="text-nowrap">密 码：</p>
+                            <p class="text-nowrap">验证码：</p>
                         </div>
                         <div class="ui-block-b">
-                            <input class="form-control" data-val="true" data-val-required="请输入密码." id="Password" name="Password" type="password" />
+                            <input class="form-control" data-val="true" data-val-required="The ValidateCode field is required." id="ValidateCode" name="ValidateCode" type="text" value="" />
                         </div>
                     </div>
-                    <div class="testgrid2">
-                        <div class = "ui-block-a">
-                            <p class="text-nowrap">真实姓名：</p>
-                        </div>
-                        <div class="ui-block-b">
-                            <input class="form-control" data-val="true" data-val-required="请输入姓名." id="UserName" name="UserName" type="text" value="" />
-                        </div>
+                    <div style="margin-top:20px">
+                    <button type="button" name="GetValidateCode" class="btn btn-primary" id="GetValidateCode" onclick="SubmitForm1('GetValidateCode', 'valiCode'); Time()">
+                    获取验证码</button>
                     </div>
-                    <div>
-                        <button type="button" id="RegisterBtn" class="btn btn-primary btn-lg btn-block" onclick="Register()">
-                                注册</button>
-                    </div>
-                    <div>
-                        <p style="display: none; color: Red; font-weight: bold;" id="showlabel">
-                                注册成功，即将返回登录页面</p>
+                    <div style="margin-top:20px">
+                        <button type="button" id="NextBtn" class="btn btn-primary btn-lg btn-block" onclick="Verification()">
+                        下一步</button>
                     </div>
                 </div>
-            </div>
-        </div>
+           </div>
     </div>
-
 </body>
 </html>

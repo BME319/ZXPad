@@ -17,7 +17,7 @@ function SubmitForm(){
 			var userId = $("#UserId").val();
 			var password = $("#Password").val();
 			var myRegEmail = /^[-_A-Za-z0-9]+@([_A-Za-z0-9]+\.)+[A-Za-z0-9]{2,3}$/;
-			var myRegPhone = /^\d{11}$/;
+			var myRegPhone = /^1[3|4|5|8][0-9]\d{4,8}$/;
 			window.localStorage.setItem("Password",password);
 			window.localStorage.setItem("UserName",userId);
 window.localStorage.setItem("Device","Pad");
@@ -103,7 +103,7 @@ window.localStorage.setItem("Device","Pad");
 														  }
 													  },
 													  error: function(msg) {
-														  alert("数据库连接失败");	
+														  alert("Error: GetAllRoleMatch");	
 													  }
 												  });
 											  }
@@ -115,11 +115,14 @@ window.localStorage.setItem("Device","Pad");
 											  }
 										  },
 										  error: function(msg) {
-											  alert("数据库连接失败");	
+											  alert("Error: GetActivatedState");	
 										  }
 									  });
 								  
 								  }
+							  },
+							  error: function(msg) {
+								  alert("Error: GetIDByInput");	
 							  }
 					  	  });
 					  }
@@ -127,10 +130,10 @@ window.localStorage.setItem("Device","Pad");
 					  {
 						  alert("密码错误或用户名不存在");	
 					  }
-					  },
-					  error: function(msg) {
-						  alert("数据库连接失败");	
-					  }
+				  },
+				  error: function(msg) {
+					  alert("Error: CheckPasswordByInput");	
+				  }
 				 });
 			}
 			else if (userId == "") 
@@ -183,7 +186,7 @@ function Activition() {
 						}
 					},
 					error: function(msg) {
-						alert("数据库连接失败");	
+						alert("Error: SetActivition");	
 					}
 				});
 			}
@@ -201,7 +204,7 @@ function Register() {
 			var UserName = $('#UserName').val();
 			var Password = $('#Password').val();
 			var myRegEmail = /^[-_A-Za-z0-9]+@([_A-Za-z0-9]+\.)+[A-Za-z0-9]{2,3}$/;
-			var myRegPhone = /^\d{11}$/;
+			var myRegPhone = /^1[3|4|5|8][0-9]\d{4,8}$/;
 			
 			if (UserId != "" && UserName != "" && Password != "" )
 			{
@@ -284,19 +287,19 @@ function Register() {
 															}
 														},
 														error: function(msg) {
-															alert("数据库连接失败");	
+															alert("Error: SetPsRoleMatch");	
 														}
 													});
 												}
 											},
 											error: function(msg) {
-												alert("数据库连接失败");	
+												alert("Error: GetIDByInput");	
 											}
 										});
 									}
 								},
 								error: function(msg) {
-									alert("数据库连接失败");	
+									alert("Error: Register");	
 								}
 							});
 						}
@@ -307,7 +310,7 @@ function Register() {
 						}
 					},
 					error: function(msg) {
-						alert("数据库连接失败");	
+						alert("Error: CheckRepeat");	
 					}
 				});
 			}
@@ -354,7 +357,7 @@ var wait = 60;
 			var ValidateCode = $("#ValidateCode").val();
 			var valiCode = "test";
 			var myRegEmail = /^[-_A-Za-z0-9]+@([_A-Za-z0-9]+\.)+[A-Za-z0-9]{2,3}$/;
-			var myRegPhone = /^\d{11}$/;
+			var myRegPhone = /^1[3|4|5|8][0-9]\d{4,8}$/;
 			
 			if (userId != "" && ValidateCode != "")
 			{
@@ -400,9 +403,13 @@ var wait = 60;
 								alert("验证码错误");	
 							}
 						}
+						else
+						{
+							alert("用户名不存在");	
+						}
 					},
 					error: function(msg) {
-						alert("用户名不存在或数据库连接失败");	
+						alert("Error: GetIDByInput");	
 					}
 				});
 			}
@@ -481,7 +488,7 @@ function ResetPassword() {
 						}
 					},
 					error: function(msg) {
-							alert("数据库连接失败");	
+							alert("Error: ChangePassword");	
 						}
 				});
 			}
@@ -501,3 +508,64 @@ function ResetPassword() {
 				$("#ConfirmPassword").focus();
 			}
 		}
+		
+		
+/**********************手机号码正则验证***********************/	
+$(document).ready(function() {
+	
+    $("#UserId").blur(function () {
+		var PHONENUMBER = $("#UserId").val();
+		var isPhone = /^1[3|4|5|8][0-9]\d{4,8}$/;
+
+		//alert(isPhone.test(PHONENUMBER));
+		//alert(PHONENUMBER.length)
+		if (PHONENUMBER.length == 11)
+		{
+			if (isPhone.test(PHONENUMBER))
+			{
+				document.getElementById("AlertUserId").style.display = "none";
+				//alert(PHONENUMBER);
+			}	
+			else
+			{
+				//alert(PHONENUMBER.length);
+				document.getElementById("AlertUserId").innerHTML = "请输入正确的手机号码";
+				document.getElementById("AlertUserId").style.display = "block";
+				//alert("不是正确的手机号码");
+			}
+		}
+		else
+		{
+			//alert(PHONENUMBER.length);
+			document.getElementById("AlertUserId").innerHTML = "请输入11位手机号码";
+			document.getElementById("AlertUserId").style.display = "block";
+			//alert("请输入11位手机号码");	
+		}
+		/*if (isPhone.test(PHONENUMBER))
+		{
+			document.getElementById("AlertUserId").style.display = "none";
+			alert(PHONENUMBER);
+		}
+		else 
+		{
+			//alert("test");
+			alert(PHONENUMBER.length);
+			if (PHONENUMBER.length == 11)
+			{
+				//alert(PHONENUMBER.length);
+				document.getElementById("AlertUserId").innerHTML = "请输入正确的手机号码";
+				document.getElementById("AlertUserId").style.display = "block";
+				//alert("不是正确的手机号码");
+			}
+			else
+			{
+				//alert(PHONENUMBER.length);
+				document.getElementById("AlertUserId").innerHTML = "请输入11位手机号码";
+				document.getElementById("AlertUserId").style.display = "block";
+				//alert("请输入11位手机号码");	
+			}	
+		}*/
+	}
+	)
+});
+
