@@ -24,6 +24,7 @@ var myip = '127.0.0.1';
 			localStorage.setItem('TerminalIP', myip);
             localStorage.setItem('TerminalName',"X-pc");
 		    localStorage.setItem('DeviceType',1);
+		window.localStorage.setItem("Device","Pad");
 			if (ID != "" || ID != null)
 			{
 				$('#UserId').val(ID);

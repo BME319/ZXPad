@@ -94,13 +94,15 @@
 										}
 									},
 									error: function(msg) {
-										alert("数据库连接失败");	
+										alert("Error: GetAllRoleMatch");	
+										location.href = "LogOn-Pad.html";
 									}
 								});	
 							}
 						},
 						error: function(msg) {
-							alert("数据库连接失败");	
+							alert("Error: CheckPasswordByInput");	
+							location.href = "LogOn-Pad.html";
 						}
 					});
 				}	
