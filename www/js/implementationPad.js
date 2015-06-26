@@ -1,11 +1,11 @@
 // JavaScript Document
 
 //前一页面传递参数的接收函数GetQueryString
-	function GetQueryString(name){
+/*	function GetQueryString(name){
      	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
      	var r = window.location.search.substr(1).match(reg);
      	if(r!=null)return  unescape(r[2]); return null;
-	}
+	}*/
 
 
  function GetImplementationForPadFirst(PatientId, Module){
@@ -28,11 +28,23 @@
         success: function(data) {
 			//头像、基本信息
 			$("#PatientName").text(data.PatientInfo.PatientName);
+			//$("#portrait").attr("src","images/head.jpg"); 
+			if(data.PatientInfo.ImageUrl !="")
+			{
+				//alert(data.PatientInfo.ImageUrl);
+				var ImageUrl=serverIP+"/CDFiles/PersonalPhoto/Patient/"+data.PatientInfo.ImageUrl;
+				$("#portrait").attr("src", ImageUrl);
+			}
+			else
+			{
+				var ImageUrl=serverIP+"/CDFiles/PersonalPhoto/Patient/"+"non.jpg";
+				$("#portrait").attr("src",ImageUrl); 
+			}
 			
 			
 			//计划列表 条数必》1
 			var str_li='';
-			str_li+='<li style="width:30px"><img id="play_prev" src="images/btn_prev.gif" width="20" height="13" title="上一计划" alt="上一计划" onclick="hookBtn(this.id);" /></li>';
+			str_li+='<li style="width:30px"><img id="play_next" src="images/btn_prev.gif" width="20" height="13" title="上一计划" alt="上一计划" onclick="hookBtn(this.id);" /></li>';
 			str_li+='';
 			
 			for(var i=0;i<data.PlanList.length;i++)
@@ -50,7 +62,7 @@
 					str_li+=' <li id="'+id+'" name="'+planno+'" style="display:none;width:500px">'+ data.PlanList[i].PlanName+'</li>';
 				}
 			}
-			str_li+='<li style="width:30px"><img id="play_next" src="images/btn_next.gif" width="20" height="13" title="下一计划" alt="下一计划"  onclick="hookBtn(this.id);"/></li>';
+			str_li+='<li style="width:30px"><img id="play_prev" src="images/btn_next.gif" width="20" height="13" title="下一计划" alt="下一计划"  onclick="hookBtn(this.id);"/></li>';
 			
 			$('#ul_target').append(str_li);   
 			
@@ -82,6 +94,22 @@
 			//画图
 			if((data.chartData.graphList.length>0) && (data.chartData.graphList!=null))//有图表数据
 			{
+				
+				//✔ ✘处理 
+				for(var m=0;m<data.chartData.graphList.length;m++)
+				{
+					
+				var regS = new RegExp("noncomplete","g");
+			    data.chartData.graphList[m].drugDescription=data.chartData.graphList[m].drugDescription.toString().replace(regS, "✘");
+		        var regS1 = new RegExp("complete","g");
+			    data.chartData.graphList[m].drugDescription=data.chartData.graphList[m].drugDescription.toString().replace(regS1, "✔");
+				 var regS2 = new RegExp("###","g");
+			    data.chartData.graphList[m].drugDescription=data.chartData.graphList[m].drugDescription.toString().replace(regS2, "'");
+				
+				}
+				
+				
+				
 			   guides=data.chartData.BPGuide; //guide需要传出
 			   createStockChart(data.chartData.graphList, 0);
 			   
@@ -102,7 +130,7 @@
 		    
 			}
 		                  }, 
-       error: function(msg) {alert("GetImplementationForPadFirst Error!");},
+       error: function(msg) {alert("Error!");},
 	   complete: function() {      
              // $("div[data-role=content] ul").listview();    
 			  //$("div[data-role=content] ul li").listview("refresh");    
@@ -178,7 +206,7 @@
 				panels: [{
 						title: "血压 （单位：mmHg）",
 						showCategoryAxis: false,
-						percentHeight: 60,
+						percentHeight: 70,
 						autoMargins:false,
 						//marginTop:300,
 						//marginLeft:90,
@@ -245,7 +273,7 @@
 						title: "用药情况",
 						showCategoryAxis: true,
 						//backgroundColor:"#CC0000",
-						percentHeight: 20,
+						percentHeight: 30,
 						valueAxes: [{
 							id:"v2",
 							gridAlpha : 0,
@@ -272,7 +300,7 @@
                             bulletBorderThickness : 2,
                             bulletBorderAlpha : 1,		
 							showBalloon: true,		
-                            balloonText: "[[category]]<br>[[drugDescription]]",
+                            balloonText: "[[drugDescription]]",
 				            //labelText:"[[drugDescription]]"
 
 						}],
@@ -285,7 +313,11 @@
                 balloon:{
 					fadeOutDuration:3,
 					animationDuration:0.1,
-					//fixedPosition:true, //？
+					maxWidth:400,
+				    textAlign:"left",
+					horizontalPadding:12,
+					verticalPadding:4,
+					fillAlpha:0.8
 				},
 				chartCursorSettings:{
 					usePeriod: "7DD",
@@ -500,6 +532,20 @@ function rechange(pre,loop){
 			 
 			 if(data.chartData.graphList.length>0)   //有图表数据
 			{
+				
+				for(var m=0;m<data.chartData.graphList.length;m++)
+				{
+					
+				var regS = new RegExp("noncomplete","g");
+			    data.chartData.graphList[m].drugDescription=data.chartData.graphList[m].drugDescription.toString().replace(regS, "✘");
+		        var regS1 = new RegExp("complete","g");
+			    data.chartData.graphList[m].drugDescription=data.chartData.graphList[m].drugDescription.toString().replace(regS1, "✔");
+				 var regS2 = new RegExp("###","g");
+			    data.chartData.graphList[m].drugDescription=data.chartData.graphList[m].drugDescription.toString().replace(regS2, "'");
+				
+				}
+				
+				
 			   guides=data.chartData.BPGuide; //guide需要传出
 			   createStockChart(data.chartData.graphList, 0);
 			   
@@ -518,7 +564,7 @@ function rechange(pre,loop){
 			}
 		 
 		                  }, 
-       error: function(msg) {alert("GetImplementationForPadSecond Error!");},
+       error: function(msg) {alert("Error!");},
 	   complete: function() {      
     
         } 
