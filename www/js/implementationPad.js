@@ -1,11 +1,11 @@
 // JavaScript Document
 
 //前一页面传递参数的接收函数GetQueryString
-	function GetQueryString(name){
+	/*function GetQueryString(name){
      	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
      	var r = window.location.search.substr(1).match(reg);
      	if(r!=null)return  unescape(r[2]); return null;
-	}
+	}*/
 
 
  function GetImplementationForPadFirst(PatientId, Module){
@@ -28,7 +28,17 @@
         success: function(data) {
 			//头像、基本信息
 			$("#PatientName").text(data.PatientInfo.PatientName);
-			
+			if(data.PatientInfo.ImageUrl !="")
+			{
+				//alert(data.PatientInfo.ImageUrl);
+				var ImageUrl=serverIP+"/CDFiles/PersonalPhoto/Patient/"+data.PatientInfo.ImageUrl;
+				$("#portrait").attr("src", ImageUrl);
+			}
+			else
+			{
+				var ImageUrl=serverIP+"/CDFiles/PersonalPhoto/Patient/"+"non.jpg";
+				$("#portrait").attr("src",ImageUrl); 
+			}
 			
 			//计划列表 条数必》1
 			var str_li='';
@@ -82,6 +92,19 @@
 			//画图
 			if((data.chartData.graphList.length>0) && (data.chartData.graphList!=null))//有图表数据
 			{
+				//✔ ✘处理 
+				for(var m=0;m<data.chartData.graphList.length;m++)
+				{
+					
+				var regS = new RegExp("noncomplete","g");
+			    data.chartData.graphList[m].drugDescription=data.chartData.graphList[m].drugDescription.toString().replace(regS, "✘");
+		        var regS1 = new RegExp("complete","g");
+			    data.chartData.graphList[m].drugDescription=data.chartData.graphList[m].drugDescription.toString().replace(regS1, "✔");
+				 var regS2 = new RegExp("###","g");
+			    data.chartData.graphList[m].drugDescription=data.chartData.graphList[m].drugDescription.toString().replace(regS2, "'");
+				
+				}
+				
 			   guides=data.chartData.BPGuide; //guide需要传出
 			   createStockChart(data.chartData.graphList, 0);
 			   
@@ -282,10 +305,14 @@
 							}
 					}
 				],
-                balloon:{
+               balloon:{
 					fadeOutDuration:3,
 					animationDuration:0.1,
-					//fixedPosition:true, //？
+					maxWidth:400,
+				    textAlign:"left",
+					horizontalPadding:12,
+					verticalPadding:4,
+					fillAlpha:0.8
 				},
 				chartCursorSettings:{
 					usePeriod: "7DD",
@@ -399,7 +426,7 @@ function animate(a,b){
 function hookBtn(id){
 	var length=$("#thumbs li").length-2;
 	var temp_index=index;
-	if(id == 'play_prev')
+	if(id == 'play_next')
 	{
 			index--;
 			if(index < 0) 
