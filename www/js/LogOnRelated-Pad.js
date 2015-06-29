@@ -205,6 +205,7 @@ function Register() {
 			var Password = $('#Password').val();
 			var myRegEmail = /^[-_A-Za-z0-9]+@([_A-Za-z0-9]+\.)+[A-Za-z0-9]{2,3}$/;
 			var myRegPhone = /^1[3|4|5|8][0-9]\d{4,8}$/;
+			var isHealthCoach = 0;
 			
 			if (UserId != "" && UserName != "" && Password != "" )
 			{
@@ -262,34 +263,52 @@ function Register() {
 												if (userID != "")
 												{
 													$.ajax({
-														type: "POST",
-														timeout: 30000,
-														//contentType: "application/json;charset=utf-8",
-														url: 'http://'+ serverIP +'/'+serviceName+'/SetPsRoleMatch',
-														data: { PatientId: userID, RoleClass: "HealthCoach", ActivationCode: "ageargarg", ActivatedState: "1", Description: ""},
-														dataType: 'xml',
-														async: false,
-														beforeSend: function() {},
-														success: function (result) {
-															var test = $(result).find("int").text();
-															if (test == 1)
-															{
-																document.getElementById("showlabel").innerHTML = "注册成功，即将返回登录页面";
-																document.getElementById("showlabel").style.display = "block";
-																setTimeout(function () {
-																	//alert("注册成功");
-																	location.href = "LogOn-Pad.html"
-																},1000)
-															}
-															else
-															{
-																alert("注册失败");	
-															}
-														},
-														error: function(msg) {
-															alert("Error: SetPsRoleMatch");	
-														}
-													});
+													  type: "POST",
+													  dataType: "xml",
+													  timeout: 30000,
+													  url: 'http://' + serverIP + '/' + serviceName + '/GetNoByNumberingType',
+													  async: false,
+													  data: { NumberingType: "12" },
+													  beforeSend: function () { },
+													  success: function (result) {
+														  var InviteNo = $(result).find("string").text();
+														  if (InviteNo != "")
+														  {
+															$.ajax({
+																type: "POST",
+																timeout: 30000,
+																//contentType: "application/json;charset=utf-8",
+																url: 'http://'+ serverIP +'/'+serviceName+'/SetPsRoleMatch',
+																data: { PatientId: userID, RoleClass: "HealthCoach", ActivationCode: InviteNo, ActivatedState: "1", Description: ""},
+																dataType: 'xml',
+																async: false,
+																beforeSend: function() {},
+																success: function (result) {
+																	var test = $(result).find("int").text();
+																	if (test == 1)
+																	{
+																		document.getElementById("showlabel").innerHTML = "注册成功，即将返回登录页面";
+																		document.getElementById("showlabel").style.display = "block";
+																		setTimeout(function () {
+																			//alert("注册成功");
+																			location.href = "LogOn-Pad.html"
+																		},1000)
+																	}
+																	else
+																	{
+																		alert("注册失败");	
+																	}
+																},
+																error: function(msg) {
+																	alert("Error: SetPsRoleMatch");	
+																}
+															});
+														  }
+													  },
+													  error: function (msg) {
+														  alert("Error: GetNoByNumberingType");
+													  }
+												  	});
 												}
 											},
 											error: function(msg) {
@@ -305,8 +324,102 @@ function Register() {
 						}
 						else
 						{
-							document.getElementById("showlabel").innerHTML = "用户名重复";
-							document.getElementById("showlabel").style.display = "block";	
+							$.ajax({
+							  type: "POST",
+							  timeout: 30000,
+							  //contentType: "application/json;charset=utf-8",
+							  url: 'http://'+ serverIP +'/'+serviceName+'/GetIDByInput',
+							  data: { Type: Type, Name: userId},
+							  dataType: 'xml',
+							  async: false,
+							  beforeSend: function() {},
+							  success: function(result) {
+								  if (result != "")
+								  {
+									  var UserId = $(result).find("string").text();
+									  $.ajax({
+										type: "POST",
+										timeout: 30000,
+										//contentType: "application/json;charset=utf-8",
+										url: 'http://'+ serverIP +'/'+serviceName+'/GetAllRoleMatch',
+										data: { UserId: UserId},
+										dataType: 'xml',
+										async: false,
+										beforeSend: function() {},
+										success: function(result) {
+											if (result != "")
+											{
+												$(result).find('Table1').each(function() {
+													var Role = $(this).find("RoleClass").text();
+													if (Role == "HealthCoach")
+													{
+														document.getElementById("showlabel").innerHTML = "用户名重复";
+														document.getElementById("showlabel").style.display = "block";
+														isHealthCoach = 1;
+													}
+												});
+											}
+										},
+										error: function(msg) {
+											alert("Error: GetAllRoleMatch");	
+										}
+									});
+									if (isHealthCoach == 0)
+									{
+										$.ajax({
+										  type: "POST",
+										  dataType: "xml",
+										  timeout: 30000,
+										  url: 'http://' + serverIP + '/' + serviceName + '/GetNoByNumberingType',
+										  async: false,
+										  data: { NumberingType: "12" },
+										  beforeSend: function () { },
+										  success: function (result) {
+											  var InviteNo = $(result).find("string").text();
+											  if (InviteNo != "")
+											  {
+												$.ajax({
+													type: "POST",
+													timeout: 30000,
+													//contentType: "application/json;charset=utf-8",
+													url: 'http://'+ serverIP +'/'+serviceName+'/SetPsRoleMatch',
+													data: { PatientId: UserId, RoleClass: "HealthCoach", ActivationCode: InviteNo, ActivatedState: "1", Description: ""},
+													dataType: 'xml',
+													async: false,
+													beforeSend: function() {},
+													success: function (result) {
+														var test = $(result).find("int").text();
+														if (test == 1)
+														{
+															document.getElementById("showlabel").innerHTML = "注册成功，即将返回登录页面";
+															document.getElementById("showlabel").style.display = "block";
+															setTimeout(function () {
+																//alert("注册成功");
+																location.href = "LogOn-Pad.html"
+															},1000)
+														}
+														else
+														{
+															alert("注册失败");	
+														}
+													},
+													error: function(msg) {
+														alert("Error: SetPsRoleMatch");	
+													}
+												});
+											  }
+										  },
+										  error: function (msg) {
+											  alert("Error: GetNoByNumberingType");
+										  }
+										});	
+									}
+								  }
+							  },
+							  error: function(msg) {
+								  alert("Error: GetIDByInput");	
+							  }
+							});	
 						}
 					},
 					error: function(msg) {

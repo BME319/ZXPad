@@ -733,8 +733,6 @@ Downloadcode = localStorage.getItem('DownloadAddress')
 					else 
 					{
 						alert("此手机号已被使用，请输入新的手机号");
-						document.getElementById("download").style.display = "block";
-						document.getElementById("Invitation").style.display = "block";
 					}
 				},
 				error: function (msg) {
