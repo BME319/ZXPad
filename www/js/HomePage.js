@@ -11,8 +11,196 @@
 /* global $ */
 var OverDueArr = new Array();
 var loadersArr = new Array();
-var ImageAddressIP = "http://10.12.43.63:8088";  //webserviceIP
+var rowArr = new Array();
+//var ImageAddressIP = "http://10.12.43.63:8088";  //webserviceIP
+var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
 var ImageAddressFile = window.localStorage.getItem("PatientFile");
+
+/*
+var planRate = new Rate('planloader');
+var complianceRate = new Rate('complianceloader');
+var goalRate = new Rate('goalloader');*/
+
+	function GetPatientsList(callback)
+	{
+		
+		var doctorId = localStorage.getItem("DoctorId");
+		$.mobile.loading( "show", {
+            text: 'loading',
+            textVisible: true,
+            //theme: theme,
+            textonly: false,
+            //html: html
+    });
+		var moduleSelected=$('#moduleSelect').children('option:selected').val();
+		var planSelected=$('#planSelect').children('option:selected').val();
+		var complianceSelected=$('#complianceSelect').children('option:selected').val();
+		var goalSelected=$('#goalSelect').children('option:selected').val();
+		//console.log('module ' + moduleSelected +' plan '+planSelected+' compliance '+complianceSelected+' goal '+goalSelected);		
+		rowArr.length = 0;
+		
+	  $.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://'+ serverIP +'/'+serviceName+'/GetPatientsList',		
+		data:{DoctorId: doctorId,		
+		ModuleType :'H'+ moduleSelected,		
+		Plan :planSelected,		
+		Compliance :complianceSelected,
+		Goal:goalSelected
+		},
+		async: true,
+		beforeSend: function() {
+	},
+		success: function(result) {
+		   callback(result);
+		},
+		error: function(msg) {
+		  console.log(msg);
+		  $.mobile.loading( "hide" );
+
+		}
+	  });
+
+	}
+	function getPatients(result)
+	{
+		if ($(result).text())
+		  {
+			 $(result).find('RateTable').each(function() {
+				var planRate = $(this).find("PlanRate").text();
+				var complianceRateTotal = $(this).find("ComplianceRate").text();
+				var goalRate = $(this).find("GoalRate").text();
+				console.log('planRate: '+ planRate+'  complianceRateTotal: '+ complianceRateTotal+'  goalRate: '+ goalRate);
+				DrawRates(planRate, complianceRateTotal, goalRate);
+			});
+			$(result).find('PatientListTable').each(function() {
+				var patientId = $(this).find("PatientId").text();
+				var patientName = $(this).find("PatientName").text();
+				var photoAddress = $(this).find("photoAddress").text();
+				var planNo = $(this).find("PlanNo").text();
+				var startDate = $(this).find("StartDate").text();
+				var process = $(this).find("Process").text();
+				var remainingDays = $(this).find("RemainingDays").text();
+				var complianceRate = $(this).find('ComplianceRate').text();
+				var val0 =  $(this).find('VitalSign').children("string").eq(0).text(); //Now Value
+				var val1=  $(this).find('VitalSign').children("string").eq(1).text();	//Origin Value
+				var val2=  $(this).find('VitalSign').children("string").eq(2).text();	//Target Value
+				var totalDays = $(this).find('TotalDays').text();	
+				var planstatus = $(this).find('Status').text();			
+
+				var vals = new Array();
+				vals.push(val0);
+				vals.push(val1);
+				vals.push(val2);
+				//console.log(val0+"  O: "+val1 +" T: "+val2);
+			
+			
+				var obj = new Object();
+				obj.patientId = patientId;
+				obj.patientName = patientName;
+				obj.photoAddress = photoAddress;
+				obj.planNo = planNo;
+				obj.startDate = startDate;
+				obj.process =process;
+				obj.remainingDays = remainingDays;
+				obj.complianceRate = complianceRate;
+				obj.vals = vals;
+				obj.totalDays  =totalDays;
+				obj.planstatus = planstatus;				
+				//rowArr.push(obj);
+				this.patientList.push(obj);
+				});
+
+		  }
+		if(rowArr != null)
+	   		DataTableLoad(rowArr);
+			   	$.mobile.loading( "hide" ); 
+				   	$("#DataTable").trigger('create'); 
+	}
+
+
+
+function Patient()
+{
+
+	this.patientName = '';
+	this.patientId = '';
+	this.photoAddress = '';
+	this.planNo = '';
+	this.startDate = 0;
+	this.process =0;
+	this.remainingDays = 0;
+	this.complianceRate = 0;
+	this.vals = new Array();
+	this.totalDays  = 0;
+	this.planstatus = 0;
+
+}
+Patient.prototype.draw =function()
+{
+
+}
+
+function PatientTable()
+{
+	this.patientList = new Array();
+}
+PatientTable.prototype.addPatient  =function()
+{
+	GetPatientsList(getPatients);
+}
+
+
+
+function Rate(canvasID)
+{
+	this.canvasID = canvasID;
+	this.percentage = 0;
+	var linecolor = 'rgba(0, 0, 0, 1)';	
+	this.loader = $('#' + canvasID).ClassyLoader({
+				width:100,
+				height:100,
+				fontSize: "20px",
+				diameter:40,
+				lineColor:linecolor,
+				remainingLineColor:'rgba(0, 0, 0, 0.1)',
+				lineWidth:10,
+				//speed: 20,
+				animate: false,
+				percentage: 0
+			});
+	//this.loader.show();
+
+}
+Rate.prototype.draw =function(percentage)
+{
+	if (this.percentage != percentage) {
+		this.clear();
+
+		var linecolor = 'rgba(0, 0, 0, 1)';
+		if(percentage> 0.6)
+			linecolor = 'rgba(0, 200, 0, 0.7)';	//Green
+		else if(percentage > 0.3)
+			linecolor = 'rgba(240, 120, 0, 0.7)';	//Orange
+		else
+			linecolor = 'rgba(255, 0, 0, 0.7)';	//Red
+		
+
+			this.loader.setLineColor(linecolor).setPercent(percentage*100).draw();
+			//console.log('LoaderPercent: '+ loadersArr[i].getPercent());	
+			console.log("Draw Rate canvas: " + this.canvasID);		
+	}
+}
+Rate.prototype.clear =function()
+{
+	var canvas = document.getElementById(this.canvasID);
+	console.log('canvas object: '+ canvas);
+  var context = canvas.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  console.log("Clear Rate canvas: " + this.canvasID);
+}
 	
 
 function InitialSMSBox()
@@ -125,7 +313,7 @@ function InitialSMSBox()
 	 }
 
 
-var rowArr = new Array();
+
 	function GetPatientsList()
 	{
 		var doctorId = localStorage.getItem("DoctorId");
@@ -376,7 +564,7 @@ function DataTableLoad(arr)
 		var planstatus = 0;
 		if(arr[i].planstatus != "")
 			planstatus =arr[i].planstatus;
-		//console.log(pid +'  '+ planstatus+'  '+arr[i].startDate);
+		console.log(pid +'  '+ planstatus+'  '+arr[i].startDate);
 		//Days counting
 		if (arr[i].totalDays > 0) {
 			totalDays = arr[i].totalDays;
@@ -394,14 +582,21 @@ function DataTableLoad(arr)
 */
 
 			PhotoAddress = "img/avatar.jpg";
+			var avatarBorderColor = '#FFFFFF';
+		if(planstatus == 0)
+			avatarBorderColor= '#FD7B7B';	//light red 
+		if (planstatus ==1 ) 			  
+			avatarBorderColor= '#FBF18F';	//light red 
 
 		//var avatarUrl = "img/avatar.jpg";
 		var avatarUrl = PhotoAddress;
 		var progressbar = "progressbar";
 
-		progressbar ='<div  data-role="fieldcontain" style = "margin:0;"><input type="range" name="points" class="points" value="'+processvalue+'" min="0" max="100" data-highlight="true"><p>'+processDays+'/'+totalDays+'天</p></div>';
+		progressbar ='<div  data-role="fieldcontain" style = "margin:0;"><label for="points" style="margin-top:0px;"><p>'+processDays+'/'+totalDays+'天</p></label><input type="range" name="points" class="points" value="'+processvalue+'" min="0" max="100" data-highlight="true"></div>';
 		     	
-patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:2px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="plus" class="Planicon"></a><a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
+//patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:2px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="plus" class="Planicon"></a><a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
+patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:6px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;border-color:'+avatarBorderColor+';" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
+
 		var tasklist = '<canvas id="l'+i+'"class="loader'+i+'" style="width:100px;"></canvas>';
 		var figure = '<div id="chartdiv'+i+'" style="width: 240px; height: 100px;"></div>';
 		var Content = "";
@@ -423,8 +618,29 @@ patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;marg
 		}
 
 		table.row.add([patientInfo, tasklist, figure, message,arr[i].planNo,arr[i].patientId,arr[i].startDate,planstatus,patientname]).draw();
+		/*
+		if(planstatus == 0)
+			$(table.row( i ).nodes() ).css('background-color','#F7A2A2');	//light red 
+		if (planstatus ==1 ) 			  
+			$(table.row( i ).nodes() ).css('background-color','#FBF18F');	//light red 
+		*/
+		/*
+		switch(planstatus)
+		{
+			case 0:		//noPlan
+			{
+			  $(table.row( i ).nodes() ).css('background-color','#F7A2A2');	//light red 
+			  break;
+			}
+			case 1:		//tempPlan
+			{
+			  $(table.row( i ).nodes() ).css('background-color','Red');	//light yellow			  
+			  break;
+			}
+		}*/
 		if(arr[i].planNo != "")
 		{
+			/*
 		var loaders = '.loader'+i;
 		var loader = $(loaders).ClassyLoader({
 			width:100,
@@ -437,7 +653,10 @@ patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;marg
 			//speed: 50,
 			animate: false,
 			percentage: 0
-		});
+		});*/
+		var tasklistCanvas = 'l'+i;
+		var tasklistRate = new Rate(tasklistCanvas);
+
 		//if(arr[i].planNo != "")
 		//{
 			//console.log('PID: ' + pid);
@@ -445,7 +664,8 @@ patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;marg
 			//console.log('Compliance Rate: ' + arr[i].complianceRate);
 			if(arr[i].complianceRate > 0)
 			{
-			loader.draw(arr[i].complianceRate*100); //tasklist percentage figure
+			//loader.draw(arr[i].complianceRate*100); //tasklist percentage figure
+			tasklistRate.draw(arr[i].complianceRate*100);
 			//console.log(arr[i].complianceRate*100);
 			}		
 		}		
@@ -534,7 +754,9 @@ function onDeviceReady() {
 	
 	//CheckNetwork();
 	//alert('scroll refresh!');
-	GetPatientsList();
+	//GetPatientsList();
+	patientTable = new PatientTable();
+patientTable.addPatient();
 	InitialSMSBox();
 	//myScroll.refresh();	
 	PlanOverDueCheck(); 
@@ -556,11 +778,22 @@ function BindEvent() {
 
 function DrawRates(p,c,g)
 {
+	
+	var planRate = new Rate('planloader');
+	var complianceRate = new Rate('complianceloader');
+	var goalRate = new Rate('goalloader');
+
+
+console.log(planRate);
+	planRate.draw(p);
+	complianceRate.draw(c);
+	goalRate.draw(g);
+/*
 	var loaders = new Array();		
 	loaders.push('#planloader');
 	loaders.push('#complianceloader');
 	loaders.push('#goalloader');
-	
+
 	//Calculate the percentage of three main indicators
 	var percentages = new Array();
 	percentages.push(p);
@@ -575,14 +808,16 @@ function DrawRates(p,c,g)
 			linecolor = 'rgba(240, 120, 0, 0.7)';	//Orange
 		else
 			linecolor = 'rgba(255, 0, 0, 0.7)';	//Red
-		
+
 		if(percentages[i] != 0)
 		{
 			loadersArr[i].setLineColor(linecolor).setPercent(percentages[i]*100).draw();
 			//console.log('LoaderPercent: '+ loadersArr[i].getPercent());			
 		}
 
-	}	
+	}	*/
+
+
 }
 //Draw Rates Loader
 function InitialRateLoader()
