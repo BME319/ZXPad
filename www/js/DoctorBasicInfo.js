@@ -4,7 +4,9 @@
  //var serviceName = 'Services.asmx';
  var DoctorId = localStorage.getItem("DoctorId");
 var ImageAddressIP = "http://10.12.43.66:8088";  //webserviceIP
- var ImageAddressFile = "/CDFiles/PersonalPhoto/Doctor";
+ //var ImageAddressFile = "/CDFiles/PersonalPhoto/Doctor";
+  var ImageAddressFile = "/PersonalPhoto/Doctor";
+
  var ImageAddress = ImageAddressIP + ImageAddressFile + "/" + DoctorId + ".jpg";
  var pictureSource;   // picture source
  var destinationType; // sets the format of returned value
