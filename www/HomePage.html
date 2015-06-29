@@ -147,7 +147,7 @@ background-color: red;
       <!--</div>-->
       <div id="homepage_header" data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:50px">
         <!--<a id="bars-button" data-icon="bars" class="ui-btn-left" style="margin-top:10px;" href="#navpanel">Menu</a>-->
-        <a href="#navpanel" data-role="none" style="float:left; margin: 0px;padding: 0px;"> <div style="display:inline-block;margin:0px auto;width:50px;height:50px;border-radius:100px;border:2px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;"><img style="width:100%;min-height:100%; text-align:center;" src = "img/doc_Avatar.jpg" id="docimg" value="" /></div> </a>
+        <a href="#navpanel" data-role="none" style="float:left; margin: 0px;padding: 0px;"> <div style="display:inline-block;margin:0px auto;width:50px;height:50px;border-radius:100px;border:2px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;"><img style="width:100%;min-height:100%; text-align:center;" src = "img/doc_Avatar.jpg" id="docImg" value="" onError="this.onerror=null;this.src='img/doc_Avatar.jpg';"/></div> </a>
         <h1>健康专员主页</h1>
         <div class="ui-btn-right">
           <div style="float:left;">
@@ -324,7 +324,7 @@ background-color: red;
           </div>
         </div>
         <script>
-          //SMS
+          //SMS---regionBegin
           	var TheOtherId = "";
           	var piUserId = localStorage.getItem('UserId');
           	var piTerminalName = localStorage.getItem('TerminalName');
@@ -400,7 +400,8 @@ background-color: red;
           			}
           		}
           	}
-          
+          //SMS---regionEnd
+
              $(document).ready(function () {
              var table = $('#DataTable').DataTable({
                       "oLanguage": {//语言国际化
@@ -524,9 +525,9 @@ background-color: red;
           		localStorage.setItem("ModuleType",p1);
           		InitialRateLoader();
           		onDeviceReady();
-          		//PlanOverDueCheck();
-          		//InitialSMSBox();
           		
+              /*
+              //Selcet Event Binding
           		$('#planSelect').change(function(){
           		var p1=$(this).children('option:selected').val();
 
@@ -552,21 +553,20 @@ background-color: red;
           		var p1=$(this).children('option:selected').val();
           		localStorage.setItem("ModuleType",p1);
           	GetPatientsList();
-          			});	          			
-         	
+          			});	 
+                */         			
+         	/*
             //Search input
-          	//$('#dtSearch').bind('keyup', function () {
             	$('#dtSearch').bind({
                 keyup: function () {
-              //console.log('search');
               table.search( this.value ).draw();
               myScroll.refresh();
               //console.log(table.row());
               },
               blur: function () {
                 //console.log('search input blur event for classyloader error');
-              //myScroll.refresh();
               }});
+
             //Search input clear
               $("[title = 'Clear text']").bind({
                 click: function () {
@@ -583,16 +583,14 @@ background-color: red;
                     .order( [ 6, p1 ] )
                     .draw();
               });
-          
+          */
+          /*
           	 //SMSBox
           	 $("#SMSBox").click(function ()
           	 {
           		 //替换     	
           		 location.href='SMSList.html?';
-               /*
-               InitialSMSList();
-               $('#SMSBoxPanel').panel( "open" );
-               */
+
           		 } );
                
              $('#navPassword').click(function () {
@@ -630,6 +628,7 @@ background-color: red;
     });
                location.href = 'ProfilePage.html?';
              });
+             */
           							
           		});   
           

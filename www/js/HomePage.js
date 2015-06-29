@@ -14,12 +14,14 @@ var loadersArr = new Array();
 var rowArr = new Array();
 //var ImageAddressIP = "http://10.12.43.63:8088";  //webserviceIP
 var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
-var ImageAddressFile = window.localStorage.getItem("PatientFile");
+//var ImageAddressFile = window.localStorage.getItem("PatientFile");
+var ImageAddressFile = "/PersonalPhoto";
 
 /*
 var planRate = new Rate('planloader');
 var complianceRate = new Rate('complianceloader');
 var goalRate = new Rate('goalloader');*/
+
 
 	function GetPatientsList(callback)
 	{
@@ -572,16 +574,16 @@ function DataTableLoad(arr)
 		}
 		if(patientname =="")
 			patientname = "未知";			
-/*
+
 		var PhotoAddress = arr[i].photoAddress;
 		if (PhotoAddress == "")
 		{
 			PhotoAddress = "img/avatar.jpg";
 		}
 		else PhotoAddress = ImageAddressIP + ImageAddressFile + '/'+PhotoAddress;
-*/
 
-			PhotoAddress = "img/avatar.jpg";
+
+			//PhotoAddress = "img/avatar.jpg";
 			var avatarBorderColor = '#FFFFFF';
 		if(planstatus == 0)
 			avatarBorderColor= '#FD7B7B';	//light red 
@@ -595,7 +597,7 @@ function DataTableLoad(arr)
 		progressbar ='<div  data-role="fieldcontain" style = "margin:0;"><label for="points" style="margin-top:0px;"><p>'+processDays+'/'+totalDays+'天</p></label><input type="range" name="points" class="points" value="'+processvalue+'" min="0" max="100" data-highlight="true"></div>';
 		     	
 //patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:2px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="plus" class="Planicon"></a><a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
-patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:6px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;border-color:'+avatarBorderColor+';" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
+patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:6px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;border-color:'+avatarBorderColor+';" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'" onerror="imgError(this);"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
 
 		var tasklist = '<canvas id="l'+i+'"class="loader'+i+'" style="width:100px;"></canvas>';
 		var figure = '<div id="chartdiv'+i+'" style="width: 240px; height: 100px;"></div>';
@@ -670,7 +672,7 @@ patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;marg
 			}		
 		}		
 	}
-	
+	/*
 	//Avataricon (PatientBasicInfo)
 		$('.Avataricon').bind('click',function () {
 		//var val = $(this).attr("value");
@@ -690,6 +692,8 @@ patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;marg
 			
 		});
 		
+		*/
+
 	//Planicon
 		$('.Planicon').bind('click',function () {
 			var table = $('#DataTable').DataTable();
@@ -755,8 +759,9 @@ function onDeviceReady() {
 	//CheckNetwork();
 	//alert('scroll refresh!');
 	//GetPatientsList();
+	GetDoctorPhoto(localStorage.getItem('DoctorId'));
 	patientTable = new PatientTable();
-patientTable.addPatient();
+	patientTable.addPatient();
 	InitialSMSBox();
 	//myScroll.refresh();	
 	PlanOverDueCheck(); 
@@ -773,6 +778,119 @@ function BindEvent() {
 		 myScroll.disable();
 		//console.log('myScroll disable');		 		 
 	 });
+
+//Selcet Event Binding
+	$('#planSelect').change(function(){
+	var p1=$(this).children('option:selected').val();
+
+GetPatientsList();
+		}); 
+	$('#complianceSelect').change(function(){
+	var p1=$(this).children('option:selected').val();
+	var planType=$('#planSelect').children('option:selected').val();
+	if(planType != 2)
+	{
+		GetPatientsList();
+	}
+		});
+	$('#goalSelect').change(function(){
+	var p1=$(this).children('option:selected').val();
+	var planType=$('#planSelect').children('option:selected').val();
+	if(planType != 2)
+	{
+		GetPatientsList();
+	}
+		});
+	$('#moduleSelect').change(function(){
+	var p1=$(this).children('option:selected').val();
+	localStorage.setItem("ModuleType",p1);
+GetPatientsList();
+		});	 
+
+
+
+//Search input
+	$('#dtSearch').bind({
+    keyup: function () {
+    	    var table = $('#DataTable').DataTable(); 
+  table.search( this.value ).draw();
+  myScroll.refresh();
+  //console.log(table.row());
+  },
+  blur: function () {
+    //console.log('search input blur event for classyloader error');
+  }});
+
+
+  	 //SMSBox
+	 $("#SMSBox").click(function ()
+	 {
+		 //替换     	
+		 location.href='SMSList.html?';
+   /*
+   InitialSMSList();
+   $('#SMSBoxPanel').panel( "open" );
+   */
+		 } );
+   
+ $('#navPassword').click(function () {
+   //localStorage.clear();
+   //location.href = 'ResetPassword.html?';
+   location.href = 'ResetPassword-Pad.html?';     
+
+ });     
+   
+ $('#navQuit').click(function () {
+   var userName = localStorage.getItem('UserName');
+   var password = localStorage.getItem('Password');
+   
+   localStorage.clear();
+   //Auto-Logon
+   //localStorage.setItem('UserName',userName);
+   //localStorage.setItem('Password',password);
+   location.href = 'LogOn-Pad.html?';
+ });
+ 
+ $('#navBasicInfo').click(function () {
+   location.href = 'DoctorInfoPage.html?';
+ });
+ 
+ $('#New').click(function () {
+//alert('new patient!');
+   		localStorage.setItem('PatientId', "");
+       localStorage.setItem('NewPatientFlag',true);
+$.mobile.loading( "show", {
+            text: 'loading',
+            textVisible: true,
+            //theme: theme,
+            textonly: false,
+            //html: html
+    });
+   location.href = 'ProfilePage.html?';
+ });
+
+//Search input clear
+  $("[title = 'Clear text']").bind({
+    click: function () {
+    	    var table = $('#DataTable').DataTable(); 
+
+      table.search('').draw();
+          myScroll.refresh();
+    }
+  });
+  
+  $('#orderSwitch').change(function () {
+    var p1=$(this).children('option:selected').val();
+    var table = $('#DataTable').DataTable(); 
+    // Sort by column 1 and then re-draw
+    table
+        .order( [ 6, p1 ] )
+        .draw();
+  });
+
+
+
+
 
 }
 
@@ -855,6 +973,7 @@ function InitialRateLoader()
 	{//SMS
 	//var ThisUserId = localStorage.getItem("DoctorId");
 	//console.log(ThisUserId);
+	$('#MainFieldPhone').empty();	//clear sms dialog
 	TheOtherId = localStorage.getItem("PatientId");
 	console.log('SMS TheOtherId: '+TheOtherId);
 	var Str = "Phone"; 	//2015-6-17
@@ -924,4 +1043,49 @@ function InitialRateLoader()
 		});
 	});		
 		
+	}
+
+//Deal with img Loading ErrorEvent
+	function imgError(image) {
+    image.onerror = "";
+    image.src = "img/avatar.jpg";
+    return true;
+	}
+
+	function GetDoctorPhoto(DoctorID){
+		var imageAddress = ImageAddressIP + ImageAddressFile;
+		$.ajax({
+			type: "POST",
+        	dataType: "xml",
+			timeout: 30000,  
+			url: 'http://'+ serverIP +'/'+serviceName+'/GetDoctorDetailInfo',
+			async:false,
+			data:{
+				Doctor:DoctorID
+			},
+			success: function(result){
+				try
+				{
+					var photoAddress = $(result).find('PhotoAddress').text();
+					var testStr = /.jpg/;
+					if(!testStr.test(photoAddress)) 
+						//m = DoctorURL+"non.jpg";
+						imageAddress += '/non.jpg';
+					else 
+						imageAddress += '/' + photoAddress;
+					/*var m = $(result).find('PhotoAddress').text();
+					var testStr = /.jpg/
+					if(!testStr.test(m)) 
+						m = DoctorURL+"non.jpg";
+					else 
+						m = DoctorURL+m;
+					window.localStorage.setItem("DoctorPhoto",m);*/
+					$('#docImg').attr('src',imageAddress);}
+				catch(e)
+				{
+					 console.log(e.name + ": " + e.message);
+				}
+			},
+			error: function(msg) {alert("GetDoctorPhoto Error!");}
+		});
 	}
