@@ -1,13 +1,14 @@
 div#Menu {
 	width: 30%;
-	height: 600px;
+	height: 530px;
 	float: left;
+	/*margin-top:-20px;*/
 }
 div#Detail {
-	background-color: #EEEEEE;
+	/*background-color: #EEEEEE;*/
 	width: 70%;
 	float: left;
-	height: 600px;
+	height: 530px;
 }
 .circle {
 	width: 30px;
@@ -21,7 +22,7 @@ div#Detail {
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
-ï¿½ï¿½
+¡¡
 }
 .ForSend {
 	padding: 15px 10px;
@@ -30,8 +31,8 @@ div#Detail {
 	position: relative;
 	border-radius: 15px;
 	float: right;
-	font-size:20px;
-	word-break:break-all;
+	font-size: 20px;
+	word-break: break-all;
 }
 .SendTri {
 	position: absolute;
@@ -49,8 +50,8 @@ div#Detail {
 	position: relative;
 	border-radius: 15px;
 	float: left;
-	font-size:20px;
-	word-break:break-all;
+	font-size: 20px;
+	word-break: break-all;
 }
 .ReceiveTri {
 	position: absolute;
@@ -67,12 +68,11 @@ div#Detail {
 .RevealTbl {
 	visibility: display;
 }
-.NormalField{
-	overflow-y: scroll; 
+.NormalField {
+	overflow-y: auto;
 	height: 480px;
 }
-
-.ShortField{
-	overflow-y: auto; 
-	height: 180px;
+.ShortField {
+	overflow-y: auto;
+	height: 250px;
 }
