@@ -8,6 +8,7 @@ var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
 var ImageAddressFile = "CDFiles/PersonalPhoto/Patient";
 var ImageAddress = ImageAddressIP + ImageAddressFile + "/" + UserId + ".jpg";
 var DoctorId = localStorage.getItem('DoctorId');
+
 /**********************初始页面************************/
 $(document).ready(function (event) {
 	
@@ -42,8 +43,6 @@ $(document).ready(function (event) {
 		GetUserBasicInfo(UserId);
 	}
 	UserId = localStorage.getItem("PatientId");
-	var width1 = 0.25*($("#InvitationInfoPage").width());
-	var width2 = 0.25*($("#InvitationInfoPage").width());
 	$.ajax({
 			type: "POST",
 			dataType: "xml",
@@ -56,6 +55,8 @@ $(document).ready(function (event) {
 				var str = $(result).find("string").text();
 				if (str != "")
 				{
+					var width1 = 0.28*($("#InvitationInfoPage").width());
+					var width2 = 0.28*($("#InvitationInfoPage").width());
 					//var Invitationcode = utf16to8('您的邀请码是：' + str);
 					var Downloadcode;
 					if (localStorage.getItem('DownloadAddress') != null) 
@@ -615,8 +616,8 @@ function Time() {
 function SendInvitation() {
 				//alert(1);
 		var InvitatoinPhoneNo = $("#InvitatoinPhoneNo").val();
-		var width1 = 0.9*$("#Downloadcode").width();
-		var width2 = 0.9*$("#Invitationcode").width();
+		var width1 = $("#Downloadcode").width();
+		var width2 = $("#Invitationcode").width();
 		var SetFlag1 = 0;
 		var SetFlag2 = 0;
 		
@@ -732,6 +733,8 @@ Downloadcode = localStorage.getItem('DownloadAddress')
 					else 
 					{
 						alert("此手机号已被使用，请输入新的手机号");
+						document.getElementById("download").style.display = "block";
+						document.getElementById("Invitation").style.display = "block";
 					}
 				},
 				error: function (msg) {
@@ -766,86 +769,6 @@ function utf16to8(str) { //转码
 	}
 	return out;
 }
-
-function  showInvitationInfoPage() {
-	var width1 = 368/378*0.45*0.45*$(this).width();
-	var width2 = 368/378*0.45*0.45*$(this).width();
-	$("#Downloadcode").empty();
-	$("#Invitationcode").empty();
-	$.ajax({
-			type: "POST",
-			dataType: "xml",
-			timeout: 30000,  
-			url: 'http://'+ serverIP +'/'+serviceName+'/GetActivateCode',
-			async: false,
-			data: {UserId: UserId, RoleClass: "Patient"},
-			beforeSend: function() {},
-			success: function(result) {
-				var str = $(result).find("string").text();
-				if (str != "")
-				{
-					
-					//var Invitationcode = utf16to8('您的邀请码是：' + str);
-					var Downloadcode;
-					if (localStorage.getItem('DownloadAddress') != null) 
-					{
-						Downloadcode = localStorage.getItem('DownloadAddress')
-					}
-					else
-					{
-						Downloadcode = "http://www.baidu.com";
-					}
-					$("#Downloadcode").qrcode({
-						render: "canvas", //canvas方式
-						width: width1, //宽度
-						height:width1, //高度
-						text: Downloadcode //任意内容
-					});	
-					document.getElementById("download").style.display = "block";
-					$("#Invitationcode").qrcode({
-						render: "canvas", //canvas方式
-						width: width2, //宽度
-						height:width2, //高度
-						text: str //任意内容
-					});	
-					document.getElementById("Invitation").style.display = "block";
-					document.getElementById("Invitation").innerHTML = '您的邀请码是：' + str;	
-				}
-				//alert(SetFlag2);
-			},
-			error: function(msg) {
-				alert("Error:GetActivateCode");
-			}
-		});
-		
-		$.ajax({
-		type: "POST",
-		dataType: "xml",
-		timeout: 30000,  
-		url: 'http://'+ serverIP +'/'+serviceName+'/GetPhoneNoByUserId',
-		async: false,
-		data: {UserId: UserId},
-		beforeSend: function() {},
-		success: function(result) {
-			var str = $(result).find("string").text();
-			if (str != "")
-			{
-				$("#InvitatoinPhoneNo").attr("value", str);
-			}
-			else
-			{
-				$(document).on("pageshow", "#InvitationInfoPage", function() {
-					$('#InvitatoinPhoneNo').val($('#PhoneNumber').val());
-				});			
-			}
-		},
-		error: function(msg) {
-			alert("Error:GetPhoneNoByUserId");
-		}
-	});
-	
-}
-
 
 function GetNewPatientID() {
 		  $.ajax({
