@@ -1,15 +1,17 @@
 ﻿/**********************全局变量************************/
- //var DoctorId = "D001";
+ //var DoctorId = "D003";
  //var serverIP = '10.12.43.94:8089';
  //var serviceName = 'Services.asmx';
  var DoctorId = localStorage.getItem("DoctorId");
-var ImageAddressIP = "http://10.12.43.66:8088";  //webserviceIP
- //var ImageAddressFile = "/CDFiles/PersonalPhoto/Doctor";
-  var ImageAddressFile = "/PersonalPhoto/Doctor";
-
+ var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
+ var ImageAddressFile = "/PersonalPhoto";
  var ImageAddress = ImageAddressIP + ImageAddressFile + "/" + DoctorId + ".jpg";
  var pictureSource;   // picture source
  var destinationType; // sets the format of returned value
+ var TerminalIP = window.localStorage.getItem("TerminalIP");
+ var TerminalName = window.localStorage.getItem("TerminalName");
+ var DeviceType = window.localStorage.getItem("DeviceType");
+ var revUserId  = window.localStorage.getItem("UserId");
  
 /**********************初始页面************************/
 $(document).ready(function(event){
@@ -185,29 +187,27 @@ function uploadPhoto(imageURI) {
 	options.fileKey = "file";
 	options.fileName = DoctorId + ".jpg";
 	options.mimeType = "image/jpeg";
-//alert("1");
 	var params = new Object();
 	params.value1 = "test";
 	params.value2 = "param";
 	options.params = params;
-	//alert("0");
+	
 	var ft = new FileTransfer();
-	//alert("2");
-	var URI = ImageAddressIP +'/'+ "upload_pad.php";
-	//alert(URI);
+	var URI = ImageAddressIP +'/'+ "upload.php";
 	ft.upload(imageURI, URI, win, fail, options);
 }
 
 function win(r) {
 	var PhotoAddress =  DoctorId + ".jpg";
- var TerminalIP = window.localStorage.getItem("TerminalIP");
- var TerminalName = window.localStorage.getItem("TerminaName");
- var DeviceType = window.localStorage.getItem("DeviceType");
- var revUserId  = window.localStorage.getItem("UserId");
+ 	var TerminalIP = window.localStorage.getItem("TerminalIP");
+ 	var TerminalName = window.localStorage.getItem("TerminaName");
+ 	var DeviceType = window.localStorage.getItem("DeviceType");
+ 	var revUserId  = window.localStorage.getItem("UserId");
 	var ItemSeq = "1";
 	var Description = null;
 	var SortNo = "1";
 	SetDetailInfo(DoctorId, "Contact", "Contact001_4", ItemSeq, PhotoAddress, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+	CheckMstRole(DoctorId, ItemSeq, PhotoAddress, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
 	var Flag = document.getElementById("Flag").value;
 	if (Flag == "true")
 	{
@@ -259,11 +259,43 @@ function SetDetailInfo(Doctor, CategoryCode, ItemCode, ItemSeq, Value, Descripti
   });
 }
 
+//获取角色信息并保存相应患者角色基本信息
+function CheckMstRole(UserId, ItemSeq, PhotoAddress, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType)
+{
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/GetAllRoleMatch',
+		async: false,
+		data:
+		{
+			UserId: UserId
+		},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			$(result).find('Table1').each(function () {
+				var RoleClass = $(this).find("RoleClass").text();
+				if(RoleClass == 'Patient')
+				{
+					SetPatDetailInfo(UserId, "Contact", "Contact001_4", ItemSeq, PhotoAddress, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+					var Flag = document.getElementById("Flag").value;
+					if (Flag != "true")
+					{
+					  alert("医生头像地址更新失败！");
+					}
+				}
+			})
+		},
+		error: function (msg) {
+			alert("GetAllRoleMatch出错啦！");
+		}
+	});
+}
 
-
-/*
 //保存详细信息到PsDetailInfo
-function SetDetailInfo(Patient, CategoryCode, ItemCode, ItemSeq, Value, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType)
+function SetPatDetailInfo(Patient, CategoryCode, ItemCode, ItemSeq, Value, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType)
 {
   $.ajax({
     type: "POST",
@@ -295,4 +327,4 @@ function SetDetailInfo(Patient, CategoryCode, ItemCode, ItemSeq, Value, Descript
       alert("SetPatBasicInfoDetail出错啦！");
     }
   });
-}*/
+}
