@@ -7,6 +7,7 @@
 //var serverIP = '10.12.43.101:8098';	//mulitiple-users
 
  var serviceName = 'Services.asmx';
+ var imgStoreFile="PersonalPhoto";
 
 /**********************CheckNetwork************************/
 function CheckNetwork() {

@@ -43,6 +43,7 @@ input[type=checkbox] {visibility: hidden;}
 .checkboxRound input[type=checkbox]:checked + label {background: #4BCB6C;}
 
 </style>
+
 <div data-role="page">
 	<div data-role="header">
 		<h1>高血压模块任务实施情况</h1>
@@ -53,10 +54,19 @@ input[type=checkbox] {visibility: hidden;}
 				<div> <img src="images/head.jpg" id="portrait"/> </div>
 				<p id="PatientName"></p>
 			</div>
-			<div id="thumbs" style="margin-top:40px;width:100%;height:30px;" align="center">
-				<ul id="ul_target" style="margin:0 auto;overflow: hidden;width:600px">
-				</ul>
+
+            <div id="thumbs" style="margin-top:30px;width:100%;height:60px;" align="center">
+				<div style="width:830px;height:60px;">
+                <button  data-icon="arrow-l" style="width:150px;float:left;" id="play_prev" onclick="hookBtn(this.id);">上一计划</button>
+                <div style="width:450px;float:left;margin-left:40px;" id="planListDiv">
+                <select name="planList" id="planList" data-native-menu="false" >
+                
+                </select>
+                </div>
+                <button  data-icon="arrow-r" style="width:150px;float:left;margin-left:40px;" id="play_next" onclick="hookBtn(this.id);">下一计划</button>
+                </div>
 			</div>
+            
 			<div data-role="popup" id="popupBasic" data-position-to="" >
 				<p  style="font-size:20px;color:#0048CC;">没有更多</p>
 			</div>
@@ -78,23 +88,24 @@ input[type=checkbox] {visibility: hidden;}
 			</div>
 			<div style="width:700px;height:40px;display:block;margin-left:10%;margin-top:0px;">
 				<div class="ui-grid-b" >
-					<div class="ui-block-a" style="width:150px;">
+					<div class="ui-block-a" style="width:110px;margin-top:-20px;margin-left:20px;">
 						<div data-role="fieldcontain" style="">
-							<select name="switch" id="switch" data-role="slider">
-								<option value="0" >收缩压</option>
-								<option value="1" >舒张压</option>
+							<select name="switch" id="switch" data-native-menu="false">
+								<option value="Bloodpressure_1" id="Bloodpressure_1">收缩压</option>
+								<option value="Bloodpressure_2" >舒张压</option>
+                                <option value="Pulserate_1" >脉率</option>
 							</select>
 						</div>
 					</div>
-					<div class="ui-block-b">
+					<div class="ui-block-b" style="margin-left:50px;" id="originalDiv">
 						<p><img alt="Load" src="images/original.png" style="width:30px;height:5px;" />&nbsp;起始值：<span id="BPoriginal"></span>mmHg</p>
 					</div>
-					<div class="ui-block-c">
+					<div class="ui-block-c" id="targetDiv">
 						<p><img alt="Load" src="images/target.png" style="width:30px;height:5px;" />&nbsp;目标值：<span id="BPtarget"></span>mmHg</p>
 					</div>
 				</div>
 			</div>
-			<div id="chartdiv" style="width:80%; height:500px;margin-top:30px;margin-left:10%;"> </div>
+			<div id="chartdiv" style="width:80%; height:450px;margin-top:30px;margin-left:10%;"> </div>
 			<div style="margin:20px auto;" align="center">
 				<p id="CompliacneValue" style="font-size:20px;color:#0048CC;"></p>
 			</div>
@@ -103,6 +114,7 @@ input[type=checkbox] {visibility: hidden;}
 	<div data-role="footer">
 		<h3> copyright </h3>
 	</div>
+    
 	<div data-role="panel" data-position="right" data-position-fixed="true" data-display="push" data-theme="a" id="editPlan">
 		<div data-role="navbar" data-position="fixed">
 			<div class="ui-grid-b"> 
@@ -261,12 +273,11 @@ input[type=checkbox] {visibility: hidden;}
 	var piDeviceType = localStorage.getItem('DeviceType');
 	var DoctorId = localStorage.getItem('UserId');
 	
-  //初始值
-    var index = 0;
-	var chart;
-	var guides;
-	var PlanNo;
-    var NewPlanNo;
+    //初始值 全局变量
+	var chart="";;
+	var NowPlanNo="";
+	var StartDate=0;
+	var EndDate=0;
 	
 	//写死
 	var PLType = 1;
@@ -290,9 +301,13 @@ input[type=checkbox] {visibility: hidden;}
 	 GetImplementationForPadFirst(PatientId, Module);
      
 	  $('#switch').change(function(){ 
-	      selectDataset($(this).children('option:selected').val());
+	      selectDataset($(this).children('option:selected').val());  //下拉框切换体征
 	   });
 
+      $('#planList').change(function(){ 
+	      GetImplementationForPadSecond(PatientId, $(this).children('option:selected').val());
+	      //selectPlan($(this).children('option:selected').val());  //下拉框切换计划
+	   });
 	    
 	});
 	
