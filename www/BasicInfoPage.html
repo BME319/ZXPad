@@ -1,0 +1,421 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.5, maximum-scale=2, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
+<link href="css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-2.1.3.js"></script>
+<script src="js/jquery.mobile-1.4.2.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/CommonUtility.js"></script>
+<script type="application/javascript" src="js/iscroll.js"></script>
+<link rel="stylesheet" type="text/css" href="css/scrollbar.css">
+<link rel="stylesheet" type="text/css" href="css/scroll.css">
+<script type="text/javascript" src="js/qrcode.js"></script>
+<script type="text/javascript" src="js/jquery.qrcode.js"></script>
+<script type="text/javascript" src="js/BasicInfoPage.js"></script>
+<title>患者建档</title>
+<style type="text/css">
+div#CheckPhoneDiv.ui-grid-d .ui-block-a {
+	width: 4%;
+}
+div#CheckPhoneDiv.ui-grid-d .ui-block-b {
+	width: 37%;
+}
+div#CheckPhoneDiv.ui-grid-d .ui-block-c {
+	width: 18%;
+}
+div#CheckPhoneDiv.ui-grid-d .ui-block-d {
+	width: 37%;
+}
+div#CheckPhoneDiv.ui-grid-d .ui-block-e {
+	width: 4%;
+}
+
+div#SynInfoDiv.ui-grid-d .ui-block-a {
+	width: 4%;
+}
+div#SynInfoDiv.ui-grid-d .ui-block-b {
+	width: 37%;
+}
+div#SynInfoDiv.ui-grid-d .ui-block-c {
+	width: 18%;
+}
+div#SynInfoDiv.ui-grid-d .ui-block-d {
+	width: 37%;
+}
+div#SynInfoDiv.ui-grid-d .ui-block-e {
+	width: 4%;
+}
+
+div#BasicInfoDiv.ui-grid-d .ui-block-a {
+	width: 4%;
+}
+div#BasicInfoDiv.ui-grid-d .ui-block-b {
+	width: 37%
+}
+div#BasicInfoDiv.ui-grid-d .ui-block-c {
+	width: 18%;
+}
+div#BasicInfoDiv.ui-grid-d .ui-block-d {
+	width: 37%
+}
+div#BasicInfoDiv.ui-grid-e .ui-block-d {
+	width: 4%
+}
+</style>
+<style type="text/css">
+.Logo {
+	float: left;
+}
+.clearfloat {
+	clear: both;
+}
+.sidebar {
+	padding-left: 6%;
+	list-style-type: none;
+}
+.mainInfo {
+	padding-left: 10px;
+	padding-right: 10px;
+	width: 95%;
+	float: left;
+}
+
+</style>
+</head>
+<body>
+
+<div data-role="page" id="BasicInfoPage">          
+  <div data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:45px"> 
+    <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a> 
+    <!--<a href="HomePage.html"> <img src = "img/avatar.jpg" id="docimg" value="" style="height:30px"/> </a>-->
+    <h3>患者信息</h3>
+  </div>
+  <div data-role="popup" id="SaveInsure" data-theme="a" data-overlay-theme="b" class="ui-content" style="width:300px; height:150px; padding-bottom:2em;">
+    <h3 align="center" style="font-size:20px; height:50px">保存确认</h3>
+    <p align="center" style="font-size:16px; height:40px"">您确定保存基本信息吗？</p>
+    <div data-role="fieldcontain" align="center">
+      <a href="#" data-rel="back" onclick = "SaveInfo()" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">确认</a>
+      <a href="#" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">取消</a>
+    </div>
+  </div>
+  <div data-role="popup" id="ResetInsure" data-theme="a" data-overlay-theme="b" class="ui-content" style="width:300px; height:150px; padding-bottom:2em;">
+    <h3 align="center" style="font-size:20px; height:50px">重置确认</h3>
+    <p align="center" style="font-size:16px; height:40px"">您确定重置基本信息吗？</p>
+    <div data-role="fieldcontain" align="center">
+      <a href="#" data-rel="back" onclick = "ResetInfo()" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">确认</a>
+      <a href="#" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">取消</a>
+    </div>
+  </div>
+  <div data-role="content">
+    <div class="ui-grid-d" id="CheckPhoneDiv">
+      <div class="ui-block-a"></div>
+      <div class="ui-block-b"> 
+        <div data-role="content">
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="PhoneNo" style="width:80px">手机号</label>
+                </td>
+                <td width="350px">
+                  <input type="text" name="PhoneNo" id="PhoneNo" style="height:40px">
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="ui-block-c">
+        <div data-role="content">
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                 <a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini" id="Regist" onClick="CheckPhone()">注册</a>
+               </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="ui-block-d" id="IdDiv">
+        <div data-role="content">
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="UserId" style="width:100px">*ID</label>
+                </td>
+                <td width="300px">
+                  <input name="UserId" type="text" id="UserId" style="background-color:#EAEAEA; height:40px" readonly>
+                </td>
+              </tr>
+            </table> 
+          </div>
+        </div>
+      </div>
+      <div class="ui-block-e"></div>
+    </div>
+    
+    <div class="ui-grid-d" id="SynInfoDiv">
+      <div class="ui-block-a"></div>
+      <div class="ui-block-b"> 
+        <div data-role="content">
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="Hospital" style="width:80px">医院</label>
+                </td>
+                <td style="width:300px">
+                  <select name="Hospital" id="Hospital" style="height:40px"></select>
+                </td>
+              </tr>
+            </table>   
+          </div> 
+        </div>
+      </div>
+      <div class="ui-block-c"></div>
+      <div class="ui-block-d">
+        <div data-role="content">
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="PId" style="width:100px">就诊号</label>
+                </td>
+                <td style="width:300px">
+                  <input type="text" name="PId" id="PId" style="height:40px">
+                </td>
+                <td>
+                  <a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini" onClick="SynInfo()">同步信息</a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="ui-block-e"></div>
+    </div>
+    <div class="ui-grid-d" id="BasicInfoDiv">
+        <div class="ui-block-a"></div>
+        <div class="ui-block-b">
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="UserName" style="width:80px">*姓名</label>
+                </td>
+                <td width="300px">
+                  <input type="text" name="UserName" id="UserName" style="height:40px; font-weight:50">
+                </td>
+              </tr>
+            </table> 
+          </div>
+          <div>
+            <label for="AlertUserName" id="AlertUserName" style="color:red">姓名必填</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="SexType" style="width:80px">*性别</label>
+                </td>
+                <td width="300px">
+                  <select name="SexType" id="SexType" style="height:40px"></select>
+               </td>
+              </tr>
+            </table> 
+          </div>
+          <div>
+            <label for="AlertSex" id="AlertSex" style="color:red">性别必填</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>            
+                  <label for="AboBloodType" style="width:80px">血型</label>
+                </td>
+                <td width="300px">
+                  <select name="AboBloodType" size="1" id="AboBloodType" style="height:40px"></select>
+                </td>
+              </tr>
+            </table> 
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="InsuranceType" style="width:80px">医保类型</label>
+                </td>
+                <td width="300px">
+                  <select name="InsuranceType" id="InsuranceType" style="height:40px"></select>
+                </td>
+              </tr>
+            </table> 
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="Birthday" style="width:80px">*出生日期</label>
+                </td>
+                <td width="300px">
+                  <input type="date" name="Birthday" id="Birthday" style="height:40px">
+                </td>
+              </tr>
+            </table>     
+          </div>
+          <div>
+            <label for="AlertBirth" id="AlertBirth" style="color:red">生日必填</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="Height" style="width:80px">身高(cm)</label>
+                </td>
+                <td width="300px">
+                  <input type="text" name="Height" id="Height" style="height:40px">
+                </td>
+              </tr>
+            </table> 
+          </div>
+          <div>
+            <label for="AlertHeight" id="AlertHeight" style="color:red">身高必须为正数</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="Weight" style="width:80px">体重(kg)</label>
+                </td>
+                <td width="300px">
+                  <input type="text" name="Weight" id="Weight" style="height:40px">
+                </td>
+              </tr>
+            </table> 
+          </div>
+          <div>
+            <label for="AlertWeight" id="AlertWeight" style="color:red">体重必须为正数</label>
+          </div>
+        </div>
+        <div class="ui-block-c"></div>
+        <div class="ui-block-d">
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="HomeAddress" style="width:120px">家庭住址</label>
+                </td>
+                <td width="300px">
+                  <input type="text" name="HomeAddress" id="HomeAddress" style="height:40px">
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="IDNo" style="width:120px">身份证号码</label>
+                </td>
+                <td width="300px">
+                  <input type="text" name="IDNo" id="IDNo" style="height:40px">
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <label for="AlertID" id="AlertID" style="color:red">身份证号码必须为15位或18位</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="PhoneNumber" style="width:120px">联系电话</label>
+                </td>
+                <td width="300px">
+                  <input type="text" name="PhoneNumber" id="PhoneNumber" style="height:40px">
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div>
+              <label for="AlertPhone" id="AlertPhone" style="color:red; width:200px">联系电话必须为手机或座机</label>  
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="Nationality" style="width:120px">国籍</label>
+                </td>
+                <td width="300px">
+                  <input type="text" name="Nationality" id="Nationality" style="height:40px">
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="Occupation" style="width:120px">职业</label>
+                </td>
+                <td width="300px">
+                  <input type="text" name="Occupation" id="Occupation" style="height:40px">
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="EmergencyContact" style="width:120px">紧急联系人</label>
+                </td>
+                <td width="300px">
+                  <input type="text" name="EmergencyContact" id="EmergencyContact" style="height:40px">
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td>
+                  <label for="EmergencyContactPhoneNumber" style="width:120px">紧急联系人电话</label>
+                </td>
+                <td width="300px">
+                  <input type="text" name="EmergencyContactPhoneNumber" id="EmergencyContactPhoneNumber" style="height:40px">
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div>
+              <label for="AlertEmergencyPhone" id="AlertEmergencyPhone" style="color:red; width:200px">联系电话必须为手机或座机</label>  
+          </div>
+        </div>
+        <div class="ui-block-e"></div>
+      </div>
+    <div>
+      <input type="text" name="DoctorId" id="DoctorId" data-role="none" style="display: none;">
+      <input type="text" name="InvalidFlag" id="InvalidFlag" data-role="none" style="display: none;">
+      <input type="text" name="Flag" id="Flag" data-role="none" style="display: none;">
+    </div>
+    <div style="text-align:center" id="SaveButton">
+      <a href="#ResetInsure" data-inline="true" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">重置</a>
+      <a href="#SaveInsure" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">保存</a>
+    </div>
+    <div data-theme="a" data-role="footer" data-position="fixed">
+      <h3>copyright</h3>
+    </div>
+  </div>
+</div>
+
+</html>
