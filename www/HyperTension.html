@@ -6,6 +6,7 @@
 <title>查看计划</title>
 <link rel="stylesheet" href="css/jquery.mobile-1.4.2.css">
 <link rel="stylesheet" href="css/implementationPad.css">
+<link rel="stylesheet" href="css/SMSForPanel.css">
 <!--<script src="js/jquery.js"></script>-->
 <!--<script src="js/jquery.mobile-1.4.2.js"></script>-->
 <script src="js/CommonUtility.js" type="text/javascript"></script>
@@ -17,6 +18,7 @@
 <script src="js/amstock.js" type="text/javascript"></script>
 <script src="js/implementationPad.js" type="text/javascript"></script>
 <script src="js/EditPlan.js" type="text/javascript"></script>
+<script src="js/SMSResize.js" type="text/javascript"></script>
 </head>
 <body>
 <style type="text/css">
@@ -145,17 +147,17 @@ input[type=checkbox] {visibility: hidden;}
       style="z-index: 2000;">
     <div id="" align="center">
       <div style="float:left;"> <a href="#homepage_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" ></a> </div>
-      <h2 id="">SMS</h2>
+      <h2 id="SMSHeader"></h2>
     </div>
     <!--<div data-role="content">-->
-    <div style="position:relative; height:100%; margin-top:50px;" id="GenaralFieldPhone">
-      <div id="OutFieldPhone" style="position:absolute; width: 99%;">
-        <div id="MainFieldPhone" class="NormalField"></div>
+    <div style="position:relative; height:100%; margin-top:50px;" id="GenaralField">
+      <div id="OutField" style="position:absolute; width: 99%;">
+        <div id="MainField" class="NormalField"></div>
         <table width="100%">
           <tr>
-            <td align="center" width="89%"><textarea id="SMSContentPhone" style="font-size:20px; padding:1px;margin:5px;"></textarea></td>
+            <td align="center" width="89%"><textarea id="SMSContent" style="font-size:20px; padding:1px;margin:5px;"></textarea></td>
             <td></td>
-            <td align="center" width="10%" valign="bottom"><button type="button" id="SMSbtnPhone">发送</button></td>
+            <td align="center" width="10%" valign="bottom"><button type="button" id="SMSbtn">发送</button></td>
           </tr>
         </table>
       </div>
@@ -467,4 +469,5 @@ input[type=checkbox] {visibility: hidden;}
 	
 </script>
 </body>
+<script src="js/SMSForPanel.js" type="text/javascript"></script>
 </html>
