@@ -1,685 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="user-scalable=no, initial-scale=1.4, maximum-scale=2, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
-<link href="css/timeLine.css" rel="stylesheet" type="text/css" />
-<style type="text/css">
-/*checkbox样式*/
-
-
-
-input[type=checkbox] {
-	visibility: hidden;
-}
-.checkboxRound {
-	width: 20px;
-	height: 20px;
-	background: #ddd;
-	margin: 2px 20px;
-	border-radius: 100%;
-	position: relative;
-	-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-	-moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-	box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-}
-.checkboxRound label {
-	display: block;
-	width: 16px;
-	height: 16px;
-	border-radius: 100px;
-	-webkit-transition: all .5s ease;
-	-moz-transition: all .5s ease;
-	-o-transition: all .5s ease;
-	-ms-transition: all .5s ease;
-	transition: all .5s ease;
-	cursor: pointer;
-	position: absolute;
-	top: 2px;
-	left: 2px;
-	z-index: 1;
-	background: #EAEAEA;
-	-webkit-box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5);
-	-moz-box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5);
-	box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5);
-}
-.checkboxRound input[type=checkbox]:checked + label {
-	background: #4BCB6C;
-}
-textarea#hyperclass {
-	resize: none;
-	width: 300px;
-	height: 280px;
-	max-height: 300px;
-	max-width: 300px;
-	overflow: auto;
-	border: 0;
-}
-#TextInput2 {
-	width: 20%
-}
-#TextInput1 {
-	width: 20%
-}
-div#CPPart1 {
-	width: 65%
-}
-div#CPPart2 {
-	width: 30%;
-	text-align: center;
-	position: fixed;
-	top: 70px;
-	right: 5px;
-}
-table.gridtable {
-	font-family: verdana, arial, sans-serif;
-	font-size: 11px;
-	color: #333333;
-	border-width: 1px;
-	border-color: #666666;
-	border-collapse: collapse;
-}
-table.gridtable th {
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #666666;
-	background-color: #dedede;
-}
-table.gridtable td {
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #666666;
-	background-color: #ffffff;
-}
-#historyUl, #historyUl p {
-	margin: 0px;
-	padding: 0px;
-	border: none;
-}
-#ClinicInfoPage #ClinicInfoDetail-form.ui-panel {
-	width: 45em;
-}
-#ClinicInfoPage #ClinicInfoDetail-form.ui-panel-closed {
-	width: 0;
-}
-#ClinicInfoPage .ui-panel-page-content-position-left, .ui-panel-dismiss-open.ui-panel-dismiss-position-right {
-	left: 0em;/*panel左边页面关闭触发范围*/
-	right: 45em;/*panel页面关闭触发范围*/
-}
-<!--
-/************ Table ************/-->
-.dtypetable {
-	width: 100%;
-	border-collapse: collapse;
-	border: 1px solid #ccc;
-}
-.dtypetable thead td {
-	font-size: 20px;
-	color: #000000;
-	text-align: center;
-	background: url(table_top.jpg) repeat-x top center;
-	border: 1px solid #ccc;
-	font-weight: bold;
-}
-.dtypetable tbody tr {
-	background: #fff;
-	font-size: 20px;
-	color: #000000;
-}
-.dtypetable tbody tr.alt-row {
-	background: #f2f7fc;
-}
-.dtypetable td {
-	line-height: 20px;
-	text-align: left;
-	padding: 4px 10px 3px 10px;
-	height: 18px;
-	border: 1px solid #ccc;
-}
-</style>
-</head>
-
-<body>
-<div data-role="page" id="ClinicInfoPage">
-  <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> 
-    <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-    <h1>创建计划</h1>
-    
-    <!--navbar -->
-    <div data-role="navbar" >
-      <ul>
-        <li>
-          <button class="ui-btn-active ui-state-persist">就诊信息</button>
-        </li>
-        <li>
-          <button>目标讨论</button>
-        </li>
-        <li>
-          <button>任务选择</button>
-        </li>
-        <li>
-          <button>开始计划</button>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div data-role="content" data-theme="a">
-    <div id="ClinicInfoContent" >
-      <input id="AdmissionDateMark" name="AdmissionDateMark" type="hidden" value="1897-01-01 00:00:00" />
-      <input id="ClinicDateMark" name="ClinicDateMark" type="hidden" value="1897-01-01 00:00:00" />
-      <div id="norecord" style="display: none; margin-top: 20px;margin-bottom:40px;" align="center">
-        <p style="font-size: 20px; color: Red;">还没有任何临床信息</p>
-      </div>
-      <div class="demo" id="demo" style="display: block;">
-        <div class="history">
-          <div class="history-date">
-            <ul id="historyUl">
-            </ul>
-          </div>
-        </div>
-        <div id="history_loading" style="display: none; margin-top:0px" align="center"> <img alt="Load" src="img/history_loading.gif" style="width:50px;height:50px;" />
-          <p>加载中，请稍后</p>
-        </div>
-        <div class="white" style="height: 10px; margin-top: 10px;"> </div>
-        <!--<div id="historyButton">
-                    <input type="button" style="width:800px;height:40px;" class="btn btn-primary" onclick="GetMoreClinic();" value="加载更多" />
-                </div>--> 
-      </div>
-    </div>
-    <div class="ui-grid-b">
-      <div class="ui-block-a"> </div>
-      <div class="ui-block-b" style="text-align:center;">
-        <button class="ui-btn ui-btn-inline"  onclick="GetMoreClinic();" id="historyButton">加载更多</button>
-        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage'); $.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
-        <!-- InsertCurSbp(); InsertCurDbp();函数合入InsertTarget中。getGoalValue()获取目标血压与当前血压的差值 ZC 20150511--> 
-      </div>
-      <div class="ui-block-c"> </div>
-    </div>
-  </div>
-  <div data-role="panel" data-position="right" data-position-fixed="true" data-display="push" data-theme="a" id="ClinicInfoDetail-form">
-    <div id="detailTitle" align="center">
-      <h2 id = "DetailType"></h2>
-    </div>
-    <table cellpadding="3" style="margin-top:50px">
-      <tr>
-        <td width="10%" style="border: 0;"> 患者ID: </td>
-        <td width="15%" style="border: 0;" id="PatientId"></td>
-        <td width="10%" style="border: 0;"> 患者姓名: </td>
-        <td id = "UserName" width="12%" style="border: 0;"></td>
-        <td width="5%" style="border: 0;"> 日期: </td>
-        <td id= "NowDate" width="12%" style="border: 0;"></td>
-      </tr>
-    </table>
-    <table data-role="table" id="table-column-toggle" data-mode="columntoggle" data-column-btn-text="显示\隐藏" class="ui-responsive table-stroke">
-      <thead id = "table-column-toggle-thead">
-      </thead>
-      <tbody id = "table-column-toggle-tbody">
-      </tbody>
-    </table>
-    <br />
-    <br />
-    <table id="table-ClinicInfoDetailByType" class="dtypetable">
-      <thead id = "table-ClinicInfoDetailByType-thead">
-      </thead>
-      <tbody id = "table-ClinicInfoDetailByType-tbody">
-      </tbody>
-    </table>
-  </div>
-</div>
-<div data-role="page" id="SetTargetPage">
-  <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-    <h1>创建计划</h1>
-    
-    <!--navbar -->
-    <div data-role="navbar" >
-      <ul>
-        <li>
-          <button>就诊信息</button>
-        </li>
-        <li>
-          <button class="ui-btn-active ui-state-persist">目标讨论</button>
-        </li>
-        <li>
-          <button>任务选择</button>
-        </li>
-        <li>
-          <button>开始计划</button>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div data-role="content" data-theme="a">
-    <div class="ui-grid-b">
-      <div class="ui-block-a">
-        <h3 align="center">血压</h3>
-        <div class="ui-grid-a">
-          <div class="ui-block-a">
-            <div  id="chart_SBP_1" style="float:left;margin-left:10px ; width: 150px; height: 300px;"></div>
-          </div>
-          <div class="ui-block-b">
-            <div  id="chart_DBP_1" style="width: 150px; height: 300px;"></div>
-          </div>
-          <div data-role="fieldcontain" id="test1">
-            <label style="width:50%">当前收缩压</label>
-            <input  type="text" id="TextInput1" onkeyup="this.value=this.value.replace(/\D/g,'') ;GetDescription();SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);RiskModify() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" />
-            <label style="width:50%">当前舒张压</label>
-            </br>
-            </br>
-            <input type="text" id="TextInput2" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);RiskModify()  ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}"/>
-            </br>
-            </br>
-            </br>
-            </br>
-            </br>
-          </div>
-        </div>
-      </div>
-      <div class="ui-block-b">
-        <h3 align="center">高血压等级说明</h3>
-        <textarea data-role="none" id="hyperclass" name="" cols="" rows=""  readonly="readonly" ></textarea>
-        <div data-role="fieldcontain" id="test2">
-          <label style="width:50%">目标收缩压</label>
-          <input type="text" id="TextInput3" onkeyup="this.value=this.value.replace(/\D/g,'') ;SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1)  ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}"/>
-          <label style="width:50%">目标舒张压</label>
-          </br>
-          </br>
-          <input type="text" id="TextInput4" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1) ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}"/>
-          </br>
-          </br>
-          </br>
-          </br>
-        </div>
-      </div>
-      <div class="ui-block-c">
-        <h3 align="center">风险评估</h3>
-        <!--        <div id="chartdiv3" style="width:300px; height:400px;"> </div>
--->
-        <div id="chartdiv3" style="width:300px; height:400px;"> </div>
-      </div>
-    </div>
-    <div class="ui-grid-b">
-      <div class="ui-block-a"> </div>
-      <div id="Targetbutton" class="ui-block-b" style="text-align:center;">
-        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#ClinicInfoPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
-        <button class="ui-btn ui-btn-inline" onclick="if(InsertTarget()) {$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});}getGoalValue();">下一步</button>
-        <!-- InsertCurSbp(); InsertCurDbp();函数合入InsertTarget中。getGoalValue()获取目标血压与当前血压的差值 ZC 20150511--> 
-      </div>
-      <div class="ui-block-c"> </div>
-    </div>
-  </div>
-</div>
-<div data-role="page" id="CreatePlanPage">
-  <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-    <h1>创建计划</h1>
-    <!--navbar -->
-    <div data-role="navbar" >
-      <ul>
-        <li>
-          <button>就诊信息</button>
-        </li>
-        <li>
-          <button>目标讨论</button>
-        </li>
-        <li>
-          <button class="ui-btn-active ui-state-persist">任务选择</button>
-        </li>
-        <li>
-          <button>开始计划</button>
-        </li>
-      </ul>
-    </div>
-  </div>
-  
-  <!--content -->
-  <div data-role="content" data-theme="a">
-    <div id="CPPart1">
-      <h4 style="color:#4BAACB">生活方式：</h4>
-      <table data-role="table" class="ui-responsive table-stroke">
-        <thead>
-          <tr>
-            <th></th>
-            <th></th>
-            <th>说明</th>
-            <th>效果</th>
-            <th>副作用</th>
-          </tr>
-        </thead>
-        <tbody id="LifeStyleBody">
-          <!--加载“生活方式” -->
-        </tbody>
-      </table>
-      <div class="ui-grid-a">
-        <div class="ui-block-a">
-          <h4 id="drugTitle" style="color:#4BAACB">药物治疗：</h4>
-        </div>
-        <div class="ui-block-b" style="text-align: right"> <a href="#popupDrug" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-btn-inline ui-icon-star ui-btn-icon-left" data-transition="pop" id="drugBtn">医嘱列表</a> </div>
-      </div>
-      <table data-role="table" class="ui-responsive table-stroke" id="DrugListTable">
-        <!--加载“药物治疗” -->
-      </table>
-      <div id="LastDrugListDiv" style="height: 50px; color:#cb6c4b" > 
-        <!--加载“过往药物治疗” --> 
-      </div>
-    </div>
-    <div id="CPPart2">
-      <p>生活方式</p>
-      <h1 id="lifestyleChanges" style="color:#4BAACB">0mmHg</h1>
-      <img src="img/plus.png" style="height: 24px; width: 24px;"/>
-      <p>药物治疗</p>
-      <h1 id="drugChanges"  style="color:#4BAACB">0mmHg</h1>
-      <hr style="width:60%;"/>
-      <p>距离目标</p>
-      <h1 id="goal" style="color:#cb6c4b">0mmHg</h1>
-    </div>
-    <div class="ui-grid-b">
-      <div class="ui-block-a"> </div>
-      <div class="ui-block-b" style="text-align:center;">
-        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
-        <button class="ui-btn ui-btn-inline" onclick="setPsTask();startPlanPageInit();$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
-        <!-- startPlanPageInit()开始计划页面初始化 ZC 2015-05-11--> 
-      </div>
-      <div class="ui-block-c"> </div>
-    </div>
-    <div data-role="popup" id="popupDrug" data-theme="a" class="ui-corner-all ui-content" data-dismissible="false"> <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a>
-      <h3 id="popupH3">该患者过往药嘱列表：</h3>
-      <div id="popupDrugDiv"> 
-        <!-- 药嘱列表--> 
-      </div>
-      <div class="ui-grid-a" id="divBtn">
-        <div class="ui-block-a"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-btn-a">取 消</a></div>
-        <div class="ui-block-b"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-btn-a" onclick="setPsDrug();">确 定</a></div>
-      </div>
-    </div>
-  </div>
-</div>
-<div data-role="page" id="StartPlanPage">
-  <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-    <h1>创建计划</h1>
-    
-    <!--navbar -->
-    <div data-role="navbar" >
-      <ul>
-        <li>
-          <button>就诊信息</button>
-        </li>
-        <li>
-          <button>目标讨论</button>
-        </li>
-        <li>
-          <button>任务选择</button>
-        </li>
-        <li>
-          <button class="ui-btn-active ui-state-persist">开始计划</button>
-        </li>
-      </ul>
-    </div>
-  </div>
-  
-  <!--content --> 
-  
-  <!--<h1 align="center">开始计划</h1>-->
-  <div data-role="content" data-theme="a">
-    <div class="ui-grid-a">
-      <div class="ui-block-a">
-        <p align="center"><b>计划目标</b></p>
-        <div style="float:left;width:65%">
-                <div class="ui-grid-a">
-
-          <div class="ui-block-a">
-          <div id="chart_SBP_2" style="float:left;margin-left:10px ; width: 120px; height: 340px;"></div>
-          </div>
-          <div class="ui-block-b">
-          <div id="chart_DBP_2" style="width: 120px; height: 340px;"></div>
-          </div>
-          </div>
-        </div>
-        <div style="float:right;width:35%;height:340px;">
-          <div style="height:95px;">
-            <div style="float:left;width:65%">
-              <p align="center">初始收缩压</p>
-            </div>
-            <div style="float:left;width:25%">
-              <p align="center">
-                <input name="textarea" type="text" id="OSBP" readonly="true"/>
-              </p>
-            </div>
-          </div>
-          <div style="height:95px;">
-            <div style="float:left;width:65%">
-              <p align="center">目标收缩压</p>
-            </div>
-            <div style="float:left;width:25%">
-              <p align="center">
-                <input name="textarea" type="text" id="TSBP" readonly="true"/>
-              </p>
-            </div>
-          </div>
-          <div style="height:95px;">
-            <div style="float:left;width:65%">
-              <p align="center">初始舒张压</p>
-            </div>
-            <div style="float:left;width:25%">
-              <p align="center">
-                <input name="textarea" type="text" id="ODBP" readonly="true"/>
-              </p>
-            </div>
-          </div>
-          <div style="height:95px;">
-            <div style="float:left;width:65%">
-              <p align="center">目标舒张压</p>
-            </div>
-            <div style="float:left;width:25%">
-              <p align="center">
-                <input name="textarea" type="text" id="TDBP" readonly="true"/>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div style="float:left;width:33%">
-          <p align="center">计划开始时间</p>
-          <p align="center">结束日期设置</p>
-        </div>
-        <div style="float:left;width:33%">
-          <p align="center" id="BeginDate"></p>
-          <p align="center">
-            <input name="textarea" id="EndDate" type="text" onclick="WdatePicker()" readonly="true"/>
-          </p>
-          <p align="center"; style="color:#FF0000" id="Alert"></p>
-        </div>
-        <!--      <div style="float:left;width:33%">
-        <p align="center">
-          <button id= "btnToStart" style="width:100px; height:40px;" onclick="$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">返回修改</button>
-          <button id= "btnToStart" style="width:100px; height:40px;" onclick="btn1_listener_f()">确认开始</button>
-        </p>
-      </div>
---> 
-      </div>
-      <div class="ui-block-b">
-        <p align="center"><b>计划任务</b></p>
-        <table align="center" class="gridtable" id="PlanShow">
-          <thead id="L0">
-            <tr>
-              <th><div align="center" style="width:80px;">编号</div></th>
-              <th><div align="center" style="width:80px;">类型</div></th>
-              <th><div align="center" style="width:80px;">任务名</div></th>
-              <th><div align="center" style="width:185px;";>说明</div></th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-    </div>
-    <div class="ui-grid-b">
-      <div class="ui-block-a"> </div>
-      <div class="ui-block-b" style="text-align:center;">
-        <button id= "btnToStart"  class="ui-btn ui-btn-inline"  onclick="$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">返回修改</button>
-        <button id= "btnToStart"  class="ui-btn ui-btn-inline" onclick="btn1_listener_f()">确认开始</button>
-        <!--        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
-        <button class="ui-btn ui-btn-inline" onclick="setPsTask();startPlanPageInit();$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
---> <!-- startPlanPageInit()开始计划页面初始化 ZC 2015-05-11--> 
-      </div>
-      <div class="ui-block-c"> </div>
-    </div>
-  </div>
-</div>
-</body>
-<script src="js/jquery-2.1.3.js" type="text/javascript"></script>
-<script src="js/jquery.mobile-1.4.2.js" type="text/javascript"></script>
-<script src="js/jquery-ui-1.7.2.custom.min.js" type="text/javascript"></script>
-<script src="js/amcharts.js" type="text/javascript"></script>
-<script src="js/serial.js" type="text/javascript"></script>
-<script src="js/jquery.chromatable.js" type="text/javascript"></script>
-<script src="js/WdatePicker.js"></script>
-<script type="text/javascript" src="js/CommonUtility.js"></script>
-<script type="text/javascript" src="js/target discussion.js"></script>
-<script type="text/javascript">
-//Loading 
-
-  var SBPlist = new Array();
-  var DBPlist = new Array();
-  var Tasklist = new Array();
-  var bpi = 0;
-  var lifeChanges = 0;
-  var drugChanges = 0;
-  var target = 0;
-  var toTarget = 0; //距离目标多少mmHg
-  var evaluate={};
-  /*
-//Loading show
-
-$(document).on("pagehide", "#ClinicInfoPage", function(){
-
-console.log("pagehide");
-$.mobile.loading( "show", {text: 'loading', textVisible: true, textonly: false});
-});
-*/
-
-	//Loading hide
-$(document).on("pageshow", "#ClinicInfoPage", function(){
-
-console.log("pageshow");
-$.mobile.loading( "hide" ); 
-});
-
-$(document).on("pageshow", "#SetTargetPage", function(){
-
-$.mobile.loading( "hide" ); 
-});
-
-
-$(document).on("pageshow", "#CreatePlanPage", function(){
-
-$.mobile.loading( "hide" ); 
-});
-
-$(document).on("pageshow", "#StartPlanPage", function(){
-
-$.mobile.loading( "hide" ); 
-});
-
-
-  //ClinicInfoPage自运行
-  $(document).on("pageinit", "#ClinicInfoPage", function(){
-
-	 /*localStorage.setItem('UserId', 'D003');
-	  localStorage.setItem('TerminalName', 'ZC-PC');
-	  localStorage.setItem('TerminalIP', '10.12.43.94');
-	  localStorage.setItem('DeviceType', 0);
-	  //localStorage.setItem('PatientId','PID201501070026');
-      localStorage.setItem('PatientId', 'PID201501070003');
-      localStorage.setItem('NewPlanNo', 'P0002');
-	  localStorage.setItem('PlanNo', 'PLN201504280012');
-	  localStorage.setItem('ModuleType', 'M1');
-	  localStorage.setItem('PLType', '1');*/
-	  
-	  $("#PatientId").text(localStorage.getItem('PatientId'));
-	  
-	  L = GetMoreClinic();
-	  if(L > 0){
-		  var target = document.getElementById("demo");
-		  target.style.display = "block";
-		  var target = document.getElementById("norecord");
-		  target.style.display = "none";
-      }
-	  else{
-		  var target = document.getElementById("demo");
-		  target.style.display = "none";
-		  var target = document.getElementById("norecord");
-		  target.style.display = "block";
-      }
-  });
-  
-  //SetTargetPage自运行
-  $(document).on("pageinit", "#SetTargetPage", function(){
-    if (localStorage.getItem('EditEnable') == 0) {
-      $('#Targetbutton').css('display','none');
-      //console.log('targetPage');
-    }
-	  $("#TextInput1").css("width","80px").parent().css("width","80px");
-	  $("#TextInput2").css("width","80px").parent().css("width","80px");
-	  $("#TextInput3").css("width","80px").parent().css("width","80px");
-	  $("#TextInput4").css("width","80px").parent().css("width","80px");
-	  //先对NewPlanNo置为空，以对“下一步”按钮点击状态进行判断 ZC 2015-05-07
-	  localStorage.setItem('NewPlanNo', "");
-	  GetBPGrades();
-	  //读取血压值，包括当前和前一个计划的目标
-	  GetCurrentSBP(localStorage.getItem('PatientId'));
-	  GetCurrentDBP(localStorage.getItem('PatientId'));
-	  
-	  GetTargetSBP(localStorage.getItem('PLType'), localStorage.getItem('PlanNo'), "1");
-	  GetTargetDBP(localStorage.getItem('PLType'), localStorage.getItem('PlanNo'), "2");
-
-/*	  SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);
-	  DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);
-	  Risk();*/
-
-   	   setTimeout(function(){
-		  SBPBar($("#TextInput1").val(), $("#TextInput3").val(), SBPlist, chart_SBP_1);
-		  },200);
-	   setTimeout(function(){
-		  DBPBar($("#TextInput2").val(), $("#TextInput4").val(), DBPlist, chart_DBP_1);
-		  },200);
-	   setTimeout(function(){
-		  Risk();
-		  },200); 
-		  //tab();
-  });
-  
-function tab()
-{
-	  SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);
-	  DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);
-	  Risk(); 
-}
-  
-  //CreatePlanPage自运行
-  $(document).on("pageinit", "#CreatePlanPage", function(){ 
-      //当PlanNo状态为暂存时，把NewPlanNo=PlanNo，只要PLType不变，则不影响页面逻辑
-      if(localStorage.getItem('PLType') == 1){
-		localStorage.setItem('NewPlanNo', localStorage.getItem('PlanNo'));  
-	  }
-      getGoalValue(); 
-	  loadLifeStyle();	
-	  loadLastLifeStyle();
-	  getPatientDrugRecord(); //获取患者的药嘱列表
-      loadDrugList();  //加载以往的“药物治疗”记录
-  });
-   
-  //StartPlanPage自运行
-  $(document).on("pageinit", "#StartPlanPage", function(){ 
-  	  $("#PlanShow").chromatable({		//任务显示滚动(表头不滚动)
-		  width: "495px",
-		  height: "450px",
-		  scrolling: "yes",	
-	  });
-  });
- 
-  //“开始计划”页面初始化 
+ //“开始计划”页面初始化 
   function startPlanPageInit(){
 	  GetPsTask(localStorage.getItem('NewPlanNo'));
 	  GetPsTarget(localStorage.getItem('NewPlanNo'));
@@ -983,6 +302,7 @@ function tab()
 	  $("#table-ClinicInfoDetailByType").table("refresh");
 	  $( "#ClinicInfoDetail-form" ).trigger( "updatelayout" );
   }
+  
   //从数据库中读取用户当前收缩压值
   function GetCurrentSBP(PatientId){
 	 //alert(PatientId);
@@ -1160,15 +480,14 @@ function tab()
   
   //收缩压图	
   function SBPBar(a, b, SBPlist, chart_SBP_1){
-	 // alert(a);alert(b);alert(SBPlist);都取到数值了
-/*	  if(a=="")
+	  if(a=="")
 	  {
 		a=0;
 	  }
 	  if(b=="")
 	  {
 		b=0;
-	  }*/
+	  }
 	  var chart;
 	  var chartData = [
 		  {
@@ -1343,7 +662,6 @@ function tab()
 function Risk()
   {
 	  var PatientId=localStorage.getItem('PatientId');
-	  //alert(PatientId);
 	 // PatientId = "PID201501070003";
 	  var Hyper="";
 	  var Harvard="";
@@ -1356,7 +674,7 @@ function Risk()
 	  GetStroke(PatientId);
 	  GetHeartFailure(PatientId);
 	  RiskBar(Hyper,Harvard,Framingham,Stroke,Heart);
-		//alert(Hyper);alert(Harvard);alert(Framingham);alert(Stroke);alert(Heart);
+
       //高血压
       function GetHypertension(PatientId)
 	  {
@@ -1399,8 +717,9 @@ function Risk()
 	  	 return Hyper;
 		 
 		 //alert("1");
-	  }	  
-    //五年死亡率
+	  }
+	  
+    //五年危险率
     function GetHarvardRisk(PatientId)
 	{  
 	  $.ajax
@@ -1531,7 +850,8 @@ function Risk()
           error: function(msg) {alert("请输入相关参数");}
       });
 	  return Harvard;
-	}	
+	}
+	
     //心血管疾病
     function GetFramingham(PatientId)
 	{  
@@ -1548,13 +868,13 @@ function Risk()
           success: function(result) 
 		  { 
 			 Framingham=$(result).text();
-			 //alert(Framingham);
 			 evaluate.Framingham=Framingham;	    
           }, 
           error: function(msg) {alert("请输入相关参数");}
       });
 	  return Framingham;
-	}		
+	}	
+	
     //中风
     function GetStroke(PatientId)
 	{  
@@ -1785,7 +1105,8 @@ function Risk()
           error: function(msg) {alert("请输入相关参数");}
       });
 	  return Stroke;
-	}		
+	}	
+	
     //心衰
     function GetHeartFailure(PatientId)
 	{  
@@ -1924,7 +1245,8 @@ function Risk()
           error: function(msg) {alert("请输入相关参数");}
       });
 	  return Heart;
-	}	  
+	}	
+	  
     //画柱状图
     function RiskBar(Hyper,Harvard,Framingham,Stroke,Heart)
     {
@@ -1936,12 +1258,12 @@ function Risk()
 	  Heart=Heart*100;
 	  var chartData = [
                 {
-                    "year": "高血压发病率",
+                    "year": "高血压",
                     "正常": 1,
                     "您的风险": Hyper.toFixed(2)
                 },
                 {
-                    "year": "五年死亡率",
+                    "year": "五年危险率",
                     "正常": 1,
                     "您的风险": Harvard.toFixed(2)
                 },
@@ -1951,12 +1273,12 @@ function Risk()
                     "您的风险": Framingham.toFixed(2)
                 },
                 {
-                    "year": "中风发病率",
+                    "year": "中风",
                     "正常": 1,
                     "您的风险": Stroke.toFixed(2)
                 },
                 {
-                    "year": "心衰发病率",
+                    "year": "心衰",
                     "正常": 1,
                     "您的风险": Heart.toFixed(2)
                 }
@@ -1983,7 +1305,6 @@ function Risk()
                 var valueAxis = new AmCharts.ValueAxis();
                 valueAxis.axisAlpha = 0;
                 valueAxis.gridAlpha = 0;
-				valueAxis.title="概率/%";
                 valueAxis.position = "bottom";
                 chart.addValueAxis(valueAxis);
 
@@ -2020,7 +1341,9 @@ function Risk()
                 chart.write("chartdiv3");
 				//alert(Hyper);	
       }
-  }	  
+  }	
+  
+  
   //修改当前收缩压和舒张压时实时显示风险评估结果
   function RiskModify()
   {
@@ -2047,7 +1370,7 @@ function Risk()
 		Hyper = 1-Math.exp(-Math.exp(((Math.log(Math.E,4))- (22.94954+ RiskInfactor))/0.87692));
 		return Hyper;
 	 };
-	 //五年死亡率
+	 //五年危险率
 	 function GetHarvardRisk(PatientId)
 	 {  
 			 var RiskInfactor=evaluate.RiskInfactor2; 
@@ -2159,13 +1482,15 @@ function Risk()
 			Harvard = 6.304 * Math.pow(10, -8) * Math.pow(RiskInfactor, 5) - 5.027 * Math.pow(10, -6) * Math.pow(RiskInfactor, 4) + 0.0001768 * Math.pow(RiskInfactor, 3) - 0.001998 * Math.pow(RiskInfactor, 2) + 0.01294 * RiskInfactor + 0.0409;
 			Harvard=Harvard/100;
 			return Harvard;
-	}	 
+	}
+	 
 	//心血管疾病
 	function GetFramingham(PatientId)
 	{  
 	 	Framingham=evaluate.Framingham;	    
 		return Framingham;
-	}		
+	}	
+	
 	//中风
 	function GetStroke(PatientId)
 	{  
@@ -2376,7 +1701,8 @@ function Risk()
 				Stroke = Risk[RiskInfactor-1] / 100;         
 			 }
 		return Stroke;
-	}		
+	}	
+	
 	//心衰
 	function GetHeartFailure(PatientId)
 	{  
@@ -2499,7 +1825,8 @@ function Risk()
 				Heart=HeartFailureRisk/100;
 			 }  
 			 return Heart;
-	}	 	 
+	}	 
+	 
     //画柱状图
     function RiskBar(Hyper,Harvard,Framingham,Stroke,Heart)
     {
@@ -2511,12 +1838,12 @@ function Risk()
 	  Heart=Heart*100;
 	  var chartData = [
                 {
-                    "year": "高血压发病率",
+                    "year": "高血压",
                     "正常": 1,
                     "您的风险": Hyper.toFixed(2)
                 },
                 {
-                    "year": "五年死亡率",
+                    "year": "五年危险率",
                     "正常": 1,
                     "您的风险": Harvard.toFixed(2)
                 },
@@ -2526,12 +1853,12 @@ function Risk()
                     "您的风险": Framingham.toFixed(2)
                 },
                 {
-                    "year": "中风发病率",
+                    "year": "中风",
                     "正常": 1,
                     "您的风险": Stroke.toFixed(2)
                 },
                 {
-                    "year": "心衰发病率",
+                    "year": "心衰",
                     "正常": 1,
                     "您的风险": Heart.toFixed(2)
                 }
@@ -2594,7 +1921,8 @@ function Risk()
                 chart.write("chartdiv3");
 				//alert(Hyper);	
       }
-    }	  
+    }	
+  
     //插入当前收缩压压
     function InsertCurSbp()//PatientId P444
     {
@@ -2656,7 +1984,8 @@ function Risk()
 		 ret =false;} 
 	  });
 	  return ret;
-    }  
+    }
+  
     //插入当前舒张压
     function InsertCurDbp()
     {
@@ -2711,7 +2040,8 @@ ret = true;
 		 ret = false;}
 	  });
 	  return ret; 
-  }    
+  }  
+  
   //插入新Plan、当前血压、目标血压
   function InsertTarget()
   {
@@ -2735,6 +2065,7 @@ ret = true;
 	 //alert(ret);
 	 return ret;		
   }
+  
   //生成PlanNo
   //修改函数名，改为GetNewPlanNo ZC 2015-05-07
   function GetNewPlanNo(){
@@ -2755,6 +2086,7 @@ ret = true;
 		  error: function(msg) {alert("GetNewPlanNoError!");}
 	  });
   }
+  
   //将PlanNo插入Plan表
   function InsertPlan(PlanNo)
   {
@@ -2798,6 +2130,7 @@ ret = true;
 		  error: function(msg) {alert("SetPlanError!");}
 	  });
   }  
+  
   //插入目标收缩压
   function InsertTargetSbp(PlanNo)
   {
@@ -3242,7 +2575,8 @@ return ret;
 					  //alert("Plan " + PlanNo + " starts");
 		alert("新建计划： " + PlanNo + " 成功！");
 
-					  location.href = "HomePage.html?";	//ZAM 2015-5-4
+					  //location.href = "HomePage.html?";	//ZAM 2015-5-4
+					  location.href = "#InvitationInfoPage";
 				  }
 				  else
 				  {
@@ -3464,5 +2798,3 @@ return ret;
 	   ret = true;
 	   return ret; 
   }
-</script>
-</html>

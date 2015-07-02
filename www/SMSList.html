@@ -1,35 +1,25 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<title>患者消息列表测试</title>
+<title>Project_PadWS</title>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1.2, maximum-scale=2, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1.2, maximum-scale=2, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
-<link rel="stylesheet" type="text/css" href="css/scrollbar.css">
-<link rel="stylesheet" type="text/css" href="css/scroll.css">
-<link rel="stylesheet" type="text/css" href="css/SMSForPad.css">
 <script src="js/jquery-2.1.3.js"></script>
 <script src="js/jquery.mobile-1.4.2.js"></script>
 <script type="text/javascript" src="js/CommonUtility.js"></script>
+<link rel="stylesheet" type="text/css" href="css/scrollbar.css">
+<link rel="stylesheet" type="text/css" href="css/scroll.css">
+<link rel="stylesheet" type="text/css" href="css/SMSForPad.css">
 <script type="application/javascript" src="js/iscroll.js"></script>
-<script type="application/javascript" src="js/SMS.js"></script>
 <script type="text/javascript" src="js/Resize.js"></script>
-<!--<script src="http://res.websdk.rong.io/RongIMClient-0.9.6.min.js"></script>-->
-<script type="text/javascript">
-	var ThisUserId = localStorage.getItem("DoctorId");
-	var moduleType =  localStorage.getItem("ModuleType");
-	console.log(ThisUserId);
-   </script>
 </head>
 <body>
-<div data-role="page">
-  <div data-role="header">
-    <h1>Pad患者消息列表</h1>
-    <a href="javascript:history.go(-1);" data-icon="back" data-iconpos="notext" data-shadow="false" data-iconshadow="false" >返回</a> </div>
-  <div data-role="header">
+<div data-role="page"> 
+  <div data-role="header"> <a href="javascript:history.go(-1);" data-icon="back" data-iconpos="notext" data-shadow="false" data-iconshadow="false" >返回</a>
     <table width="100%">
       <tr>
         <td width="30%" align="center"><h2 style="font-size:20px;">患者列表</h2></td>
@@ -37,160 +27,27 @@
       </tr>
     </table>
   </div>
-  <div data-role="content">
-    <div id="Menu">
-      <div style="height:500px;" data-role="content">
-        <ul id="SMSListUl" data-role="listview" data-inset="true">
-        </ul>
-      </div>
-    </div>
-    <div id="Detail">
-      <div id= "GenaralField" style="position:relative; height:500px;margin-top:50px;">
-        <div id= "OutField" style="position:absolute; width: 99%;"> 
-          <div id="MainField" class="NormalField"> </div>
-          <table width="100%" class="HidTbl" id="SubmitTbl">
-            <tr>
-              <td align="right" width="89%"><textarea id="SMSContent" style="font-size:20px; padding:1px;margin:5px;"></textarea></td>
-              <td></td>
-              <td align="left" width="10%" valign="bottom"><button type="button" id="SMSbtn"> 发送</button></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+  <div id="Menu">
+    <div data-role="content" style="height:530px;">
+      <ul id="SMSListUl" data-role="listview" data-inset="true">
+      </ul>
     </div>
   </div>
-  <div data-role="footer">
-    <h1>copyright</h1>
+  <div id="Detail">
+    <div id= "GenaralField" style="position:relative;margin-top:50px;">
+      <div id= "OutField" style="position:absolute; width: 99%;">
+        <div class="NormalField" id="MainField"> </div>
+        <table width="100%" class="HidTbl" id="SubmitTbl">
+          <tr>
+            <td align="right" width="89%"><textarea id="SMSContent" padding:1px;margin:5px;"></textarea></td>
+            <td></td>
+            <td align="left" width="10%" valign="bottom"><button type="button" id="SMSbtn"> 发送</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 </body>
-<script type="text/jscript">
-	//var ThisUserId = "MD007";
-	var TheOtherId = "";
-	var piUserId = localStorage.getItem('UserId');
-	var piTerminalName = localStorage.getItem('TerminalName');
-	var piTerminalIP = localStorage.getItem('TerminalIP');
-	var piDeviceType = localStorage.getItem('DeviceType');
-	
-	var ClickFlag = true;
-	var AppKey = "sfci50a7chxxi";
-	var TheOtherToken = "";
-	
-	var InitialHt = $("#SMSContent").height(); //初始高度
-	var InitialTop = $("#OutField").position().top; //初始位置
-	var MaxHt = 0; //输入框最大高度
-		
-	$(document).ready(function(event){
-		var newModuleType = 'H'+ localStorage.getItem("ModuleType"	);
-		//console.log(newModuleType);
-		GetSMSList(ThisUserId, newModuleType);
-		GetSMSDialogue(ThisUserId, TheOtherId,'Pad');		
-		document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
-		  
-		var SMSBtn = document.getElementById('SMSbtn');	
-		SMSBtn.addEventListener("mouseover", ChangeFlagToF, false);
-		SMSBtn.addEventListener("mouseout", ChangeFlagToT, false);
-		
-		var ContentTxt = document.getElementById('SMSContent');
-		ContentTxt.addEventListener("focus", InTxt, false);
-		ContentTxt.addEventListener("blur", OutOfTxt, false);
-		
-			document.getElementById('SMSbtn').onclick = function () {
-		submitSMS("Pad"); //2015-6-8
-		}; //20150618
-		
-		document.getElementById('SMSContent').style.height = "47px"; //设定文本域初始高度
-	});
-
-
-	//点击后出现相应的消息对话
-	$(function() {
-		$("#SMSListUl li").click(function(){
-		   TheOtherId = $(this).find("tr:first").find("td:eq(1)").attr("id");
-		   PatientName = $(this).find("tr:first").find("td:eq(1)").text();
-		   $('#MainField').html(""); //清空以前的消息
-		   GetSMSDialogue(ThisUserId, TheOtherId, 'Pad');	     
-		   document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;//滑动至底部
-		   $('#SubmitTbl').attr("class", "RevealTbl");
-		   $('#PName').html("");
-		   $('#PName').html(PatientName);
-		   SetSMSRead(ThisUserId, TheOtherId); //变为已读
-		   $(this).find("tr:first").find("td:first").html(""); //删除未读标记
-		   $(this).find("tr:first").find("td:first").removeClass('circle');
-		})
-	})
-  
-	//window.onload = PadMessagePush("Pad");
-	
-	//autogrow初始化
-	$("#SMSContent").textinput({
-  		autogrow: true
-	});
-	
-	//固定文本框下边框与添加滚动条
-	$("#SMSContent").resize(function(){
-		var PresentTop = $("#OutField").position().top; //获取当前位置
-		var PresentHt = $("#SMSContent").height(); //获取当前始高度
-		var t = document.getElementById('SMSContent'); 
-		var h = t.scrollHeight; 
-		if (PresentHt < 170)
-		{
-			$( "#SMSContent" ).textinput( "option", "autogrow", true );
-			if (PresentHt != InitialHt)
-			{
-				var temp = PresentHt - InitialHt;
-				InitialHt = PresentHt; //改变比较值
-				$("#OutField").css("top", PresentTop - temp);
-			}
-		}
-		else
-		{
-			if (MaxHt == 0)
-			{
-				MaxHt = PresentHt;
-			}
-			$( "#SMSContent" ).textinput( "option", "autogrow", false );
-			h = h > MaxHt ? MaxHt : h;
-			
-			if (PresentHt != InitialHt)
-			{
-				var temp = PresentHt - InitialHt;
-				InitialHt = PresentHt; //改变比较值
-				$("#OutField").css("top", PresentTop - temp);
-			}
-		}
-	});
-	
-	/*//退格到最大高度内后恢复autogrow
-	document.onkeydown = function (event) 
-	{		
-		console.log('one key down');
-		var e = event || window.event || arguments.callee.caller.arguments[0]; 
-		var t = document.getElementById('SMSContent'); 
-		
-		if(e && e.keyCode == 8)
-		{ 
-			var a = document.getElementById('SMSContent').scrollTop;
-			if ((a == 0) && ($("#SMSContent").height() <= MaxHt))
-			{
-				$( "#SMSContent" ).textinput( "option", "autogrow", true );
-			}
-		}
-	}*/
-	$('#SMSContent').bind('keypress', function (event) 
-	{		
-		var e = event || window.event || arguments.callee.caller.arguments[0]; 
-		var t = document.getElementById('SMSContent'); 
-		if(e && e.keyCode == 8)
-		{ 
-			var a = document.getElementById('SMSContent').scrollTop;
-			if ((a == 0) && ($("#SMSContent").height() <= MaxHt))
-			{
-				$( "#SMSContent" ).textinput( "option", "autogrow", true );
-				document.getElementById('SMSContent').style.height = "47px"; //设定文本域初始高度
-			}
-		}
-	});
-	
-</script>
+<script type="text/javascript" src="js/SMSFOrPad.js"></script>
 </html>
