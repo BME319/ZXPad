@@ -159,8 +159,9 @@ PatientTable.prototype.addPatient  =function()
 function Rate(canvasID)
 {
 	this.canvasID = canvasID;
-	this.percentage = 0;
+	this.percentage = -1;
 	var linecolor = 'rgba(0, 0, 0, 1)';	
+	/*
 	this.loader = $('#' + canvasID).ClassyLoader({
 				width:100,
 				height:100,
@@ -172,7 +173,7 @@ function Rate(canvasID)
 				//speed: 20,
 				animate: false,
 				percentage: 0
-			});
+			});*/
 	//this.loader.show();
 
 }
@@ -188,9 +189,24 @@ Rate.prototype.draw =function(percentage)
 			linecolor = 'rgba(240, 120, 0, 0.7)';	//Orange
 		else
 			linecolor = 'rgba(255, 0, 0, 0.7)';	//Red
-		
+		var	percent =  Math.round( percentage);
+			this.loader = $('#' + this.canvasID).ClassyLoader({
+				width:100,
+				height:100,
+				fontSize: "20px",
+				diameter:40,
+				lineColor:linecolor,
+				remainingLineColor:'rgba(0, 0, 0, 0.1)',
+				lineWidth:10,
+				//speed: 20,
+				animate: false,
+				percentage: percent
+			});
 
-			this.loader.setLineColor(linecolor).setPercent(percentage*100).draw();
+			//this.loader.setLineColor(linecolor).setPercent(percentage*100).draw();
+			this.loader.show();
+			//this.loader.setPercent(percentage*100).show();
+
 			//console.log('LoaderPercent: '+ loadersArr[i].getPercent());	
 			console.log("Draw Rate canvas: " + this.canvasID);		
 	}
@@ -597,7 +613,9 @@ function DataTableLoad(arr)
 		progressbar ='<div  data-role="fieldcontain" style = "margin:0;"><label for="points" style="margin-top:0px;"><p>'+processDays+'/'+totalDays+'天</p></label><input type="range" name="points" class="points" value="'+processvalue+'" min="0" max="100" data-highlight="true"></div>';
 		     	
 //patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:2px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="plus" class="Planicon"></a><a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
-patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:6px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;border-color:'+avatarBorderColor+';" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'" onerror="imgError(this);"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
+patientInfo = ' <div style="width: 320px;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:6px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;border-color:'+avatarBorderColor+';" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'" onerror="imgError(this);"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
+//patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:50%;border:6px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;border-color:'+avatarBorderColor+';" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'" /></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
+
 
 		var tasklist = '<canvas id="l'+i+'"class="loader'+i+'" style="width:100px;"></canvas>';
 		var figure = '<div id="chartdiv'+i+'" style="width: 240px; height: 100px;"></div>';
@@ -616,7 +634,11 @@ patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;marg
 		}
 		if(Content != "" || count != "0")
 		{
-			message = '<div style="width: 100%; height: 80%;"><ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+SendDateTime+' <span class="ui-li-count" style="background-color:#C00"><font color="white">'+count+'</font></span></li><li><a href="" class="SMS" id="SMS'+i+'" value="'+pid+'"><p>'+Content+'</p></a> </li></ul></div>';
+			message = '<div style="width: 200px; height: 80%;"><ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+SendDateTime+' <span class="ui-li-count" style="background-color:#C00"><font color="white">'+count+'</font></span></li><li><a href="" class="SMS" id="SMS'+i+'" value="'+pid+'"><p>'+Content+'</p></a> </li></ul></div>';
+		}
+		else
+		{
+			message='<div style="width: 200px; height: 80%;"></div>';
 		}
 
 		table.row.add([patientInfo, tasklist, figure, message,arr[i].planNo,arr[i].patientId,arr[i].startDate,planstatus,patientname]).draw();
@@ -664,10 +686,10 @@ patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;marg
 			//console.log('PID: ' + pid);
 			figureDraw(i, arr[i].vals[0],arr[i].vals[1],arr[i].vals[2]);	//vitalsign figure
 			//console.log('Compliance Rate: ' + arr[i].complianceRate);
-			if(arr[i].complianceRate > 0)
+			//if(arr[i].complianceRate >= 0)
 			{
 			//loader.draw(arr[i].complianceRate*100); //tasklist percentage figure
-			tasklistRate.draw(arr[i].complianceRate*100);
+			tasklistRate.draw(arr[i].complianceRate);
 			//console.log(arr[i].complianceRate*100);
 			}		
 		}		
@@ -745,7 +767,8 @@ patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;marg
 	//DataTable refresh style css
 	$("#DataTable").trigger('create');
 	$.mobile.loading( "hide" );
-
+	$('.amcharts-main-div').parent().parent().attr('width','220px');
+	//$("tr").find("td").first().attr('width','320px');
 	//progressbar ui adjust
 		$('.points').parent().find('input').hide().css('margin-left','-9999px'); // Fix for some FF versions
             $('.points').parent().find('.ui-slider-track').css('margin','0 15px 0 15px').css('pointer-events','none');	//disable drag interaction
@@ -903,9 +926,9 @@ function DrawRates(p,c,g)
 
 
 console.log(planRate);
-	planRate.draw(p);
-	complianceRate.draw(c);
-	goalRate.draw(g);
+	planRate.draw(p*100);
+	complianceRate.draw(c*100);
+	goalRate.draw(g*100);
 /*
 	var loaders = new Array();		
 	loaders.push('#planloader');
