@@ -111,17 +111,26 @@
 				  if(data.ChartData.OtherTasks=="1")  //除体征测量外，有其他任务
 				  {
 			          createStockChart(data.ChartData);
+					  //超过三个药物的都将省略号
+				      //默认单击下部图的点都将弹框，显示详细
+					  
+					  //监听下部图的bullet点 的点击事件
+					  chart.panels[1].addListener("clickGraphItem",showDetailInfo); 
+					  //监听下部图的横坐标lable 的点击事件
+					 //chart.panels[1].categoryAxis.addListener("clickItem",showDetailInfo);
+					  
 				  }
 				  else  //没有其他任务
 				  {
 					  createStockChartNoOther(data.ChartData);
 				  }
-			   
+
+				  
 			     $("#graph_loading").css("display","none");
 			     $("#alertTextDiv").css("display","none");
 			     $("#load_first").css("display","block");
 			     $("#load_after").css("visibility","visible");
-			   
+			   //chart.addListener("clickItem",zz);
 		    }
 			else //无图表数据
 			{
@@ -134,14 +143,138 @@
 		    
 			}
 		                  }, 
-       error: function(msg) {alert("Error!");},
+       error: function(msg) {alert("Error: GetImplementationForPadFirst!");},
 	   complete: function() {      
              // $("div[data-role=content] ul").listview();    
 			  //$("div[data-role=content] ul li").listview("refresh");    
 			  //$('#ul_target').listview('refresh');     
         } 
      });
-  }
+
+	 //chart.addListener("rollOverGraph",zz);
+	 
+ }
+
+	
+function showDetailInfo(event)
+{
+	//alert(event.item.category);
+	
+	//清空弹框内内容
+	$("#ul_targetDetial li").remove();
+	
+	//获取被点击的bullet的时间值，事件格式，许处理成string"20150618"格式传到webservice
+	var dateSelected=event.item.category;
+	var theyear=dateSelected.getFullYear();
+	var themonth=dateSelected.getMonth()+1;  
+	if(themonth<10)
+	{
+		var themonth="0"+themonth.toString();
+	}
+	var theday=dateSelected.getDate();
+	if(theday<10)
+	{
+		var theday="0"+theday.toString();
+	}
+	var theDate=theyear.toString()+themonth.toString()+theday.toString();
+	
+	//alert(PatientId);
+	//alert(NowPlanNo);
+	//alert(theDate);
+	/*
+	  //alert(event.item.category);
+	  //alert(event.index);  获取点的序号 0~
+     var dateSelected= chart.panels[1].categoryAxis.coordinateToDate(2); 
+	 //获取X值，再调method获取date 只能在没有缩放的时候使用
+	*/
+	
+	 $.ajax({  
+        type: "POST",
+        dataType: "json",
+		//timeout: 30000,  
+	url: 'http://'+ serverIP +'/'+serviceName+'/GetImplementationByDate',
+		//async:false,
+        data: {PatientId:PatientId, 
+		        PlanNo:NowPlanNo,
+				DateSelected:theDate
+			  },
+		beforeSend: function(){//alert(dateSelected);
+			},
+        success: function(data) {
+			
+			
+		var str="";
+		str+='<li data-role="list-divider" style="text-align:center;"> <span>'+data.Date+'</span><span style="margin-left:20px;">'+data.WeekDay+'</span></li>';
+		
+		//体征
+		if(data.VitalTaskComList.length>0)
+		{
+			str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">体征测量</h3>';
+		for(var j=0;j<data.VitalTaskComList.length;j++)
+		{
+			if(data.VitalTaskComList[j].Status=="1"){
+			str+='<p style="margin-left:10px;font-size:14px;"> '+data.VitalTaskComList[j].SignName+'✔<span style="margin-left:10px;"> '+data.VitalTaskComList[j].Value+''+data.VitalTaskComList[j].Unit+'</span> <span style="margin-left:10px;">'+data.VitalTaskComList[j].Time+'</span></p>';
+			}
+			else
+			{
+				str+='<p style="margin-left:10px;font-size:14px;"> '+data.VitalTaskComList[j].SignName+'✘</p>';
+			}
+		}
+		str+='</li>'; 
+		}
+		
+		//生活方式
+		if(data.LifeTaskComList.length>0)
+		{
+			str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">生活方式</h3><p style="font-size:14px;">';
+			
+		for(var j=0;j<data.LifeTaskComList.length;j++)
+		{
+			if(data.LifeTaskComList[j].Status=="1")
+			{
+				str+='<span style="margin-left:10px;"> '+data.LifeTaskComList[j].TaskName+'✔</span>';
+				
+			}
+			else
+			{
+				str+='<span style="margin-left:10px;"> '+data.LifeTaskComList[j].TaskName+'✘</span>';
+			}
+			
+		}
+		 str+='</p></li>'; 
+		}
+		
+		//用药
+		if(data.DrugTaskComList.length>0)
+		{
+			str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">用药情况</h3>';
+			
+		for(var j=0;j<data.DrugTaskComList.length;j++)
+		{
+			if(data.DrugTaskComList[j].Status=="1")
+			{
+				str+='<p style="font-size:14px;"><span style="margin-left:10px;"> '+data.DrugTaskComList[j].TaskName+'✔</span></p>';
+				
+			}
+			else
+			{
+				str+='<span style="margin-left:10px;"> '+data.DrugTaskComList[j].TaskName+'✘</span></p>';
+			}
+		}
+		str+='</li>'; 
+		}
+ $("#ul_targetDetial").append(str);
+ $('#ul_targetDetial').listview('refresh');  
+	$("#popupDetail").popup("open");	
+		
+			}, 
+       error: function(msg) {alert("Error: showDetailInfo!");},
+	   complete: function() {      
+  
+        } 
+     });
+
+}
   
 
  function createStockChart(ChartData) {
@@ -152,6 +285,7 @@
 	  // $("#BPtarget").text(ChartData.GraphGuide.target);
        //图
 	   chart=AmCharts.makeChart("chartdiv", {
+		       // addClassNames:true,
 				type: "stock",
 				pathToImages: "amcharts-images/",
 				dataDateFormat:"YYYYMMDD",
@@ -161,16 +295,16 @@
 						minPeriod:"DD",
 						dateFormats:[{
                     period: 'DD',
-                    format: 'MM/DD'
+                    format: 'YY/MM/DD'
                 }, {
                     period: 'WW',
-                    format: 'MM DD'
+                    format: 'YY/MM/DD'
                 }, {
                     period: 'MM',
-                    format: 'MM/DD'
+                    format: 'YY/MM/DD'
                 }, {
                     period: 'YYYY',
-                    format: 'YYYY'
+                    format: 'YY/MM/DD'
                 }]
 					},
 					
@@ -303,9 +437,10 @@
                             bulletBorderThickness : 2,
                             bulletBorderAlpha : 1,		
 							showBalloon: true,		
-                            balloonText: "[[DrugDescription]]",
+                            balloonText: "体征测量<b><span style='font-size:14px;color:red;'> 3✘</span><br> 生活方式 2✔<br>用药情况<span style='font-size:14px;color:red;'> 2✘</span> 3✔ ",
+							//[[DrugDescription]]
 				            //labelText:"[[drugDescription]]"
-
+                            //balloonFunction:zz,
 						}],
 							stockLegend: {     //有这个才能显示title
 								valueTextRegular: " ",
@@ -321,6 +456,7 @@
 					horizontalPadding:12,
 					verticalPadding:4,
 					fillAlpha:0.8
+					,disableMouseEvents:true
 					 //offsetX:20
                      //fixedPosition:true,
 				},
@@ -356,6 +492,11 @@
 				responsive: {   //手机屏幕自适应
                     enabled: true
                    },
+				   "allLabels": [
+		{
+			url: "www.baidu.com",
+		}
+	]
 
 			});
 		
@@ -363,7 +504,10 @@
 		//chart.addListener("clickStockEvent",objet);				
         // chart.panels[0].valueAxes[0].inside=false;
 	    //chart.validateNow();
+		//
 }
+  
+
   
   //体征切换
   function selectDataset(ItemCode) {
@@ -455,7 +599,7 @@
 			   
 			 }, 
        error: function(msg) {
-		   alert("selectDataset Error!");
+		   alert("Error: selectDataset !");
 		   },
 	   complete: function() {      
     
@@ -642,6 +786,11 @@ function rechange(loop){
 				  if(data.ChartData.OtherTasks=="1")  //除体征测量外，有其他任务
 				  {
 			          createStockChart(data.ChartData);
+					  
+					   //监听下部图的bullet点 的点击事件
+					   chart.panels[1].addListener("clickGraphItem",showDetailInfo); 
+					  //监听下部图的横坐标lable 的点击事件
+					 //chart.panels[1].categoryAxis.addListener("clickItem",showDetailInfo);
 				  }
 				  else  //没有其他任务
 				  {
@@ -672,7 +821,7 @@ function rechange(loop){
 	         $("#switch").selectmenu('refresh', true);
 
 		                  }, 
-       error: function(msg) {alert("Error!");},
+       error: function(msg) {alert("Error: GetImplementationForPadSecond!");},
 	   complete: function() {      
     
         } 
@@ -826,6 +975,7 @@ function rechange(loop){
 					//cursorPosition:"middle",
 					categoryBalloonEnabled:false,
 					categoryBalloonAlpha:1,
+
 					categoryBalloonColor:"#ffff",
 					categoryBalloonDateFormats:[{period:"YYYY", format:"YYYY"}, {period:"MM", format:"YYYY/MM"}, {period:"WW", format:"YYYY/MM/DD"}, {period:"DD", format:"YYYY/MM/DD"}],
 					valueLineEnabled:false,  //水平线
