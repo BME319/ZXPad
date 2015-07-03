@@ -31,6 +31,7 @@
 		localStorage.setItem('DeviceType',1);
 		var width = $(document).width();
 		var height = $(document).height();
+		var isHealthCoach = 0;
 		$('img').width(width);
 		$('img').height(height);
 		window.localStorage.setItem("Device","Pad");	
@@ -85,12 +86,17 @@
 												if (Role == "HealthCoach")
 												{
 													window.localStorage.setItem("AutoLogOn","Yes");
+													HealthCoach = 1;
 													//alert("登陆成功");	
 													setTimeout(function(){
 														location.href = "HomePage.html";
 													},1000)
 												}
 											});
+											if (HealthCoach == 0)
+											{
+												location.href = "LogOn-Pad.html";
+											}
 										}
 									},
 									error: function(msg) {

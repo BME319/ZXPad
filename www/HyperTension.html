@@ -17,6 +17,9 @@
 <script src="js/amstock.js" type="text/javascript"></script>
 <script src="js/implementationPad.js" type="text/javascript"></script>
 <script src="js/EditPlan.js" type="text/javascript"></script>
+<script src="js/SendInvitation.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/qrcode.js"></script>
+<script type="text/javascript" src="js/jquery.qrcode.js"></script>
 </head>
 <body>
 <style type="text/css">
@@ -80,10 +83,6 @@
 }
 #editPlan.ui-panel-closed {
 	width: 0;
-}
-.ui-panel-page-content-position-left, .ui-panel-dismiss-open.ui-panel-dismiss-position-right {
-	left: 0em;/*panel左边页面关闭触发范围*/
-	right: 45em;/*panel页面关闭触发范围*/
 }
 
 .barbox dd.barline div.proChart{height:10px;overflow:hidden;background:url(images/barbg.gif) repeat-x;}
@@ -167,7 +166,11 @@ input[type=checkbox] {visibility: hidden;}
       <p>发送邀请</p>
     </div>
   </div>-->
-  <div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" data-theme="a" id="InvitationInfoPage">
+  <div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" data-theme="a" id="InvitationInfoPage" data-dismissible="false" style="z-index: 2000;">
+  	<div id="" align="center">
+      <div style="float:left;"> <a href="#homepage_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" ></a> </div>
+      <h2 id="">发送邀请</h2>
+    </div>
     <div class="ui-grid-a" style="margin-top:25px">
       <div class="ui-block-a" data-role="fieldcontain" style="margin-top:2px"> 
         <!--          <label for="InvitatoinPhoneNo">手机号：</label>-->
@@ -177,6 +180,9 @@ input[type=checkbox] {visibility: hidden;}
         <input type="button" data-inline="true" data-transition="turn" data-theme="a" onclick="SendInvitation(); Time()" data-iconpos="left" style="height:46px"
 						value="发送邀请码" id="SendInvitation">
       </div>
+    </div>
+    <div>
+    	<label for="AlertUserId" id="AlertUserId" style="color:red; display:none">请输入11位手机号码</label>
     </div>
     <div class="ui-grid-a" style="margin-top:25px">
       <div class="ui-block-a">
@@ -191,6 +197,12 @@ input[type=checkbox] {visibility: hidden;}
       <div class="ui-block-b" id="Invitationcode"></div>
     </div>
   </div>
+<!--  <div id="popinvitation" data-role="popup" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:250px">
+    <div style="text-align:center">
+        	<p style="font-size:20px" id="alert"></p>
+            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a" data-rel="back" style="vertical-align:middle">确定</a>
+   	</div>
+    </div>-->
   <div data-role="header" id="page_header">
     <h1>高血压模块任务实施情况</h1>
     <div class="ui-btn-left">
@@ -218,7 +230,7 @@ input[type=checkbox] {visibility: hidden;}
         <div align="center">
           <h> <b>患者综合信息管理</b> </h>
         </div>
-        <div data-role="controlgroup" data-corners="false"> <a id="navBasicInfo" href="#BasicInfoPanel" data-role="button">基本信息</a> <a id="navModuleInfo" href="#ModuleInfoPanel" data-role="button">慢病信息</a> <a id='navClinicInfo' href="#ClinicInfoPanel" data-role="button">临床信息</a> <a id='navPlan' href="#PlanPanel" data-role="button">创建与调整计划</a> <a id='navRisk' href="#RiskPanel" data-role="button">风险评估</a> <a id="navSMS" href="#SMSPanel" data-role="button">即时消息</a> <a id="navInvite" href="#InvitationInfoPage" data-role="button">发送邀请</a></div>
+        <div data-role="controlgroup" data-corners="false"> <a id="navBasicInfo" href="#BasicInfoPanel" data-role="button">基本信息</a> <a id="navModuleInfo" href="#ModuleInfoPanel" data-role="button">慢病信息</a> <a id='navClinicInfo' href="#ClinicInfoPanel" data-role="button">临床信息</a> <a id='navPlan' href="#PlanPanel" data-role="button">创建与调整计划</a> <a id='navRisk' href="#RiskPanel" data-role="button">风险评估</a> <a id="navSMS" href="#SMSPanel" data-role="button">即时消息</a> <a id="navInvite" href="#InvitationInfoPage" data-role="button" onClick="showInvitationInfoPage()">发送邀请</a></div>
       </div>
       </div>
       <div  style="width:80%;float:left;margin-top:0px;">
