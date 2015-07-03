@@ -144,13 +144,13 @@ input[type=checkbox] {visibility: hidden;}
     </div>
   </div>
   <div data-role="panel" data-position="right" data-position-fixed="false" data-display="overlay" data-theme="a" id="SMSPanel" data-dismissible="false"
-      style="z-index: 2000;">
+      style="z-index: 2000;" id="SMSPanel">
     <div id="" align="center">
       <div style="float:left;"> <a href="#homepage_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" ></a> </div>
-      <h2 id="SMSHeader"></h2>
+      <div id="SMSHeader" data-role = "Header" style="font-size:20px;font-weight:bold;"></div>
     </div>
-    <!--<div data-role="content">-->
-    <div style="position:relative; height:100%; margin-top:50px;" id="GenaralField">
+    <div data-role="content">
+    <div style="position:relative; height:100%; margin-top:30px;" id="GenaralField">
       <div id="OutField" style="position:absolute; width: 99%;">
         <div id="MainField" class="NormalField"></div>
         <table width="100%">
@@ -163,6 +163,8 @@ input[type=checkbox] {visibility: hidden;}
       </div>
     </div>
   </div>
+  </div>
+  
   <!--  <div data-role="panel" data-position="right" data-position-fixed="false" data-display="overlay" data-theme="a" id="InvitePanel" data-dismissible="false"
       style="z-index: 2000;">
     <div> <a href="#page_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" ></a>

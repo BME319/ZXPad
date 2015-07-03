@@ -20,7 +20,9 @@ var isUserloggedout = false;
 
 $(document).ready(function(event){
   $('#SMSHeader').html("董德良"); //标题设为患者名称！！！！！！！！！！！！！！！！！
-  $('#GenaralField').height(DocHeight-145); //设定文档高度
+  /*$('#SMSPanel').height(DocHeight-450);*/
+  $('#GenaralField').height(GetHeight()-450); //设定文档高度
+ /* alert(DocHeight);*/
   GetSMSDialogue(ThisUserId, TheOtherId);
   SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
   document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
@@ -28,7 +30,7 @@ $(document).ready(function(event){
   var SMSBtn = document.getElementById('SMSbtn');	
   SMSBtn.addEventListener("mouseover", ChangeFlagToF, false);
   SMSBtn.addEventListener("mouseout", ChangeFlagToT, false);
- 
+  $('#SMSContent').val("");
   document.getElementById('SMSContent').style.height = "47px"; //设定文本域初始高度
   WsPush(); //websocket
 })
@@ -113,6 +115,15 @@ function getLocalmachineIPAddress()
 	return Ip;	  
 }
 
+//获取文档高度
+function GetHeight()
+{
+	var DocHeight = $(document).height();
+	var DocWidth = $(document).width();
+		
+	var ret = (DocHeight < DocWidth)?DocHeight:DocWidth;
+	return ret;
+}
 
 //消息推送
 window.onunload = function () //断开连接
@@ -517,4 +528,58 @@ function SetSMSRead (Reciever, SendBy)
 	  alert("SetSMSRead出错啦！");
 	}
   });
+}
+
+//获取某一用户未读消息总数
+function GetSMSCountForAll(DoctorId)
+{
+	var Count;
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://'+ serverIP +'/'+serviceName+'/GetSMSCountForAll',
+		async: false,
+		data: 
+		{
+			DoctorId: DoctorId
+		},
+		beforeSend: function() {
+		},
+		success: function(result) {
+			Count = $(result).find("int").text();  
+		},
+		error: function(msg) {
+		  alert("GetSMSCountForAll出错啦！");
+		}
+  });
+  return Count;
+}
+
+//获取一对一未读消息数
+function GetSMSCountForOne (Reciever, SendBy)
+{
+	var Count;
+ 	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://'+ serverIP +'/'+serviceName+'/GetSMSCountForOne',  
+		async: false,
+		data: 
+		{
+			Reciever: Reciever,
+			SendBy: SendBy
+		},
+		
+		beforeSend: function() {
+		},
+		success: function(result) {          	  
+			Count = $(result).find("int").text();
+		},
+		error: function(msg) {
+		  alert("GetSMSCountForOne出错啦！");
+		}
+   });
+   return Count;
 }
