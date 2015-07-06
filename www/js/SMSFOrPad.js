@@ -15,7 +15,7 @@ var MaxHt = 0; //输入框最大高度
 
 //ws
 var ws; //websocket
-var wsServerIP =  "192.168.1.20:4141/chat"; //写死
+var wsServerIP = serverIP.substring(0, 11) + ":4141/chat"; 
 var SocketCreated = false;
 var isUserloggedout = false;
 
@@ -208,6 +208,7 @@ function SetSMSRead (Reciever, SendBy)
 	  alert("SetSMSRead出错啦！");
 	}
   });
+  alert("SetSMSRead");
 }
 
 //改写阅读状态（一条）

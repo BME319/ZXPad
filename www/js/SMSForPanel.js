@@ -14,7 +14,7 @@ var MaxHt = 0; //输入框最大高度
 
 //ws
 var ws; //websocket
-var wsServerIP = "192.168.1.20:4141/chat";
+var wsServerIP = serverIP.substring(0, 11) + ":4141/chat"; 
 var SocketCreated = false;
 var isUserloggedout = false;
 
