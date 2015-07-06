@@ -113,6 +113,11 @@ window.localStorage.setItem("Device","Pad");
 													  location.href = "Activition-Pad.html";
 												  },2000)
 											  }
+											  else
+											  {
+												  document.getElementById("alert").innerHTML = "抱歉，由于权限问题，您无法使用本系统";
+					  							   $("#popdiv").popup("open");	
+											  }
 										  },
 										  error: function(msg) {
 											  alert("Error: GetActivatedState");	
@@ -128,7 +133,8 @@ window.localStorage.setItem("Device","Pad");
 					  }
 					  else
 					  {
-						  alert("密码错误或用户名不存在");	
+						  document.getElementById("alert").innerHTML = "密码错误或用户名不存在";
+					  	  $("#popdiv").popup("open");	
 					  }
 				  },
 				  error: function(msg) {
@@ -138,12 +144,14 @@ window.localStorage.setItem("Device","Pad");
 			}
 			else if (userId == "") 
 			{
-                alert("用户名不能为空！");
+				document.getElementById("alert").innerHTML = "用户名不能为空！";
+				$("#popdiv").popup("open");
                 $("#username").focus();
             }
             else if (password == "") 
 			{
-                alert("密码不能为空！");
+				document.getElementById("alert").innerHTML = "密码不能为空！";
+				$("#popdiv").popup("open");
                 $("#userpassword").focus(); 
             }
 		};
@@ -181,8 +189,8 @@ function Activition() {
 						}
 						else
 						{
-							document.getElementById("showlabel").innerHTML = "邀请码错误，请确认后重新输入邀请码！";
-							document.getElementById("showlabel").style.display = "block";	
+							document.getElementById("alert").innerHTML = "邀请码错误，请确认后重新输入邀请码！";
+							$("#popdiv").popup("open");
 						}
 					},
 					error: function(msg) {
@@ -192,7 +200,8 @@ function Activition() {
 			}
 			else if (InviteCode == "")
 			{
-				alert("邀请码不能为空！");
+				document.getElementById("alert").innerHTML = "邀请码不能为空！";
+				$("#popdiv").popup("open");
                 $("#InviteCode").focus();
 			}
 		};
@@ -242,7 +251,7 @@ function Register() {
 								url: 'http://'+ serverIP +'/'+serviceName+'/Register',
 								data: { Type: Type, Name: userId, Value: "", Password: Password, UserName: UserName,revUserId: revUserId, TerminalName: TerminalName, TerminalIP: TerminalIP, DeviceType: DeviceType},
 								dataType: 'xml',
-								async: false,
+								async: false, 
 								beforeSend: function() {},
 								success: function(result) {
 									var Flag1 = $(result).find("int").text();
@@ -296,7 +305,8 @@ function Register() {
 																	}
 																	else
 																	{
-																		alert("注册失败");	
+																		document.getElementById("alert").innerHTML = "注册失败！";
+																		$("#popdiv").popup("open");
 																	}
 																},
 																error: function(msg) {
@@ -334,9 +344,9 @@ function Register() {
 							  async: false,
 							  beforeSend: function() {},
 							  success: function(result) {
-								  if (result != "")
+								  var UserId = $(result).find("string").text();
+								  if (UserId != "")
 								  {
-									  var UserId = $(result).find("string").text();
 									  $.ajax({
 										type: "POST",
 										timeout: 30000,
@@ -353,8 +363,8 @@ function Register() {
 													var Role = $(this).find("RoleClass").text();
 													if (Role == "HealthCoach")
 													{
-														document.getElementById("showlabel").innerHTML = "用户名重复";
-														document.getElementById("showlabel").style.display = "block";
+														document.getElementById("alert").innerHTML = "用户名重复！";
+														$("#popdiv").popup("open");
 														isHealthCoach = 1;
 													}
 												});
@@ -364,6 +374,7 @@ function Register() {
 											alert("Error: GetAllRoleMatch");	
 										}
 									});
+									
 									if (isHealthCoach == 0)
 									{
 										$.ajax({
@@ -391,7 +402,7 @@ function Register() {
 														var test = $(result).find("int").text();
 														if (test == 1)
 														{
-															document.getElementById("showlabel").innerHTML = "注册成功，即将返回登录页面";
+															document.getElementById("showlabel").innerHTML = "注册成功，密码与您的医生账号一致，即将返回登录页面";
 															document.getElementById("showlabel").style.display = "block";
 															setTimeout(function () {
 																//alert("注册成功");
@@ -400,7 +411,8 @@ function Register() {
 														}
 														else
 														{
-															alert("注册失败");	
+															document.getElementById("alert").innerHTML = "注册失败！";
+															$("#popdiv").popup("open");	
 														}
 													},
 													error: function(msg) {
@@ -415,6 +427,97 @@ function Register() {
 										});	
 									}
 								  }
+								  else
+								  {
+									  $.ajax({
+										  type: "POST",
+										  timeout: 30000,
+										  //contentType: "application/json;charset=utf-8",
+										  url: 'http://'+ serverIP +'/'+serviceName+'/Register',
+										  data: { Type: Type, Name: userId, Value: "", Password: Password, UserName: UserName,revUserId: revUserId, TerminalName: TerminalName, TerminalIP: TerminalIP, DeviceType: DeviceType},
+										  dataType: 'xml',
+										  async: false,
+										  beforeSend: function() {},
+										  success: function(result) {
+											  var Flag1 = $(result).find("int").text();
+											  if (Flag1 == 1)
+											  {
+												  $.ajax({
+													  type: "POST",
+													  timeout: 30000,
+													  //contentType: "application/json;charset=utf-8",
+													  url: 'http://'+ serverIP +'/'+serviceName+'/GetIDByInput',
+													  data: { Type: Type, Name: userId},
+													  dataType: 'xml',
+													  async: false,
+													  beforeSend: function() {},
+													  success: function (result) {
+														  var userID = $(result).find("string").text();
+														  //alert(userId);
+														  if (userID != "")
+														  {
+															  $.ajax({
+																type: "POST",
+																dataType: "xml",
+																timeout: 30000,
+																url: 'http://' + serverIP + '/' + serviceName + '/GetNoByNumberingType',
+																async: false,
+																data: { NumberingType: "12" },
+																beforeSend: function () { },
+																success: function (result) {
+																	var InviteNo = $(result).find("string").text();
+																	if (InviteNo != "")
+																	{
+																	  $.ajax({
+																		  type: "POST",
+																		  timeout: 30000,
+																		  //contentType: "application/json;charset=utf-8",
+																		  url: 'http://'+ serverIP +'/'+serviceName+'/SetPsRoleMatch',
+																		  data: { PatientId: userID, RoleClass: "HealthCoach", ActivationCode: InviteNo, ActivatedState: "1", Description: ""},
+																		  dataType: 'xml',
+																		  async: false,
+																		  beforeSend: function() {},
+																		  success: function (result) {
+																			  var test = $(result).find("int").text();
+																			  if (test == 1)
+																			  {
+																				  document.getElementById("showlabel").innerHTML = "注册成功，即将返回登录页面";
+																				  document.getElementById("showlabel").style.display = "block";
+																				  setTimeout(function () {
+																					  //alert("注册成功");
+																					  location.href = "LogOn-Pad.html"
+																				  },1000)
+																			  }
+																			  else
+																			  {
+																				  document.getElementById("alert").innerHTML = "注册失败！";
+																				  $("#popdiv").popup("open");
+																				  
+																			  }
+																		  },
+																		  error: function(msg) {
+																			  alert("Error: SetPsRoleMatch");	
+																		  }
+																	  });
+																	}
+																},
+																error: function (msg) {
+																	alert("Error: GetNoByNumberingType");
+																}
+															  });
+														  }
+													  },
+													  error: function(msg) {
+														  alert("Error: GetIDByInput");	
+													  }
+												  });
+											  }
+										  },
+										  error: function(msg) {
+											  alert("Error: Register");	
+										  }
+									  }); 
+								  }
 							  },
 							  error: function(msg) {
 								  alert("Error: GetIDByInput");	
@@ -427,22 +530,26 @@ function Register() {
 					}
 				});
 			}
-			else if (UserId == "")
+			else if (userId == "")
 			{
-				alert("用户名不能为空！");
+				document.getElementById("alert").innerHTML = "用户名不能为空！";
+				$("#popdiv").popup("open");
                 $("#username").focus();
-			}
-			else if (UserName == "")
-			{
-				alert("昵称不能为空！");
-                $("#UserName").focus();
-
 			}
 			else if (Password == "")
 			{
-				alert("密码不能为空！");
+				document.getElementById("alert").innerHTML = "密码不能为空！";
+				$("#popdiv").popup("open");
                 $("#Password").focus();
 			}
+			else if (UserName == "")
+			{
+				document.getElementById("alert").innerHTML = "真实姓名不能为空！";
+				$("#popdiv").popup("open");
+                $("#UserName").focus();
+
+			}
+			
 		}		
 		
 		
@@ -513,12 +620,14 @@ var wait = 60;
 							}
 							else
 							{
-								alert("验证码错误");	
+								document.getElementById("alert").innerHTML = "验证码错误！";
+								$("#popdiv").popup("open");	
 							}
 						}
 						else
 						{
-							alert("用户名不存在");	
+							document.getElementById("alert").innerHTML = "用户名不存在！";
+							$("#popdiv").popup("open");	
 						}
 					},
 					error: function(msg) {
@@ -528,12 +637,14 @@ var wait = 60;
 			}
 			else if (userId == "")
 			{
-				alert("用户名不能为空！");
+				document.getElementById("alert").innerHTML = "用户名不能为空！";
+				$("#popdiv").popup("open");
 				$("#UserId").focus();
 			}
 			else if (ValidateCode == "")
 			{
-				alert("验证码不能为空！");
+				document.getElementById("alert").innerHTML = "验证码不能为空！";
+				$("#popdiv").popup("open");
 				$("#ValidateCode").focus();
 			}
 		}
@@ -607,17 +718,20 @@ function ResetPassword() {
 			}
 			else if (NewPassword == "")
 			{
-				alert("新密码不能为空！");
+				document.getElementById("alert").innerHTML = "新密码不能为空！";
+				$("#popdiv").popup("open");
                 $("#NewPassword").focus();
 			}
 			else if (ConfirmPassword == "")
 			{
-				alert("请再次输入新密码！");
+				document.getElementById("alert").innerHTML = "请再次输入新密码！";
+				$("#popdiv").popup("open");
                 $("#ConfirmPassword").focus();
 			}
 			else if (NewPassword != ConfirmPassword)
 			{
-				alert("两次输入的密码不同，请再次确认新密码");
+				document.getElementById("alert").innerHTML = "两次输入的密码不同，请再次确认新密码！";
+				$("#popdiv").popup("open");
 				$("#ConfirmPassword").focus();
 			}
 		}
