@@ -746,7 +746,7 @@ patientInfo = ' <div style="width: 320px;"><div style="width: 25%;float:left;mar
 		 localStorage.setItem('PatientId',table.row(row_clicked).data()[5]);
 		 InitialSMS();
 		$( "#SMSPanel" ).panel( "open" );	
-		$('#SMSContentPhone').val("");	   
+		$('#SMSContent').val("");	   
 		});	
 
 		 //SMS
@@ -759,7 +759,7 @@ patientInfo = ' <div style="width: 320px;"><div style="width: 25%;float:left;mar
 		 InitialSMS();
 		//$('#SMSPanel').trigger('updatelayout');
 		$( "#SMSPanel" ).panel( "open" );
-		$('#SMSContentPhone').val("");
+		$('#SMSContent').val("");
 		//myScroll.disable();		 
 		 });
 
@@ -910,11 +910,6 @@ $.mobile.loading( "show", {
         .order( [ 6, p1 ] )
         .draw();
   });
-
-
-
-
-
 }
 
 function DrawRates(p,c,g)
@@ -992,33 +987,35 @@ function InitialRateLoader()
 	
 }
 
+	
+	//GL 2015-07-03 注释
 	function InitialSMS()
 	{//SMS
 	//var ThisUserId = localStorage.getItem("DoctorId");
 	//console.log(ThisUserId);
-	$('#MainFieldPhone').empty();	//clear sms dialog
+	$('#MainField').empty();	//clear sms dialog
 	TheOtherId = localStorage.getItem("PatientId");
 	console.log('SMS TheOtherId: '+TheOtherId);
-	var Str = "Phone"; 	//2015-6-17
+	/*var Str = "Phone"; 	//2015-6-17
 	document.getElementById('SMSbtn' + Str).onclick = function () {
 		submitSMS("Phone");	//2015-6-8
-		};
+		};*/
 	
-	  GetSMSDialogue(ThisUserId, TheOtherId,'Phone');
+	 /* GetSMSDialogue(ThisUserId, TheOtherId,'Phone');*/
 	  //document.getElementById('MainFieldPhone').scrollTop = document.getElementById('MainFieldPhone').scrollHeight;
-	  console.log('scrollHeight', $('#MainFieldPhone')[0].scrollHeight);
-	  $('#MainFieldPhone').scrollTop( $('#MainFieldPhone')[0].scrollHeight);
-	  
-	  var SMSBtnSMS = document.getElementById('SMSbtnPhone');	
+	  console.log('scrollHeight', $('#MainField')[0].scrollHeight);
+	  $('#MainField').scrollTop( $('#MainField')[0].scrollHeight);
+	 /* 
+	  var SMSBtnSMS = document.getElementById('SMSbtn');	
 	  SMSBtnSMS.addEventListener("mouseover", ChangeFlagToF, false);
 	  SMSBtnSMS.addEventListener("mouseout", ChangeFlagToT, false);
 	 
-	 $('#SMSContentPhone').bind("focus", function(){
+	 $('#SMSContent').bind("focus", function(){
 		   InTxt('Phone');
 	  });
-	  $('#SMSContentPhone').bind("blur", function(){
+	  $('#SMSContent').bind("blur", function(){
 		   OutOfTxt('Phone');
-	  });
+	  });*/
 	  
   	 //window.onload = PhoneMessagePush("Phone");
 	 $('#SMSPanel').trigger('updatelayout');
@@ -1026,7 +1023,7 @@ function InitialRateLoader()
 	}
 	
 	
-	
+	/* GL 2015-07-03 注释
 	function InitialSMSList()
 	{	
 		document.getElementById('SMSbtn' + Str).onclick = function () {
@@ -1066,7 +1063,7 @@ function InitialRateLoader()
 		});
 	});		
 		
-	}
+	}*/
 
 //Deal with img Loading ErrorEvent
 	function imgError(image) {
