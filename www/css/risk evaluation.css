@@ -47,10 +47,10 @@ input[type=checkbox] {
 }
 textarea#hyperclass {
 	resize: none;
-	width: 300px;
+	width: 200px;
 	height: 280px;
 	max-height: 300px;
-	max-width: 300px;
+	max-width: 200px;
 	overflow: auto;
 	border: 0;
 }
