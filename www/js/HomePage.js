@@ -208,16 +208,16 @@ Rate.prototype.draw =function(percentage)
 			//this.loader.setPercent(percentage*100).show();
 
 			//console.log('LoaderPercent: '+ loadersArr[i].getPercent());	
-			console.log("Draw Rate canvas: " + this.canvasID);		
+			//console.log("Draw Rate canvas: " + this.canvasID);		
 	}
 }
 Rate.prototype.clear =function()
 {
 	var canvas = document.getElementById(this.canvasID);
-	console.log('canvas object: '+ canvas);
+	//console.log('canvas object: '+ canvas);
   var context = canvas.getContext('2d');
   context.clearRect(0, 0, canvas.width, canvas.height);
-  console.log("Clear Rate canvas: " + this.canvasID);
+//  console.log("Clear Rate canvas: " + this.canvasID);
 }
 	
 
@@ -610,10 +610,10 @@ function DataTableLoad(arr)
 		var avatarUrl = PhotoAddress;
 		var progressbar = "progressbar";
 
-		progressbar ='<div  data-role="fieldcontain" style = "margin:0;"><label for="points" style="margin-top:0px;"><p>'+processDays+'/'+totalDays+'天</p></label><input type="range" name="points" class="points" value="'+processvalue+'" min="0" max="100" data-highlight="true"></div>';
+		progressbar ='<div  data-role="fieldcontain" style = "margin:0;min-width:190px;"><label for="points" style="margin-top:4px;">'+processDays+'/'+totalDays+'天</label><input type="range" name="points" class="points" value="'+processvalue+'" min="0" max="100" data-highlight="true"></div>';
 		     	
 //patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:2px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="plus" class="Planicon"></a><a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
-patientInfo = ' <div style="width: 320px;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:6px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;border-color:'+avatarBorderColor+';" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'" onerror="imgError(this);"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
+patientInfo = ' <div style="width: 300px;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:100px;border:6px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;border-color:'+avatarBorderColor+';" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'" onerror="imgError(this);"/></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
 //patientInfo = ' <div style="width: 100%;"><div style="width: 25%;float:left;margin-top:20px;margin-bottom:20px;"><div style="display:inline-block;margin:5px auto;width:70px;height:70px;border-radius:50%;border:6px solid #fff;overflow:hidden;-webkit-box-shadow:0 0 3px #ccc;box-shadow:0 0 3px #ccc;border-color:'+avatarBorderColor+';" ><a href=""><img style="width:100%;min-height:100%; text-align:center;" class="Avataricon" src = "'+avatarUrl+'" /></a></div> </div> <div style="width: 70%;float:right;"><ul data-role="listview" data-inset="true"><li data-role="list-divider">'+patientname+'<div class="ui-btn-right"> <a href="" data-inline="true"  data-role="button"  data-iconpos="notext" data-icon="mail" class="SMSicon"></a></div></li><li> <p id="'+pid+'" value="'+pid+'"><b>'+arr[i].patientId+'</b></p>'+progressbar+'</li></ul></div></div>';		
 
 
@@ -744,7 +744,6 @@ patientInfo = ' <div style="width: 320px;"><div style="width: 25%;float:left;mar
 			var table = $('#DataTable').DataTable();
             var row_clicked = $(this).closest('tr');
 		 localStorage.setItem('PatientId',table.row(row_clicked).data()[5]);
-		 localStorage.setItem('PatientName',table.row(row_clicked).data()[8]);
 		 InitialSMS();
 		$( "#SMSPanel" ).panel( "open" );	
 		$('#SMSContent').val("");	   
@@ -757,7 +756,6 @@ patientInfo = ' <div style="width: 320px;"><div style="width: 25%;float:left;mar
             var row_clicked = $(this).closest('tr');
 			var pid = table.row(row_clicked).data()[5];			  
 		 localStorage.setItem('PatientId',pid);
-		 localStorage.setItem('PatientName',table.row(row_clicked).data()[8]);
 		 InitialSMS();
 		//$('#SMSPanel').trigger('updatelayout');
 		$( "#SMSPanel" ).panel( "open" );
