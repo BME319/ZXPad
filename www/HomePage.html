@@ -493,185 +493,44 @@ tbody tr.odd {
                       var td = $(this).parent();
                       var row_clicked = $(td).closest('tr');
                       var pid = table.row(row_clicked).data()[5];
-					  var PName = table.row(row_clicked).data()[8];
-          			var moduleType =$('#moduleSelect').children('option:selected').val();
-                if(colIndex != 3)
-                console.log("The column: " + colIndex + " is clicked!\n "+ "Goto PatientIntegeratPage.html");
-          						localStorage.setItem("ModuleType", moduleType);
-          						localStorage.setItem("PatientId",pid);
-								localStorage.setItem("PatientName",PName);
-								localStorage.setItem("PlanStatus",table.row(row_clicked).data()[7]);
-          						location.href='HyperTension.html?';
-/*
-                      switch (colIndex) {
-                          case 1:     
+			var PName = table.row(row_clicked).data()[8];
+          		var moduleType =$('#moduleSelect').children('option:selected').val();
+          	      switch (colIndex) {
+                          case 0:     
                               {
-          						//console.log('case 1 td clicked!');
-          						localStorage.setItem("ModuleType", moduleType);
-          						//console.log('case 1 td clicked!' + moduleType + pid);
-          						localStorage.setItem("PatientId",pid);
-          						location.href='Pad.html?';
-                                  break;
-                              }
-                          case 2:     
-                              {
-          			            var planNo = table.row(row_clicked).data()[4];
-          						if (planNo != "")
-          						{
-          							//check plan							
-          						  localStorage.setItem('PatientId', pid);
-          						  localStorage.setItem('NewPlanNo', '');
-          						  localStorage.setItem('PlanNo', planNo);
-          						  localStorage.setItem('ModuleType', moduleType);
-          						  localStorage.setItem('PLType', '4');
-          						  localStorage.setItem('EditEnable', '0');						  
-          							location.href='CreatePlan.html#SetTargetPage';					  							
-          							
-          						}
-          						else
-          						{
-						
-          						}
-          						//console.log(planNo);
-                                  break;
-                              }
-          				case 3:
-          				{
-          						  localStorage.setItem('PatientId', pid);
-          						  //InitialSMS();
-          //						console.log('Open SMS Panel.');
-          //						$('#SMSPanel').trigger('updatelayout');
-          //						$( "#SMSPanel" ).panel( "open" );
-          						  
-          					break;
-          					}					
+					console.log("The column: " + colIndex + " is clicked!\n ");
+					break;
+				}
+
+			case 3:
+			{
+				  localStorage.setItem('PatientId', pid);
+				  //InitialSMS();
+//						console.log('Open SMS Panel.');
+//						$('#SMSPanel').trigger('updatelayout');
+//						$( "#SMSPanel" ).panel( "open" );
+				  
+			break;
+			}					
           			
                           default:
-                      }*/
+			  {
+				console.log("The column: " + colIndex + " is clicked!\n "+ "Goto PatientIntegeratPage.html");
+				localStorage.setItem("ModuleType", moduleType);
+				localStorage.setItem("PatientId",pid);
+				localStorage.setItem("PlanStatus",table.row(row_clicked).data()[7]);
+				location.href='HyperTension.html?';
+				  
+			  }
+                      }
 
-                                /*              //new plan
-                        localStorage.setItem('PatientId', pid);
-                        localStorage.setItem('NewPlanNo', '');
-                        localStorage.setItem('PlanNo', '');
-                        localStorage.setItem('ModuleType', moduleType);
-                        localStorage.setItem('PLType', '0');            
-                        //console.log('Goto new plan page.');
-                        location.href='CreatePlan.html?';
-          */  
                   });
-          
-          	
-          
-          		//Initial
-          		var p1=$('#moduleSelect').children('option:selected').val();
-          		localStorage.setItem("ModuleType",p1);
-          		InitialRateLoader();
-          		onDeviceReady();
-          		
-              /*
-              //Selcet Event Binding
-          		$('#planSelect').change(function(){
-          		var p1=$(this).children('option:selected').val();
 
-          	GetPatientsList();
-          			}); 
-          		$('#complianceSelect').change(function(){
-          		var p1=$(this).children('option:selected').val();
-          		var planType=$('#planSelect').children('option:selected').val();
-          		if(planType != 2)
-          		{
-          			GetPatientsList();
-          		}
-          			});
-          		$('#goalSelect').change(function(){
-          		var p1=$(this).children('option:selected').val();
-          		var planType=$('#planSelect').children('option:selected').val();
-          		if(planType != 2)
-          		{
-          			GetPatientsList();
-          		}
-          			});
-          		$('#moduleSelect').change(function(){
-          		var p1=$(this).children('option:selected').val();
-          		localStorage.setItem("ModuleType",p1);
-          	GetPatientsList();
-          			});	 
-                */         			
-         	/*
-            //Search input
-            	$('#dtSearch').bind({
-                keyup: function () {
-              table.search( this.value ).draw();
-              myScroll.refresh();
-              //console.log(table.row());
-              },
-              blur: function () {
-                //console.log('search input blur event for classyloader error');
-              }});
-
-            //Search input clear
-              $("[title = 'Clear text']").bind({
-                click: function () {
-                  table.search('').draw();
-                      myScroll.refresh();
-                }
-              });
-              
-              $('#orderSwitch').change(function () {
-                var p1=$(this).children('option:selected').val();
-                var table = $('#DataTable').DataTable(); 
-                // Sort by column 1 and then re-draw
-                table
-                    .order( [ 6, p1 ] )
-                    .draw();
-              });
-          */
-          /*
-          	 //SMSBox
-          	 $("#SMSBox").click(function ()
-          	 {
-          		 //替换     	
-          		 location.href='SMSList.html?';
-
-          		 } );
-               
-             $('#navPassword').click(function () {
-               //localStorage.clear();
-               //location.href = 'ResetPassword.html?';
-               location.href = 'ResetPassword-Pad.html?';     
-          
-             });     
-               
-             $('#navQuit').click(function () {
-               var userName = localStorage.getItem('UserName');
-               var password = localStorage.getItem('Password');
-               
-               localStorage.clear();
-               //Auto-Logon
-               //localStorage.setItem('UserName',userName);
-               //localStorage.setItem('Password',password);
-               location.href = 'LogOn-Pad.html?';
-             });
-             
-             $('#navBasicInfo').click(function () {
-               location.href = 'DoctorInfoPage.html?';
-             });
-             
-             $('#New').click(function () {
-            //alert('new patient!');
-               		localStorage.setItem('PatientId', "");
-                   localStorage.setItem('NewPatientFlag',true);
-		$.mobile.loading( "show", {
-            text: 'loading',
-            textVisible: true,
-            //theme: theme,
-            textonly: false,
-            //html: html
-    });
-               location.href = 'ProfilePage.html?';
-             });
-             */
-          							
+  		//Initial
+  		var p1=$('#moduleSelect').children('option:selected').val();
+  		localStorage.setItem("ModuleType",p1);
+  		InitialRateLoader();
+  		onDeviceReady();
           		});   
           
           	//window.onload = PadMessagePush("Pad");
