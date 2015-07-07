@@ -206,6 +206,7 @@ function  showInvitationInfoPage() {
 			if (str != "")
 			{
 				$("#InvitatoinPhoneNo").attr("value", str);
+				$("#InvitatoinPhoneNo").attr("placeholder", "");
 				$("#Downloadcode").empty();
 				$("#Invitationcode").empty();
 				$.ajax({
