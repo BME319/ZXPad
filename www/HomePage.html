@@ -169,7 +169,7 @@ tbody tr.odd {
 <div data-role="panel" data-position="right" data-position-fixed="false" data-display="overlay" data-theme="a" id="SMSPanel" data-dismissible="false"
       style="z-index: 2000;">
       <div id="" align="center">
-    <div style="float:left;"> <a href="#homepage_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" ></a> </div>
+    <div style="float:left;"> <a href="#homepage_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" onclick="ChangePanelFlag()"></a> </div>
     <h2 id="SMSHeader" data-role = "hedaer"></h2>
   </div>
       <div data-role="content">
@@ -519,6 +519,8 @@ tbody tr.odd {
 				localStorage.setItem("ModuleType", moduleType);
 				localStorage.setItem("PatientId",pid);
 				localStorage.setItem("PlanStatus",table.row(row_clicked).data()[7]);
+				localStorage.setItem('PatientName',table.row(row_clicked).data()[8]);
+				localStorage.setItem('PanelFlag',"Panel"); //Panel调用flag
 				location.href='HyperTension.html?';
 				  
 			  }
@@ -532,10 +534,8 @@ tbody tr.odd {
   		InitialRateLoader();
   		onDeviceReady();
           		});   
-          
           	//window.onload = PadMessagePush("Pad");
         </script>
 </body>
-    <script type="application/javascript" src="js/SMSForHomePage.js"></script>
     <script type="application/javascript" src="js/SMSForPanel.js"></script>
 </html>
