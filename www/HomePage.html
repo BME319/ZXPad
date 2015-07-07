@@ -493,11 +493,13 @@ tbody tr.odd {
                       var td = $(this).parent();
                       var row_clicked = $(td).closest('tr');
                       var pid = table.row(row_clicked).data()[5];
+					  var PName = table.row(row_clicked).data()[8];
           			var moduleType =$('#moduleSelect').children('option:selected').val();
                 if(colIndex != 3)
                 console.log("The column: " + colIndex + " is clicked!\n "+ "Goto PatientIntegeratPage.html");
           						localStorage.setItem("ModuleType", moduleType);
           						localStorage.setItem("PatientId",pid);
+								localStorage.setItem("PatientName",PName);
 								localStorage.setItem("PlanStatus",table.row(row_clicked).data()[7]);
           						location.href='HyperTension.html?';
 /*

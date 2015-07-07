@@ -19,7 +19,7 @@ var SocketCreated = false;
 var isUserloggedout = false;
 
 $(document).ready(function(event){
-  $('#SMSHeader').html("董德良"); //标题设为患者名称！！！！！！！！！！！！！！！！！
+  $('#SMSHeader').html(localStorage.getItem("PatientName"));
   /*$('#SMSPanel').height(DocHeight-450);*/
   $('#GenaralField').height(GetHeight()-450); //设定文档高度
  /* alert(DocHeight);*/
