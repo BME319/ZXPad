@@ -59,7 +59,7 @@
 			if(data.PlanList[0].PlanNo=="")  //当前没有正在执行的计划
 			{
 				//修改计划可以创建计划吗？
-				$("#showEditPlan").css("visibility","hidden");  //隐藏修改计划按钮
+				//$("#showEditPlan").css("visibility","hidden");  //隐藏修改计划按钮
 
 				$("#alertText").text("当前没有正在执行的计划");
 				$("#graph_loading").css("display","none");
@@ -68,13 +68,13 @@
 				$("#alertTextDiv").css("display","block");
 				
 				NowPlanNo="";
-	            StartDate="";
-	            EndDate="";
+	            StartDate=0;
+	            EndDate=0;
 			}
 			
 			else  //当前有正在执行的计划
 			{
-				$("#showEditPlan").css("visibility","visible");
+				//$("#showEditPlan").css("visibility","visible");
 				
 			    //进度、剩余天数、依从率
 			    animate(data.ProgressRate,data.RemainingDays);
@@ -86,11 +86,32 @@
 	            StartDate=data.StartDate;
 	            EndDate=data.EndDate;
 
+                //体征切换下拉框
+				var str_option='';
+				for(var i=0;i<data.SignList.length;i++)
+				{
+					var signid="signList_"+(i+1);
+					str_option+='<option value="'+data.SignList[i].SignCode+'" id="'+signid+'">'+data.SignList[i].SignName+'</option>';
+				}
+	   
+				str_option+='';
+				$('#sign_switch').append(str_option); 
+				$("#sign_switch").selectmenu('refresh', true);
+				
+
                 //收缩压的起始值，目标值必须有！
-                $("#originalDiv").css("visibility","visible");
-				$("#targetDiv").css("visibility","visible");
-			    $("#BPoriginal").text(data.ChartData.GraphGuide.original);
-	            $("#BPtarget").text(data.ChartData.GraphGuide.target);
+				if(((data.ChartData.GraphGuide.original==null)||(data.ChartData.GraphGuide.original=="")) && ((data.ChartData.GraphGuide.target==null)||(data.ChartData.GraphGuide.target=="")))
+				{
+					$("#ori_tarDiv").css("display","none");
+				}
+				else
+				{
+					//$("#originalDiv").css("visibility","visible");
+				    //$("#targetDiv").css("visibility","visible");
+			        $("#BPoriginal").text(data.ChartData.GraphGuide.original);
+	                $("#BPtarget").text(data.ChartData.GraphGuide.target);
+					$("#ori_tarDiv").css("display","block");
+				}
 				
 			    //画图
 			    if((data.ChartData.GraphList.length>0) && (data.ChartData.GraphList!=null))          //图表有数据
@@ -111,9 +132,6 @@
 				  if(data.ChartData.OtherTasks=="1")  //除体征测量外，有其他任务
 				  {
 			          createStockChart(data.ChartData);
-					  //超过三个药物的都将省略号
-				      //默认单击下部图的点都将弹框，显示详细
-					  
 					  //监听下部图的bullet点 的点击事件
 					  chart.panels[1].addListener("clickGraphItem",showDetailInfo); 
 					  //监听下部图的横坐标lable 的点击事件
@@ -130,7 +148,6 @@
 			     $("#alertTextDiv").css("display","none");
 			     $("#load_first").css("display","block");
 			     $("#load_after").css("visibility","visible");
-			   //chart.addListener("clickItem",zz);
 		    }
 			else //无图表数据
 			{
@@ -150,16 +167,11 @@
 			  //$('#ul_target').listview('refresh');     
         } 
      });
-
-	 //chart.addListener("rollOverGraph",zz);
-	 
  }
 
 	
 function showDetailInfo(event)
 {
-	//alert(event.item.category);
-	
 	//清空弹框内内容
 	$("#ul_targetDetial li").remove();
 	
@@ -177,10 +189,7 @@ function showDetailInfo(event)
 		var theday="0"+theday.toString();
 	}
 	var theDate=theyear.toString()+themonth.toString()+theday.toString();
-	
-	//alert(PatientId);
-	//alert(NowPlanNo);
-	//alert(theDate);
+
 	/*
 	  //alert(event.item.category);
 	  //alert(event.index);  获取点的序号 0~
@@ -202,7 +211,6 @@ function showDetailInfo(event)
 			},
         success: function(data) {
 			
-			
 		var str="";
 		str+='<li data-role="list-divider" style="text-align:center;"> <span>'+data.Date+'</span><span style="margin-left:20px;">'+data.WeekDay+'</span></li>';
 		
@@ -223,49 +231,57 @@ function showDetailInfo(event)
 		str+='</li>'; 
 		}
 		
-		//生活方式
-		if(data.LifeTaskComList.length>0)
-		{
-			str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">生活方式</h3><p style="font-size:14px;">';
-			
-		for(var j=0;j<data.LifeTaskComList.length;j++)
-		{
-			if(data.LifeTaskComList[j].Status=="1")
-			{
-				str+='<span style="margin-left:10px;"> '+data.LifeTaskComList[j].TaskName+'✔</span>';
-				
-			}
-			else
-			{
-				str+='<span style="margin-left:10px;"> '+data.LifeTaskComList[j].TaskName+'✘</span>';
-			}
-			
-		}
-		 str+='</p></li>'; 
-		}
 		
-		//用药
-		if(data.DrugTaskComList.length>0)
-		{
-			str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">用药情况</h3>';
+		//其他任务:生活方式和用药情况
+		if(data.TaskComByTypeList.length>0)
+		{			
+			for(var i=0;i<data.TaskComByTypeList.length;i++)
+		    {
+				if(data.TaskComByTypeList[i].TaskType =="生活方式")
+				{
+				  str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">'+data.TaskComByTypeList[i].TaskType+'</h3><p style="font-size:14px;">';
+			  
+			 
+				 for(var j=0;j<data.TaskComByTypeList[i].TaskComList.length;j++)
+				 {
+					 
+					 if(data.TaskComByTypeList[i].TaskComList[j].Status=="1")
+					{
+				  str+='<span style="margin-left:10px;"> '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'✔</span>';
+				  
+					}
+					else
+				   {
+				  str+='<span style="margin-left:10px;"> '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'✘</span>';
+				   }
+				}
+				str+='</p></li>'; 
+			  }
 			
-		for(var j=0;j<data.DrugTaskComList.length;j++)
-		{
-			if(data.DrugTaskComList[j].Status=="1")
+			else //用药 药名过长在不同行 与生活方式在同一行样式不一样
 			{
-				str+='<p style="font-size:14px;"><span style="margin-left:10px;"> '+data.DrugTaskComList[j].TaskName+'✔</span></p>';
-				
-			}
-			else
-			{
-				str+='<span style="margin-left:10px;"> '+data.DrugTaskComList[j].TaskName+'✘</span></p>';
-			}
+				str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">'+data.TaskComByTypeList[i].TaskType+'</h3>';
+			
+				for(var j=0;j<data.TaskComByTypeList[i].TaskComList.length;j++)
+				{
+					if(data.TaskComByTypeList[i].TaskComList[j].Status=="1")
+					{
+						str+='<p style="font-size:14px;"><span style="margin-left:10px;"> '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'✔</span></p>';
+						
+					}
+					else
+					{
+						str+='<span style="margin-left:10px;"> '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'✘</span></p>';
+					}
+				}
+				str+='</li>'; 
+		    }
 		}
-		str+='</li>'; 
-		}
- $("#ul_targetDetial").append(str);
- $('#ul_targetDetial').listview('refresh');  
-	$("#popupDetail").popup("open");	
+	 }
+	 
+     $("#ul_targetDetial").append(str);
+     $('#ul_targetDetial').listview('refresh');  
+	 $("#popupDetail").popup("open");	
 		
 			}, 
        error: function(msg) {alert("Error: showDetailInfo!");},
@@ -295,16 +311,16 @@ function showDetailInfo(event)
 						minPeriod:"DD",
 						dateFormats:[{
                     period: 'DD',
-                    format: 'YY/MM/DD'
+                    format: 'MM/DD'
                 }, {
                     period: 'WW',
-                    format: 'YY/MM/DD'
+                    format: 'MM/DD'
                 }, {
                     period: 'MM',
-                    format: 'YY/MM/DD'
+                    format: 'YYYY/MM'
                 }, {
                     period: 'YYYY',
-                    format: 'YY/MM/DD'
+                    format: 'YYYY'
                 }]
 					},
 					
@@ -388,7 +404,7 @@ function showDetailInfo(event)
                             bulletBorderThickness : 1,
                             bulletBorderAlpha : 1,		
 							showBalloon: true,		
-                            balloonText: "[[SignDescription]]",
+                            balloonText: "[[category]]<br>[[SignDescription]]",
 							//要不要显示时间？[[category]]<br>
 				            //labelText:"[[nowDay]][[SBPvalue]]",
 							ValueAxis:{
@@ -437,8 +453,7 @@ function showDetailInfo(event)
                             bulletBorderThickness : 2,
                             bulletBorderAlpha : 1,		
 							showBalloon: true,		
-                            balloonText: "体征测量<b><span style='font-size:14px;color:red;'> 3✘</span><br> 生活方式 2✔<br>用药情况<span style='font-size:14px;color:red;'> 2✘</span> 3✔ ",
-							//[[DrugDescription]]
+                            balloonText: "[[DrugDescription]]",
 				            //labelText:"[[drugDescription]]"
                             //balloonFunction:zz,
 						}],
@@ -449,7 +464,7 @@ function showDetailInfo(event)
 					}
 				],
                 balloon:{
-					fadeOutDuration:3,   //3秒之后自动消失
+					fadeOutDuration:7,   //3秒之后自动消失
 					animationDuration:0.1,
 					maxWidth:500,  //必须有，不然自排版是乱的
 				    textAlign:"left",
@@ -461,6 +476,8 @@ function showDetailInfo(event)
                      //fixedPosition:true,
 				},
 				chartCursorSettings:{
+					zoomable:false,
+					pan:true,
 					usePeriod: "7DD",
 					//pan:false,
 				    //zoomable:true,
@@ -491,13 +508,7 @@ function showDetailInfo(event)
 			  },
 				responsive: {   //手机屏幕自适应
                     enabled: true
-                   },
-				   "allLabels": [
-		{
-			url: "www.baidu.com",
-		}
-	]
-
+                   }
 			});
 		
 		//alert(chart.panels[0].valueAxes[0].reversed);
@@ -519,6 +530,7 @@ function showDetailInfo(event)
 	  $.ajax({  
         type: "POST",
         dataType: "json",
+
 		//timeout: 30000,  
 		url: 'http://'+ serverIP +'/'+serviceName+'/GetSignInfoByCode',
 		//async:false,
@@ -532,18 +544,14 @@ function showDetailInfo(event)
 
 			$("#load_first").css("display","block");
 			$("#load_after").css("visibility","hidden");
-			$("#originalDiv").css("visibility","hidden");
-			$("#targetDiv").css("visibility","hidden");
 			$("#alertTextDiv").css("display","none");
 			$("#graph_loading").css("display","block");
 			},
         success: function(data) {
-	
-			chart="";
-			
+	            chart="";
 			    //画图
 			    if((data.GraphList.length>0) && (data.GraphList!=null))          //图表有数据
-			   {
+			    {
 				   //✔ ✘ ' 处理 
 				   for(var m=0;m<data.GraphList.length;m++)
 				   {	
@@ -559,43 +567,50 @@ function showDetailInfo(event)
 				  if(data.OtherTasks=="1")  //除体征测量外，有其他任务
 				  {
 			          createStockChart(data);
+					  chart.panels[1].addListener("clickGraphItem",showDetailInfo); 
 				  }
 				  else  //没有其他任务
 				  {
 					  createStockChartNoOther(data);
 				  }
+				  
+				  if((ItemCode=="Bloodpressure|Bloodpressure_1")||(ItemCode=="Bloodpressure|Bloodpressure_2"))
+				  {
+					  chart.panels[0].title="血压 （单位：mmHg）";
+				  }
+				  else if(ItemCode=="Pulserate|Pulserate_1")
+				  {
+					  chart.panels[0].title="脉率 （单位：次/分）";
+				  }
+				  chart.validateNow();
+				  
+				  //类似脉率没有初始值和目标值，则隐藏
+			   if(((data.GraphGuide.original==null)||(data.GraphGuide.original=="")) && ((data.GraphGuide.target==null)||(data.GraphGuide.target=="")))
+				{
+					$("#ori_tarDiv").css("display","none");
+				}
+				else
+				{
+					//$("#originalDiv").css("visibility","visible");
+				    //$("#targetDiv").css("visibility","visible");
+			        $("#BPoriginal").text(data.GraphGuide.original);
+	                $("#BPtarget").text(data.GraphGuide.target);
+					$("#ori_tarDiv").css("display","block");
+				}
+				
+				$("#graph_loading").css("display","none");
+		        $("#alertTextDiv").css("display","none");
+			    $("#load_first").css("display","block");
+			    $("#load_after").css("visibility","visible");
+				  
 			}
-
-	        //chart.panels[0].valueAxes[0].guides=data.GuideList
-	       // chart.panels[0].valueAxes[0].minimum=data.GraphGuide.minimum;
-			//chart.panels[0].valueAxes[0].maximum=data.GraphGuide.maximum;
-	       //chart.dataSets[0].dataProvider= data.GraphList;
-			
-	        //chart.validateNow();
-           // chart.validateData();
-           //chart.animateAgain();  //只适用于serial
-	      //chart.write("chartdiv");
-
-            $("#graph_loading").css("display","none");
-		    $("#alertTextDiv").css("display","none");
-			$("#load_first").css("display","block");
-			$("#load_after").css("visibility","visible");
-		     
-			  //图上说明	 
-		    if(ItemCode=="Pulserate_1")
-		    {
-				//隐藏
-				$("#originalDiv").css("visibility","hidden");
-				$("#targetDiv").css("visibility","hidden");
-		    }
-		    else
-		    { 
-			    //收缩压的起始值，目标值必须有！
-                $("#originalDiv").css("visibility","visible");
-				$("#targetDiv").css("visibility","visible");
-			    $("#BPoriginal").text(data.GraphGuide.original);
-	            $("#BPtarget").text(data.GraphGuide.target);
-		    }
+			else //无图表数据
+			{   $("#alertText").text("暂时无数据");
+				$("#graph_loading").css("display","none");
+				$("#load_first").css("display","block");
+			    $("#load_after").css("visibility","hidden");
+				$("#alertTextDiv").css("display","block");
+			}
 			   
 			 }, 
        error: function(msg) {
@@ -678,10 +693,8 @@ function rechange(loop){
     var temp = "planList_" + loop;
 
 	//相应改变下拉框选中值
-	$("#"+temp).attr("selected","selected");
-	$("#planList").selectmenu('refresh', true);
-	
-	/*
+	//$("#"+temp).attr("selected","selected");
+
 	var opList = document.getElementById("planList").childNodes;
     for (var i = 0, len = opList.length; i < len; i++) 
 	{
@@ -695,8 +708,8 @@ function rechange(loop){
 			opList[i].selected = false;
 		}
     }
-	*/
-    
+
+    $("#planList").selectmenu('refresh', true);
 
 
     var planid=$("#"+temp).val();
@@ -745,8 +758,6 @@ function rechange(loop){
 		beforeSend: function(){
 			$("#load_first").css("display","block");
 			$("#load_after").css("visibility","hidden");
-			$("#originalDiv").css("visibility","hidden");
-			$("#targetDiv").css("visibility","hidden");
 			$("#alertTextDiv").css("display","none");
 			$("#graph_loading").css("display","block");
 			},
@@ -761,8 +772,6 @@ function rechange(loop){
                 NowPlanNo=PlanNo;
 	            StartDate=data.StartDate;
 	            EndDate=data.EndDate;
-			 
-
 			 
 			 //画图
 			    if((data.ChartData.GraphList.length>0) && (data.ChartData.GraphList!=null))          //图表有数据
@@ -797,16 +806,33 @@ function rechange(loop){
 					  createStockChartNoOther(data.ChartData);
 				  }
 			   
+			  //类似脉率没有初始值和目标值，则隐藏  类似收缩压有的则显示
+			   if(((data.ChartData.GraphGuide.original==null)||(data.ChartData.GraphGuide.original=="")) && ((data.ChartData.GraphGuide.target==null)||(data.ChartData.GraphGuide.target=="")))
+				{
+					$("#ori_tarDiv").css("display","none");
+				}
+				else
+				{
+					//$("#originalDiv").css("visibility","visible");
+				    //$("#targetDiv").css("visibility","visible");
+			        $("#BPoriginal").text(data.ChartData.GraphGuide.original);
+	                $("#BPtarget").text(data.ChartData.GraphGuide.target);
+					$("#ori_tarDiv").css("display","block");
+				}
+				
 			   $("#graph_loading").css("display","none");
 			   $("#alertTextDiv").css("display","none");
-			   $("#load_first").css("display","block");
+			   $("#load_first").css("display","block");  
+			   
+			    //还原下拉框 收缩压被选
+			   //$("#Bloodpressure_1").attr("selected","selected");
+			   $("#signList_1").attr("selected","selected");
+	           $("#sign_switch").selectmenu('refresh', true);
+			
 			   $("#load_after").css("visibility","visible");
 			   
-			 //收缩压的起始值，目标值必须有！
-                $("#originalDiv").css("visibility","visible");
-				$("#targetDiv").css("visibility","visible");
-			    $("#BPoriginal").text(data.ChartData.GraphGuide.original);
-	            $("#BPtarget").text(data.ChartData.GraphGuide.target);
+			
+			
 		    }
 			else //无图表数据
 			{   $("#alertText").text("暂时无数据");
@@ -816,9 +842,7 @@ function rechange(loop){
 				$("#alertTextDiv").css("display","block");
 			}
 		    
-			//还原下拉框 收缩压被选
-			$("#Bloodpressure_1").attr("selected","selected");
-	         $("#switch").selectmenu('refresh', true);
+			
 
 		                  }, 
        error: function(msg) {alert("Error: GetImplementationForPadSecond!");},
@@ -891,7 +915,7 @@ function rechange(loop){
 				//autoMargins:false,
 				panels: [{
 						title: "血压 （单位：mmHg）",
-						showCategoryAxis: false,
+						showCategoryAxis: true,
 						percentHeight: 70,
 						autoMargins:false,
 						//marginTop:300,
@@ -959,7 +983,7 @@ function rechange(loop){
 					}	
 				],
                 balloon:{
-					fadeOutDuration:3,
+					fadeOutDuration:7,
 					animationDuration:0.1,
 					maxWidth:400,
 				    textAlign:"left",
@@ -969,8 +993,8 @@ function rechange(loop){
 				},
 				chartCursorSettings:{
 					usePeriod: "7DD",
-					//pan:false,
-				    //zoomable:true,
+				    zoomable:false,
+					pan:true,
 					//leaveCursor:"false",
 					//cursorPosition:"middle",
 					categoryBalloonEnabled:false,
@@ -1002,10 +1026,6 @@ function rechange(loop){
                    },
 
 			});
-		
-		//alert(chart.panels[0].valueAxes[0].reversed);
-		//chart.addListener("clickStockEvent",objet);				
-        // chart.panels[0].valueAxes[0].inside=false;
-	    //chart.validateNow();
+
 }
   

@@ -261,42 +261,56 @@ input[type=checkbox] {visibility: hidden;}
         <div id="graph_loading" style="display: none; margin-top:60px" align="center"> <img alt="Load" src="images/history_loading.gif" style="width:50px;height:50px;" />
           <p>加载中，请稍后</p>
         </div>
+        
         <div id="load_after">
-          <div id="proRate" >
-            <dl class="barbox" style="margin:0 auto;">
+        
+           <div id="plan_title" style="height:60px;width:100%;">
+           <div style="width:500px;height:60px;margin:0 auto;" >
+             <div style="width:110px;height:60px;float:left;margin-top:0px;" >
+                <div data-role="fieldcontain" style="margin-top:0px;">
+                  <select name="switch" id="sign_switch" data-native-menu="false">
+                  </select>
+                 </div>
+             </div>    
+                
+              <div id="proRate" style="width:350px;height:60px;float:left;">
+            <dl class="barbox" style="float:left;margin-left:30px;">
               <dd class="barline">
                 <div class="proChart" divindex="0" id="chartSlide_0" style="width:0px;" ></div>
               </dd>
               <dd class="last"><span>进度0%，距离计划结束还有N天</span></dd>
             </dl>
+            </div>
+            </div>
           </div>
-          <div style="width:700px;height:40px;display:block;margin-left:10%;margin-top:0px;">
+
+
+          
+          <div style="width:700px;height:40px;margin-left:5%;margin-top:0px;" id="ori_tarDiv">
             <div class="ui-grid-b" >
-              <div class="ui-block-a" style="width:110px;margin-top:-20px;margin-left:20px;">
-                <div data-role="fieldcontain" style="">
-                  <select name="switch" id="switch" data-native-menu="false">
-                    <option value="Bloodpressure_1" id="Bloodpressure_1">收缩压</option>
-                    <option value="Bloodpressure_2" >舒张压</option>
-                    <option value="Pulserate_1" >脉率</option>
-                  </select>
-                </div>
+              
+              <div class="ui-block-a" id="originalDiv">
+                <p><img alt="Load" src="images/original.png" style="width:30px;height:5px;" />&nbsp;起始值：<span id="BPoriginal"></span></p>
               </div>
-              <div class="ui-block-b" style="margin-left:50px;" id="originalDiv">
-                <p><img alt="Load" src="images/original.png" style="width:30px;height:5px;" />&nbsp;起始值：<span id="BPoriginal"></span>mmHg</p>
-              </div>
-              <div class="ui-block-c" id="targetDiv">
-                <p><img alt="Load" src="images/target.png" style="width:30px;height:5px;" />&nbsp;目标值：<span id="BPtarget"></span>mmHg</p>
+              <div class="ui-block-b" id="targetDiv">
+                <p><img alt="Load" src="images/target.png" style="width:30px;height:5px;" />&nbsp;目标值：<span id="BPtarget"></span></p>
               </div>
             </div>
           </div>
-          <div id="chartdiv" style="width:90%; height:450px;margin-top:30px;margin-left:30px;"> </div>
+          
+          
+          <div id="chartdiv" style="width:90%; height:450px;margin-top:10px;margin-left:30px;"> </div>
           <div style="margin:20px auto;" align="center">
             <p id="CompliacneValue" style="font-size:20px;color:#0048CC;"></p>
           </div>
         </div>
+        
+        
       </div>
     </div>
   </div>
+  
+  
   <div data-role="footer">
     <h3> copyright </h3>
   </div>
@@ -478,7 +492,7 @@ input[type=checkbox] {visibility: hidden;}
 	}
 	 GetImplementationForPadFirst(PatientId, Module);
      
-	  $('#switch').change(function(){ 
+	  $('#sign_switch').change(function(){ 
 	      selectDataset($(this).children('option:selected').val());  //下拉框切换体征
 	   });
 
