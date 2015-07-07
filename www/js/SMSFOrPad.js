@@ -208,7 +208,6 @@ function SetSMSRead (Reciever, SendBy)
 	  alert("SetSMSRead出错啦！");
 	}
   });
-  alert("SetSMSRead");
 }
 
 //改写阅读状态（一条）
