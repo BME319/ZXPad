@@ -1,5 +1,7 @@
 var ThisUserId = localStorage.getItem('UserId'); //医生
 var TheOtherId = localStorage.getItem("PatientId"); //患者
+var flag = localStorage.getItem("PanelFlag");
+
 //var piUserId = "a";
 //var piTerminalName = "a";
 //var piTerminalIP = "a";
@@ -20,9 +22,7 @@ var isUserloggedout = false;
 
 $(document).ready(function(event){
   $('#SMSHeader').html(localStorage.getItem("PatientName"));
-  /*$('#SMSPanel').height(DocHeight-450);*/
   $('#GenaralField').height(GetHeight()-450); //设定文档高度
- /* alert(DocHeight);*/
   GetSMSDialogue(ThisUserId, TheOtherId);
   SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
   document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
@@ -36,6 +36,113 @@ $(document).ready(function(event){
 })
 
 document.getElementById('SMSbtn').onclick = submitSMS;
+
+//改写Panel调用flag
+function ChangePanelFlag ()
+{
+	localStorage.setItem('PanelFlag',"HomePage"); 
+}
+
+
+//消息推送
+window.onunload = function () //断开连接
+{
+	SocketCreated = false;
+	isUserloggedout = true;
+	ws.close();
+}
+
+function WsPush ()
+//window.onload = function() //建立连接
+{
+	try
+	{
+		if ("WebSocket" in window) 
+		{
+			//alert(1);
+			ws = new WebSocket("ws://" + wsServerIP);
+		}
+		else if("MozWebSocket" in window) 
+		{
+			alert(2);
+			ws = new MozWebSocket("ws://" + wsServerIP);
+		}
+		else
+		{
+			alert("当前浏览器不支持WebSocket");
+		}
+	
+		SocketCreated = true;
+		isUserloggedout = false;
+	} 
+	catch (ex) 
+	{
+		console.log(ex, "ERROR");
+		return;
+	}
+	ws.onopen = WSonOpen;
+	ws.onmessage = WSonMessage;
+	ws.onclose = WSonClose;
+	ws.onerror = WSonError;
+}
+
+
+ function WSonOpen() {
+	ws.send("login:" + ThisUserId);   
+ };
+
+ function WSonMessage(event) {
+	var DataArry = event.data.split("||");
+	flag = localStorage.getItem("PanelFlag");
+	if (flag == "Panel")
+	{
+		if (DataArry[0] == TheOtherId)
+		{
+			CreateSMS("Receive", DataArry[1], DataArry[2]);
+			document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
+			SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
+		}
+	}
+	else
+	{
+		if (DataArry[0].substring(0, 3) != "log")
+		{
+			$('#PatientListTbody').find('tr').each(function() 
+			{
+				var piPatientId = $(this).find('td:first').find('div').find('ul').find('li:eq(1)').find('p').attr("value");
+				if (piPatientId == DataArry[0])
+				{
+					var Arry = GetLatestSMS(localStorage.getItem("DoctorId"), DataArry[0]);
+					var Count;
+					var piCount = $(this).find('td:last').find('div').find('ul').find('li:first').find('span').find('font').html();
+					if (typeof(piCount) == "undefined")
+					{
+						Count = "1";									
+					}
+					else
+					{
+						Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), DataArry[0]);
+						$(this).find('td:last').find('div').empty();
+					}
+					var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li><a href="" class="SMS" value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
+					$(this).find('td:last').find('div').append(Str);
+					$(this).parent().trigger('create');
+					
+					//总收件箱
+					var TotalCount = GetSMSCountForAll(localStorage.getItem("DoctorId"));
+					$('#SMSBox').find('span').find('font').html(TotalCount);
+				}
+			});
+		}
+	}
+ };
+
+ function WSonClose() {
+ };
+
+ function WSonError() {
+	console.log("远程连接中断。", "ERROR");
+ };
 
 //autogrow初始化
 $("#SMSContent").textinput({
@@ -124,74 +231,6 @@ function GetHeight()
 	var ret = (DocHeight < DocWidth)?DocHeight:DocWidth;
 	return ret;
 }
-
-//消息推送
-window.onunload = function () //断开连接
-{
-	SocketCreated = false;
-	isUserloggedout = true;
-	ws.close();
-}
-
-function WsPush ()
-//window.onload = function() //建立连接
-{
-	try
-	{
-		if ("WebSocket" in window) 
-		{
-			//alert(1);
-			ws = new WebSocket("ws://" + wsServerIP);
-		}
-		else if("MozWebSocket" in window) 
-		{
-			alert(2);
-			ws = new MozWebSocket("ws://" + wsServerIP);
-		}
-		else
-		{
-			alert("当前浏览器不支持WebSocket");
-		}
-	
-		SocketCreated = true;
-		isUserloggedout = false;
-	} 
-	catch (ex) 
-	{
-		console.log(ex, "ERROR");
-		return;
-	}
-	ws.onopen = WSonOpen;
-	ws.onmessage = WSonMessage;
-	ws.onclose = WSonClose;
-	ws.onerror = WSonError;
-}
-
-
- function WSonOpen() {
-	ws.send("login:" + ThisUserId);   
- };
-
- function WSonMessage(event) {
-	var DataArry = event.data.split("||");
-	if (DataArry[0] == TheOtherId)
-	{
-		CreateSMS("Receive", DataArry[1], DataArry[2]);
-		document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
-		SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
-	}
-	//消息通知
-	//$.sticky('<p style="line-height:150%;">您有一条新的消息</br>主题</br>发件人</br>' + event.data + '</p>' );
- };
-
- function WSonClose() {
- };
-
- function WSonError() {
-	console.log("远程连接中断。", "ERROR");
- };
-
-
 
 //获取短信对话
 function GetSMSDialogue(Reciever, SendBy)

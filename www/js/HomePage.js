@@ -16,7 +16,7 @@ var rowArr = new Array();
 var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
 //var ImageAddressFile = window.localStorage.getItem("PatientFile");
 var ImageAddressFile = "/PersonalPhoto";
-
+localStorage.setItem('PanelFlag',"Homepage"); //Panel调用flag
 /*
 var planRate = new Rate('planloader');
 var complianceRate = new Rate('complianceloader');
@@ -744,21 +744,31 @@ patientInfo = ' <div style="width: 300px;"><div style="width: 25%;float:left;mar
 			var table = $('#DataTable').DataTable();
             var row_clicked = $(this).closest('tr');
 		 localStorage.setItem('PatientId',table.row(row_clicked).data()[5]);
+		 localStorage.setItem('PanelFlag',"Panel"); //Panel调用flag
 		 InitialSMS();
 		$( "#SMSPanel" ).panel( "open" );	
+		$('#SMSHeader').html(table.row(row_clicked).data()[8]);
+		GetSMSDialogue(localStorage.getItem('UserId'), table.row(row_clicked).data()[5]);
+		document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
+		SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
 		$('#SMSContent').val("");	   
 		});	
 
 		 //SMS
 	 $(".SMS").click(function ()
 	 {
-			var table = $('#DataTable').DataTable();
-            var row_clicked = $(this).closest('tr');
-			var pid = table.row(row_clicked).data()[5];			  
+		 var table = $('#DataTable').DataTable();
+         var row_clicked = $(this).closest('tr');
+		 var pid = table.row(row_clicked).data()[5];	
 		 localStorage.setItem('PatientId',pid);
+		 localStorage.setItem('PanelFlag',"Panel"); //Panel调用flag
 		 InitialSMS();
 		//$('#SMSPanel').trigger('updatelayout');
 		$( "#SMSPanel" ).panel( "open" );
+		$('#SMSHeader').html(table.row(row_clicked).data()[8]);
+		GetSMSDialogue(localStorage.getItem('UserId'), pid);
+		document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
+		SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
 		$('#SMSContent').val("");
 		//myScroll.disable();		 
 		 });
