@@ -65,19 +65,21 @@ function WsPush ()
 			var piPatientId = $(this).find('td:first').find('div').find('ul').find('li:eq(1)').find('p').attr("value");
 			if (piPatientId == DataArry[0])
 			{
+				var Arry = GetLatestSMS(localStorage.getItem("DoctorId"), DataArry[0]);
+				var Count;
 				var piCount = $(this).find('td:last').find('div').find('ul').find('li:first').find('span').find('font').html();
 				if (typeof(piCount) == "undefined")
 				{
-					var Arry = GetLatestSMS(localStorage.getItem("DoctorId"), DataArry[0]);
-					var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">1</font></span></li><li><a href="" class="SMS" value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
-					$(this).find('td:last').find('div').append(Str);
-					$(this).parent().trigger('create');					
+					Count = "1";									
 				}
 				else
 				{
-					var Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), DataArry[0]);
-					$(this).find('td:last').find('div').find('ul').find('li:first').find('span').find('font').html(Count); //更新消息数
+					Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), DataArry[0]);
+					$(this).find('td:last').find('div').empty();
 				}
+				var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li><a href="" class="SMS" value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
+				$(this).find('td:last').find('div').append(Str);
+				$(this).parent().trigger('create');
 			}
 		});
 	}

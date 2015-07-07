@@ -744,6 +744,7 @@ patientInfo = ' <div style="width: 320px;"><div style="width: 25%;float:left;mar
 			var table = $('#DataTable').DataTable();
             var row_clicked = $(this).closest('tr');
 		 localStorage.setItem('PatientId',table.row(row_clicked).data()[5]);
+		 localStorage.setItem('PatientName',table.row(row_clicked).data()[8]);
 		 InitialSMS();
 		$( "#SMSPanel" ).panel( "open" );	
 		$('#SMSContent').val("");	   
@@ -756,6 +757,7 @@ patientInfo = ' <div style="width: 320px;"><div style="width: 25%;float:left;mar
             var row_clicked = $(this).closest('tr');
 			var pid = table.row(row_clicked).data()[5];			  
 		 localStorage.setItem('PatientId',pid);
+		 localStorage.setItem('PatientName',table.row(row_clicked).data()[8]);
 		 InitialSMS();
 		//$('#SMSPanel').trigger('updatelayout');
 		$( "#SMSPanel" ).panel( "open" );
