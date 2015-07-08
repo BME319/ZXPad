@@ -74,7 +74,6 @@
 			
 			else  //当前有正在执行的计划
 			{
-				//$("#showEditPlan").css("visibility","visible");
 				
 			    //进度、剩余天数、依从率
 			    animate(data.ProgressRate,data.RemainingDays);
@@ -173,7 +172,8 @@
 function showDetailInfo(event)
 {
 	//清空弹框内内容
-	$("#ul_targetDetial li").remove();
+	//$("#ul_targetDetial li").remove();
+	$('#ul_targetDetial').find("li").remove();
 	
 	//获取被点击的bullet的时间值，事件格式，许处理成string"20150618"格式传到webservice
 	var dateSelected=event.item.category;
@@ -221,11 +221,11 @@ function showDetailInfo(event)
 		for(var j=0;j<data.VitalTaskComList.length;j++)
 		{
 			if(data.VitalTaskComList[j].Status=="1"){
-			str+='<p style="margin-left:10px;font-size:14px;"> '+data.VitalTaskComList[j].SignName+'✔<span style="margin-left:10px;"> '+data.VitalTaskComList[j].Value+''+data.VitalTaskComList[j].Unit+'</span> <span style="margin-left:10px;">'+data.VitalTaskComList[j].Time+'</span></p>';
+			str+='<p style="margin-left:10px;font-size:14px;">✔ '+data.VitalTaskComList[j].SignName+'<span style="margin-left:10px;"> '+data.VitalTaskComList[j].Value+''+data.VitalTaskComList[j].Unit+'</span> <span style="margin-left:10px;">'+data.VitalTaskComList[j].Time+'</span></p>';
 			}
 			else
 			{
-				str+='<p style="margin-left:10px;font-size:14px;"> '+data.VitalTaskComList[j].SignName+'✘</p>';
+				str+='<p style="margin-left:10px;font-size:14px;color:red;"><b>✘ '+data.VitalTaskComList[j].SignName+'</b></p>';
 			}
 		}
 		str+='</li>'; 
@@ -237,7 +237,7 @@ function showDetailInfo(event)
 		{			
 			for(var i=0;i<data.TaskComByTypeList.length;i++)
 		    {
-				if(data.TaskComByTypeList[i].TaskType =="生活方式")
+				if(data.TaskComByTypeList[i].TaskType =="生活方式aa")
 				{
 				  str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">'+data.TaskComByTypeList[i].TaskType+'</h3><p style="font-size:14px;">';
 			  
@@ -247,7 +247,7 @@ function showDetailInfo(event)
 					 
 					 if(data.TaskComByTypeList[i].TaskComList[j].Status=="1")
 					{
-				  str+='<span style="margin-left:10px;"> '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'✔</span>';
+				  str+='<span style="margin-left:10px;">✔ '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'</span>';
 				  
 					}
 					else
@@ -266,12 +266,12 @@ function showDetailInfo(event)
 				{
 					if(data.TaskComByTypeList[i].TaskComList[j].Status=="1")
 					{
-						str+='<p style="font-size:14px;"><span style="margin-left:10px;"> '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'✔</span></p>';
+						str+='<p style="font-size:14px;"><span style="margin-left:10px;">✔ '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'</span></p>';
 						
 					}
 					else
 					{
-						str+='<span style="margin-left:10px;"> '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'✘</span></p>';
+						str+='<p style="font-size:14px;"><b><span style="margin-left:10px;color:red;">✘ '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'</span></b></p>';
 					}
 				}
 				str+='</li>'; 
@@ -530,7 +530,6 @@ function showDetailInfo(event)
 	  $.ajax({  
         type: "POST",
         dataType: "json",
-
 		//timeout: 30000,  
 		url: 'http://'+ serverIP +'/'+serviceName+'/GetSignInfoByCode',
 		//async:false,
@@ -543,7 +542,8 @@ function showDetailInfo(event)
 		beforeSend: function(){
 
 			$("#load_first").css("display","block");
-			$("#load_after").css("visibility","hidden");
+			//$("#load_after").css("visibility","hidden");
+			document.getElementById("chartdiv").innerHTML="";
 			$("#alertTextDiv").css("display","none");
 			$("#graph_loading").css("display","block");
 			},
@@ -757,7 +757,10 @@ function rechange(loop){
 			  },
 		beforeSend: function(){
 			$("#load_first").css("display","block");
-			$("#load_after").css("visibility","hidden");
+			
+			//document.getElementById("load_after").style.visibility = "hidden";
+			document.getElementById("chartdiv").innerHTML="";
+			//$("#load_after").css("visibility","hidden");
 			$("#alertTextDiv").css("display","none");
 			$("#graph_loading").css("display","block");
 			},
@@ -765,7 +768,6 @@ function rechange(loop){
 			//画图
 			       
 			animate(data.ProgressRate,data.RemainingDays);
-			//var CompliacneValue=data.CompliacneValue;
 			$("#CompliacneValue").text(data.CompliacneValue);
 			
 			//计划编号、起止日期
@@ -794,10 +796,10 @@ function rechange(loop){
 			      //输入画图数据和分级规则
 				  if(data.ChartData.OtherTasks=="1")  //除体征测量外，有其他任务
 				  {
-			          createStockChart(data.ChartData);
+			         createStockChart(data.ChartData);
 					  
 					   //监听下部图的bullet点 的点击事件
-					   chart.panels[1].addListener("clickGraphItem",showDetailInfo); 
+					  chart.panels[1].addListener("clickGraphItem",showDetailInfo); 
 					  //监听下部图的横坐标lable 的点击事件
 					 //chart.panels[1].categoryAxis.addListener("clickItem",showDetailInfo);
 				  }
@@ -805,6 +807,10 @@ function rechange(loop){
 				  {
 					  createStockChartNoOther(data.ChartData);
 				  }
+				  
+			   $("#graph_loading").css("display","none");
+			   $("#alertTextDiv").css("display","none");
+			   //$("#load_after").css("visibility","visible");
 			   
 			  //类似脉率没有初始值和目标值，则隐藏  类似收缩压有的则显示
 			   if(((data.ChartData.GraphGuide.original==null)||(data.ChartData.GraphGuide.original=="")) && ((data.ChartData.GraphGuide.target==null)||(data.ChartData.GraphGuide.target=="")))
@@ -819,19 +825,46 @@ function rechange(loop){
 	                $("#BPtarget").text(data.ChartData.GraphGuide.target);
 					$("#ori_tarDiv").css("display","block");
 				}
+               
+
+			   //$("#load_first").css("display","block");  
+			   
+			    //重新加载下拉框 
 				
-			   $("#graph_loading").css("display","none");
-			   $("#alertTextDiv").css("display","none");
-			   $("#load_first").css("display","block");  
-			   
-			    //还原下拉框 收缩压被选
+				$('#sign_switch').find("option").remove();
+				var str_option='';
+				for(var i=0;i<data.SignList.length;i++)
+				{
+					var signid="signList_"+(i+1);
+					str_option+='<option value="'+data.SignList[i].SignCode+'" id="'+signid+'">'+data.SignList
+
+[i].SignName+'</option>';
+				}
+	   
+				str_option+='';
+				$('#sign_switch').append(str_option); 
+				$("#sign_switch").selectmenu('refresh', true);
+				
+				
+				/*
 			   //$("#Bloodpressure_1").attr("selected","selected");
-			   $("#signList_1").attr("selected","selected");
+			   var signList = document.getElementById("sign_switch").childNodes;
+				for (var i = 0, len = signList.length; i < len; i++) 
+				{
+					if (signList[i].id == "signList_1") 
+					{
+						signList[i].selected = true;
+						//break;
+					}
+					else
+					{
+						signList[i].selected = false;
+					}
+				}
 	           $("#sign_switch").selectmenu('refresh', true);
-			
-			   $("#load_after").css("visibility","visible");
-			   
-			
+			*/
+
+			  //$("#load_after").css("visibility","visible");
 			
 		    }
 			else //无图表数据
