@@ -716,11 +716,11 @@ function rechange(loop){
 	
     if((loop==1) &&(planid!=""))
     {
-	   $("#showEditPlan").css("visibility","visible");
+	  // $("#showEditPlan").css("visibility","visible");
     }
     else
     {
-	   $("#showEditPlan").css("visibility","hidden");
+	   //$("#showEditPlan").css("visibility","hidden");
     }
     //刷图
 	if(planid=="")
@@ -728,6 +728,7 @@ function rechange(loop){
 		 //当前无正在执行的计划
 		 $("#alertText").text("当前没有正在执行的计划");
 		 $("#graph_loading").css("display","none");
+		 document.getElementById("chartdiv").innerHTML="";
 		 $("#load_after").css("visibility","hidden");
 		 $("#load_first").css("display","block");
 		 $("#alertText").css("display","block");
@@ -735,8 +736,8 @@ function rechange(loop){
 	else
 	{
 		
-	  $("#load_after").css("visibility","hidden");
-	  $("#graph_loading").css("display","block");
+	  //$("#load_after").css("visibility","hidden");
+	 // $("#graph_loading").css("display","block");
 	  GetImplementationForPadSecond(PatientId, planid);
 	}
 	
@@ -845,7 +846,7 @@ function rechange(loop){
 				$('#sign_switch').append(str_option); 
 				$("#sign_switch").selectmenu('refresh', true);
 				
-				
+				$("#load_after").css("visibility","visible");
 				/*
 			   //$("#Bloodpressure_1").attr("selected","selected");
 			   var signList = document.getElementById("sign_switch").childNodes;
