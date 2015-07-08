@@ -166,27 +166,29 @@ tbody tr.odd {
         </ul>
   </div>
     </div>
+
 <div data-role="panel" data-position="right" data-position-fixed="false" data-display="overlay" data-theme="a" id="SMSPanel" data-dismissible="false"
       style="z-index: 2000;">
-      <div id="" align="center">
-    <div style="float:left;"> <a href="#homepage_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" onclick="ChangePanelFlag()"></a> </div>
-    <h2 id="SMSHeader" data-role = "hedaer"></h2>
-  </div>
-      <div data-role="content">
-      <div style="position:relative; height:100%; margin-top:50px;" id="GenaralField">
-    <div id="OutField" style="position:absolute; width: 99%;">
-          <div id="MainField" class="NormalField"></div>
-          <table width="100%">
-        <tr>
-              <td align="center" width="89%"><textarea id="SMSContent" style="font-size:20px; padding:1px;margin:5px;"></textarea></td>
-              <td></td>
-              <td align="center" width="10%" valign="bottom"><button type="button" id="SMSbtn">发送</button></td>
-            </tr>
-      </table>
-        </div>
-  </div>
+    <div id="" align="center" style="z-index:2;">
+      <div style="float:left;"> <a href="#homepage_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" onclick="ChangePanelFlag()"></a> </div>
+      <div id="SMSHeader" data-role = "Header" style="font-size:20px;font-weight:bold;"></div>
     </div>
-</div>
+    <div data-role="content" style="z-index:1;">
+    <div style="position:relative; height:100%; margin-top:30px;" id="GenaralField">
+      <div id="OutField" style="position:absolute; width: 99%;">
+        <div id="MainField" class="NormalField"></div>
+        <table width="100%">
+          <tr>
+            <td align="center" width="89%"><textarea id="SMSContent" style="font-size:20px; padding:1px;margin:5px;"></textarea></td>
+            <td></td>
+            <td align="center" width="10%" valign="bottom"><button type="button" id="SMSbtn">发送</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
+
 <div id="homepage_header" data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:50px"> 
       <!--<a id="bars-button" data-icon="bars" class="ui-btn-left" style="margin-top:10px;" href="#navpanel">Menu</a>--> 
       <a href="#navpanel" data-role="none" style="float:left; margin: 0px;padding: 0px;">
