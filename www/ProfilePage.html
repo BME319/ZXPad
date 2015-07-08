@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
 <link href="css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+<link href="css/target discussion.css" rel="stylesheet" type="text/css" />
 <script src="js/jquery-2.1.3.js"></script>
 <script src="js/jquery.mobile-1.4.2.js"></script>
 <script type="text/javascript" src="js/jquery.dataTables.js"></script>
@@ -24,6 +25,7 @@
 <script type="text/javascript" src="js/jquery.qrcode.js"></script>
 <script type="text/javascript" src="js/ProfilePage.js"></script>
 <script type="text/javascript" src="js/CreatePlan.js"></script>
+<script type="text/javascript" src="js/target discussion.js"></script>
 <title>患者建档</title>
 <style type="text/css">
 /*checkbox样式*/
@@ -598,78 +600,72 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
       <h3>copyright</h3>
     </div>
   </div>
+ </div>
   <div data-role="page" id="SetTargetPage">
     <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-      <h1>目标讨论</h1>
-      <!--            <div class="ui-btn-right">
-      <div style="float:left;"> <a id="" href="#BasicInfoPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> 
-      <a id="" href="#CreatePlanPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
-    </div>
---> 
-    </div>
-    <div data-role="content" data-theme="a">
-      <div  data-role="fieldcontain" style = "margin:0;">
-        <label for="points" style="margin-top:5px;">患者建档进度：</label>
-        <input type="range" name="points" class="points" value="55" min="0" max="100" data-highlight="true">
+    <h1>创建计划</h1>
+    
+    <!--navbar -->
+    
+  </div>
+  <div data-role="content" data-theme="a" id="MainField">
+    <div class="ui-grid-b">
+      <div class="ui-block-a">
+        <h3 align="center">血压</h3>
+        <div class="ui-grid-a">
+          <div class="ui-block-a">
+            <div  id="chart_SBP_1" style="float:left;margin-left:10px ; width: 150px; height: 300px;"></div>
+          </div>
+          <div class="ui-block-b">
+            <div  id="chart_DBP_1" style="width: 150px; height: 300px;"></div>
+          </div>
+          <div data-role="fieldcontain" id="test1">
+            <label style="width:50%">当前收缩压</label>
+            <input  type="text" id="TextInput1" onkeyup="this.value=this.value.replace(/\D/g,'') ;GetDescription();SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);Risk() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" />
+            <label style="width:50%">当前舒张压</label>
+            </br>
+            </br>
+            <input type="text" id="TextInput2" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);Risk() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}"/>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+          </div>
+        </div>
       </div>
-      <div class="ui-grid-b">
-        <div class="ui-block-a">
-          <h3 align="center">血压</h3>
-          <div class="ui-grid-a">
-            <div class="ui-block-a">
-              <div  id="chart_SBP_1" style="float:left;margin-left:10px ; width: 150px; height: 300px;"></div>
-            </div>
-            <div class="ui-block-b">
-              <div  id="chart_DBP_1" style="width: 150px; height: 300px;"></div>
-            </div>
-            <div data-role="fieldcontain" id="test1">
-              <label style="width:50%">当前收缩压</label>
-              <input  type="text" id="TextInput1" onkeyup="this.value=this.value.replace(/\D/g,'') ;GetDescription();SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);RiskModify()" />
-              <label style="width:50%">当前舒张压</label>
-              </br>
-              </br>
-              <input type="text" id="TextInput2" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);RiskModify()"/>
-              </br>
-              </br>
-              </br>
-              </br>
-              </br>
-            </div>
-          </div>
+      
+      <div class="ui-block-b">
+       <div>
+        <h3 align="center">高血压等级说明</h3>
+        <textarea data-role="none" id="hyperclass" name="" cols="" rows=""  readonly="readonly" ></textarea>
+       </div>
+        <div data-role="fieldcontain" id="test2">
+          <label style="width:50%">目标收缩压</label>
+          <input type="text" id="TextInput3" onkeyup="this.value=this.value.replace(/\D/g,'') ;SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1)  ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}"/>
+          <label style="width:50%">目标舒张压</label>
+          </br>
+          </br>
+          <input type="text" id="TextInput4" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1) ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}"/>
+          </br>
+          </br>
+          </br>
+          </br>
         </div>
-        <div class="ui-block-b">
-          <h3 align="center">高血压等级说明</h3>
-          <textarea data-role="none" id="hyperclass" name="" cols="" rows=""  readonly="readonly" ></textarea>
-          <div data-role="fieldcontain" id="test2">
-            <label style="width:50%">目标收缩压</label>
-            <input type="text" id="TextInput3" onkeyup="this.value=this.value.replace(/\D/g,'') ;SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1)"/>
-            <label style="width:50%">目标舒张压</label>
-            </br>
-            </br>
-            <input type="text" id="TextInput4" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1)"/>
-            </br>
-            </br>
-            </br>
-            </br>
-          </div>
-        </div>
-        <div class="ui-block-c">
-          <h3 align="center">风险评估</h3>
-          <!--        <div id="chartdiv3" style="width:300px; height:400px;"> </div>
+      </div>
+      
+      <div class="ui-block-c">
+        <h3 align="center">风险评估</h3>
+        <!--        <div id="chartdiv3" style="width:300px; height:400px;"> </div>
 -->
-          <div id="chartdiv3" style="width:300px; height:400px;"> </div>
-        </div>
+        <div id="chartdiv3" style="width:350px; height:325px;"> </div>
+        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#ClinicInfoPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
+        <button class="ui-btn ui-btn-inline" onclick="if(InsertTarget()) {$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});}getGoalValue();">下一步</button>
       </div>
-      <div class="ui-grid-b">
-        <div class="ui-block-a"> </div>
-        <div id="Targetbutton" class="ui-block-b" style="text-align:center;">
-          <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#ModuleInfoPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
-          <button class="ui-btn ui-btn-inline" onclick="if(InsertTarget()) {$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});}getGoalValue();">下一步</button>
-        </div>
-        <div class="ui-block-c"> </div>
-      </div>
+      
     </div>
   </div>
+</div>
   <div data-role="page" id="CreatePlanPage">
     <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
       <h1>任务选择</h1>

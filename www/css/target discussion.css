@@ -1,0 +1,139 @@
+	.NormalField 
+	{
+	  overflow-y: auto;
+	  height: 600px;
+    }
+	.ShortField 
+   {
+	 overflow-y: auto;
+	 height: 130px;
+   }
+input[type=checkbox] {
+	visibility: hidden;
+}
+.checkboxRound {
+	width: 20px;
+	height: 20px;
+	background: #ddd;
+	margin: 2px 20px;
+	border-radius: 100%;
+	position: relative;
+	-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+	box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+}
+.checkboxRound label {
+	display: block;
+	width: 16px;
+	height: 16px;
+	border-radius: 100px;
+	-webkit-transition: all .5s ease;
+	-moz-transition: all .5s ease;
+	-o-transition: all .5s ease;
+	-ms-transition: all .5s ease;
+	transition: all .5s ease;
+	cursor: pointer;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	z-index: 1;
+	background: #EAEAEA;
+	-webkit-box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5);
+	box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5);
+}
+.checkboxRound input[type=checkbox]:checked + label {
+	background: #4BCB6C;
+}
+textarea#hyperclass {
+	resize: none;
+	width: 300px;
+	height: 280px;
+	max-height: 300px;
+	max-width: 300px;
+	overflow: auto;
+	border: 0;
+}
+#TextInput2 {
+	width: 20%
+}
+#TextInput1 {
+	width: 20%
+}
+div#CPPart1 {
+	width: 65%
+}
+div#CPPart2 {
+	width: 30%;
+	text-align: center;
+	position: fixed;
+	top: 70px;
+	right: 5px;
+}
+table.gridtable {
+	font-family: verdana, arial, sans-serif;
+	font-size: 11px;
+	color: #333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+#historyUl, #historyUl p {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+}
+#ClinicInfoPage #ClinicInfoDetail-form.ui-panel {
+	width: 45em;
+}
+#ClinicInfoPage #ClinicInfoDetail-form.ui-panel-closed {
+	width: 0;
+}
+#ClinicInfoPage .ui-panel-page-content-position-left, .ui-panel-dismiss-open.ui-panel-dismiss-position-right {
+	left: 0em;/*panel左边页面关闭触发范围*/
+	right: 45em;/*panel页面关闭触发范围*/
+}
+<!--
+/************ Table ************/-->
+.dtypetable {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid #ccc;
+}
+.dtypetable thead td {
+	font-size: 20px;
+	color: #000000;
+	text-align: center;
+	background: url(table_top.jpg) repeat-x top center;
+	border: 1px solid #ccc;
+	font-weight: bold;
+}
+.dtypetable tbody tr {
+	background: #fff;
+	font-size: 20px;
+	color: #000000;
+}
+.dtypetable tbody tr.alt-row {
+	background: #f2f7fc;
+}
+.dtypetable td {
+	line-height: 20px;
+	text-align: left;
+	padding: 4px 10px 3px 10px;
+	height: 18px;
+	border: 1px solid #ccc;
+}
