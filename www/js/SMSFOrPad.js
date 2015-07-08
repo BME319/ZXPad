@@ -22,7 +22,7 @@ var isUserloggedout = false;
 $(document).ready(function(event){
 	var newModuleType = 'H'+ localStorage.getItem("ModuleType"	);
 	GetSMSList(ThisUserId, newModuleType);
-	GetSMSDialogue(ThisUserId, TheOtherId);
+	//GetSMSDialogue(ThisUserId, TheOtherId);
 	$('#GenaralField').height(GetHeight()-400);
 	document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
 	  
@@ -211,7 +211,7 @@ function SetSMSRead (Reciever, SendBy)
 }
 
 //改写阅读状态（一条）
-function ChangeReadStatus(MessageNo)
+/*function ChangeReadStatus(MessageNo)
 {
 	$.ajax({
 	type: "POST",
@@ -236,7 +236,7 @@ function ChangeReadStatus(MessageNo)
 	  alert("ChangeReadStatus出错啦！");
 	}
   });
-}
+}*/
 
 document.getElementById('SMSbtn').onclick = submitSMS;
 
@@ -246,6 +246,7 @@ window.onunload = function () //断开连接
 	SocketCreated = false;
 	isUserloggedout = true;
 	ws.close();
+	TheOtherId = "";
 }
 
 function WsPush ()

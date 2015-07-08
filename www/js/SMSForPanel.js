@@ -23,8 +23,11 @@ var isUserloggedout = false;
 $(document).ready(function(event){
   $('#SMSHeader').html(localStorage.getItem("PatientName"));
   $('#GenaralField').height(GetHeight()-450); //设定文档高度
-  GetSMSDialogue(ThisUserId, TheOtherId);
+  if (flag == "Panel")
+  {
   SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
+  }
+  GetSMSDialogue(ThisUserId, TheOtherId);
   document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
   
   var SMSBtn = document.getElementById('SMSbtn');	
@@ -37,10 +40,32 @@ $(document).ready(function(event){
 
 document.getElementById('SMSbtn').onclick = submitSMS;
 
-//改写Panel调用flag
+//改写Panel调用flag并改写消息数
 function ChangePanelFlag ()
 {
 	localStorage.setItem('PanelFlag',"HomePage"); 
+	//修改消息数
+	var PatientId = localStorage.getItem("PatientId");
+	var Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), PatientId);
+	$('#PatientListTbody').find('tr').each(function() 
+	{
+		var piPatientId = $(this).find('td:first').find('div').find('ul').find('li:eq(1)').find('p').attr("value");
+		if (piPatientId == PatientId)
+		{
+			var Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), PatientId);
+			$(this).find('td:last').find('div').find('ul').find('li:first').find('span').find('font').html(Count);														
+		}
+	});
+	var TotalCount = GetSMSCountForAll(localStorage.getItem("DoctorId"));
+	$('#SMSBox').find('span').find('font').html(TotalCount);	
+}
+
+//点击实时计数产生的图标触发
+function AddFunction()
+{
+	var PatientId = localStorage.getItem("PatientId");
+	SetSMSRead(localStorage.getItem('UserId'), PatientId);
+	localStorage.setItem('PanelFlag',"Panel"); //Panel调用flag
 }
 
 
@@ -96,6 +121,7 @@ function WsPush ()
 	flag = localStorage.getItem("PanelFlag");
 	if (flag == "Panel")
 	{
+		TheOtherId = localStorage.getItem("PatientId");
 		if (DataArry[0] == TheOtherId)
 		{
 			CreateSMS("Receive", DataArry[1], DataArry[2]);
@@ -124,7 +150,7 @@ function WsPush ()
 						Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), DataArry[0]);
 						$(this).find('td:last').find('div').empty();
 					}
-					var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li><a href="" class="SMS" value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
+					var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li><a href="#SMSPanel" class="SMS" onclick = "AddFunction()" value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
 					$(this).find('td:last').find('div').append(Str);
 					$(this).parent().trigger('create');
 					
@@ -513,7 +539,7 @@ function ChangePushStatus (MessageNo)
 }
 
 //改写阅读状态（一条）
-function ChangeReadStatus(MessageNo)
+/*function ChangeReadStatus(MessageNo)
 {
 	$.ajax({
 	type: "POST",
@@ -539,7 +565,7 @@ function ChangeReadStatus(MessageNo)
 	}
   });
 }
-
+*/
 //SetSMSRead 改写阅读状态（多条）
 function SetSMSRead (Reciever, SendBy)
 {
