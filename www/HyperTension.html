@@ -114,6 +114,11 @@ input[type=checkbox] {visibility: hidden;}
 	
 .checkboxRound input[type=checkbox]:checked + label {background: #4BCB6C;}
 
+#ul_targetDetial li
+{
+	padding-bottom: 0px;
+}
+
 </style>
 <div data-role="page"> 
   <!--  <div data-role="panel" id="navpanel" data-theme="a" data-display="overlay" data-position="left" data-dismissible="false">
@@ -307,7 +312,7 @@ input[type=checkbox] {visibility: hidden;}
         <div data-role="controlgroup" data-corners="false"> <a id="navBasicInfo" href="#BasicInfoPanel" data-role="button">基本信息</a> <a id="navModuleInfo" href="#ModuleInfoPanel" data-role="button">慢病信息</a> <a id='navClinicInfo' href="#ClinicInfoPanel" data-role="button">临床信息</a> <a id='navPlan' href="#PlanPanel" data-role="button">创建与调整计划</a> <a id='navRisk' href="#RiskPanel" data-role="button">风险评估</a> <a id="navSMS" href="#SMSPanel" data-role="button">即时消息</a> <a id="navInvite" href="#InvitationInfoPage" data-role="button" onClick="showInvitationInfoPage()">发送邀请</a></div>
       </div>
       </div>
-      <div  style="width:80%;float:left;margin-top:0px;">
+     <div  style="width:80%;float:left;margin-top:0px;">
         <div id="load_first">
 <!--          <div class="imgtest" align="center" >
             <div> <img src="images/head.jpg" id="portrait"/> </div>
@@ -316,11 +321,11 @@ input[type=checkbox] {visibility: hidden;}
 -->          <div id="thumbs" style="margin-top:30px;width:100%;height:60px;" align="center">
             <div style="width:700px;height:60px;">
               <button  data-icon="arrow-l" style="width:150px;float:left;" id="play_prev" onclick="hookBtn(this.id);">上一计划</button>
-              <div style="width:350px;float:left;margin-left:20px;" id="planListDiv">
+              <div style="width:350px;float:left;margin-left:15px;" id="planListDiv">
                 <select name="planList" id="planList" data-native-menu="false" >
                 </select>
               </div>
-              <button  data-icon="arrow-r" style="width:150px;float:left;margin-left:20px;" id="play_next" onclick="hookBtn(this.id);">下一计划</button>
+              <button  data-icon="arrow-r" style="width:150px;float:left;margin-left:15px;" id="play_next" onclick="hookBtn(this.id);">下一计划</button>
             </div>
           </div>
           <div data-role="popup" id="popupBasic" data-position-to="" >
@@ -330,56 +335,74 @@ input[type=checkbox] {visibility: hidden;}
         <div id="alertTextDiv" style="display: none; margin-top:60px" align="center">
           <p style="font-size: 20px; color: Blue;" id="alertText">当前无正在执行的计划</p>
         </div>
-        <div id="graph_loading" style="display: none; margin-top:60px" align="center"> <img alt="Load" src="images/history_loading.gif" style="width:50px;height:50px;" />
-          <p>加载中，请稍后</p>
-        </div>
+        
+        
         <div id="load_after">
-          <div id="proRate" >
-            <dl class="barbox" style="margin:0 auto;">
+        
+           <div id="plan_title" style="height:60px;width:100%;">
+           <div style="width:500px;height:60px;margin:0 auto;" >
+           
+             <div style="width:110px;height:60px;float:left;margin-top:0px;" >
+                <div data-role="fieldcontain" style="margin-top:0px;">
+                  <select name="switch" id="sign_switch" data-native-menu="false">
+                  </select>
+                 </div>
+             </div>    
+                
+              <div id="proRate" style="width:350px;height:60px;float:left;">
+            <dl class="barbox" style="float:left;margin-left:30px;">
               <dd class="barline">
                 <div class="proChart" divindex="0" id="chartSlide_0" style="width:0px;" ></div>
               </dd>
               <dd class="last"><span>进度0%，距离计划结束还有N天</span></dd>
             </dl>
+            </div>
+            
+            </div>
           </div>
-          <div style="width:700px;height:40px;display:block;margin-left:10%;margin-top:0px;">
+
+
+          
+          <div style="width:700px;height:40px;margin-left:5%;margin-top:0px;" id="ori_tarDiv">
             <div class="ui-grid-b" >
-              <div class="ui-block-a" style="width:110px;margin-top:-20px;margin-left:20px;">
-                <div data-role="fieldcontain" style="">
-                  <select name="switch" id="switch" data-native-menu="false">
-                    <option value="Bloodpressure_1" id="Bloodpressure_1">收缩压</option>
-                    <option value="Bloodpressure_2" >舒张压</option>
-                    <option value="Pulserate_1" >脉率</option>
-                  </select>
-                </div>
+              
+              <div class="ui-block-a" id="originalDiv">
+                <p><img alt="Load" src="images/original.png" style="width:30px;height:5px;" />&nbsp;起始值：<span id="BPoriginal"></span></p>
               </div>
-              <div class="ui-block-b" style="margin-left:50px;" id="originalDiv">
-                <p><img alt="Load" src="images/original.png" style="width:30px;height:5px;" />&nbsp;起始值：<span id="BPoriginal"></span>mmHg</p>
-              </div>
-              <div class="ui-block-c" id="targetDiv">
-                <p><img alt="Load" src="images/target.png" style="width:30px;height:5px;" />&nbsp;目标值：<span id="BPtarget"></span>mmHg</p>
+              <div class="ui-block-b" id="targetDiv">
+                <p><img alt="Load" src="images/target.png" style="width:30px;height:5px;" />&nbsp;目标值：<span id="BPtarget"></span></p>
               </div>
             </div>
           </div>
-          <div id="chartdiv" style="width:90%; height:450px;margin-top:30px;margin-left:30px;"> </div>
+          
+          
+          <div id="graph_loading" style="display: none; margin-top:60px" align="center"> <img alt="Load" src="images/history_loading.gif" style="width:50px;height:50px;" />
+          <p>加载中，请稍后</p>
+        </div>
+          
+          
+          <div id="chartdiv" style="width:90%; height:450px;margin-top:10px;margin-left:30px;"> 
+          </div>
+          
           <div style="margin:20px auto;" align="center">
             <p id="CompliacneValue" style="font-size:20px;color:#0048CC;"></p>
           </div>
         </div>
+        
+        
       </div>
+      
+      
     </div>
   </div>
+  
+  
   <div data-role="footer">
     <h3> copyright </h3>
   </div>
   
   
-  <div data-role="popup" id="popupDetail" data-position-to="" style="width:400px;height:250px;overflow:auto;">
-       <ul data-role="listview" data-inset="true" id="ul_targetDetial" style="margin-top:0px;width:100%;">
-       
-      </ul>
-   </div>
-  
+    <div data-role="popup" id="popupDetail" class="ui-content" style="width:400px;padding-left: 1px;padding-right: 1px;padding-bottom: 0px;padding-top: 1px;" data-dismissible="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a><div style="height:300px;overflow:auto;"><ul data-role="listview" data-inset="true" id="ul_targetDetial" style="width:100%;margin-top: 0px;"></ul></div></div>
   
   
   <div data-role="panel" data-position="right" data-position-fixed="true" data-display="push" data-theme="a" id="editPlan">
@@ -550,7 +573,7 @@ input[type=checkbox] {visibility: hidden;}
 	}
 	 GetImplementationForPadFirst(PatientId, Module);
      
-	  $('#switch').change(function(){ 
+	  $('#sign_switch').change(function(){ 
 	      selectDataset($(this).children('option:selected').val());  //下拉框切换体征
 	   });
 
