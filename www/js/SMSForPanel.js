@@ -64,6 +64,7 @@ function ChangePanelFlag ()
 
 function AddFunction(obj)
 {
+	$("#SMSPanel").panel("open");
 	var PatientName = $(obj).parent().parent().parent().parent().find("td:first").find('ul').find('li:first').text();
 	var PatientId = $(obj).parent().parent().parent().parent().find("td:first").find('ul').find('li:eq(1)').find('p').attr("id");
 	$('#GenaralField').height(GetHeight()-150);
@@ -158,7 +159,7 @@ function WsPush ()
 						Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), DataArry[0]);
 						$(this).find('td:last').find('div').empty();
 					}
-					var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li onclick = "AddFunction(this)"><a href="#SMSPanel" class="SMS"  value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
+					var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li onclick = "AddFunction(this)"><a href="" class="SMS"  value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
 					$(this).find('td:last').find('div').append(Str); 
 					$(this).parent().trigger('create');
 					
