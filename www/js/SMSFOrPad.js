@@ -245,8 +245,9 @@ window.onunload = function () //断开连接
 {
 	SocketCreated = false;
 	isUserloggedout = true;
-	ws.close();
+	//ws.close();
 	TheOtherId = "";
+	ws.send("");
 }
 
 function WsPush ()

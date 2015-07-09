@@ -1,0 +1,46 @@
+.ForSend {
+	padding: 15px 10px;
+	margin-right: 20px;
+	background: #74DE81;
+	position: relative;
+	border-radius: 15px;
+	float: right;
+	font-size: 20px;
+	word-break:break-all;
+}
+.SendTri {
+	position: absolute;
+	right: -15px;
+	bottom: 10px;
+	width: 0px;
+	height: 0px;
+	border: 8px solid;
+	border-color: transparent transparent #74DE81 #74DE81;
+}
+.ForReceive {
+	padding: 15px 10px;
+	margin-left: 20px;
+	background: #beceeb;
+	position: relative;
+	border-radius: 15px;
+	float: left;
+	font-size: 20px;
+	word-break:break-all;
+}
+.ReceiveTri {
+	position: absolute;
+	left: -15px;
+	bottom: 10px;
+	width: 0px;
+	height: 0px;
+	border: 8px solid;
+	border-color: transparent #beceeb #beceeb transparent;
+}
+.NormalField {
+	overflow-y: auto;
+	height:400px;
+}
+.ShortField {
+	overflow-y: auto;
+	height:100px;
+}
