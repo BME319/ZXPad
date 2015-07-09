@@ -128,15 +128,11 @@ function WsPush ()
  function WSonMessage(event) {
 	var DataArry = event.data.split("||");
 	flag = localStorage.getItem("PanelFlag");
-	if (flag == "Panel")
-	{
-		TheOtherId = localStorage.getItem("PatientId");
-		if (DataArry[0] == TheOtherId)
-		{
-			CreateSMS("Receive", DataArry[1], DataArry[2]);
-			document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
-			SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
-		}
+	if ((flag == "Panel")&&(DataArry[0] == localStorage.getItem("PatientId")))
+	{	
+		CreateSMS("Receive", DataArry[1], DataArry[2]);
+		document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
+		SetSMSRead(ThisUserId, localStorage.getItem("PatientId"));//改写阅读状态
 	}
 	else
 	{
