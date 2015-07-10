@@ -9,14 +9,16 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
 <link href="css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+<link href="css/chosen.css" rel="stylesheet" type="text/css" />
 <link href="css/target discussion.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="css/scrollbar.css">
+<link rel="stylesheet" type="text/css" href="css/scroll.css">
 <script src="js/jquery-2.1.3.js"></script>
 <script src="js/jquery.mobile-1.4.2.js"></script>
 <script type="text/javascript" src="js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="js/CommonUtility.js"></script>
 <script type="application/javascript" src="js/iscroll.js"></script>
-<link rel="stylesheet" type="text/css" href="css/scrollbar.css">
-<link rel="stylesheet" type="text/css" href="css/scroll.css">
 <script src="js/amcharts.js" type="text/javascript"></script>
 <script src="js/serial.js" type="text/javascript"></script>
 <script src="js/jquery.chromatable.js" type="text/javascript"></script>
@@ -25,10 +27,12 @@
 <script type="text/javascript" src="js/jquery.qrcode.js"></script>
 <script type="text/javascript" src="js/ProfilePage.js"></script>
 <script type="text/javascript" src="js/CreatePlan.js"></script>
+<script type="text/javascript" src="js/NewBasicInfoPage.js"></script>
 <script type="text/javascript" src="js/target discussion.js"></script>
 <title>患者建档</title>
 <style type="text/css">
 /*checkbox样式*/
+
 
 
 
@@ -40,8 +44,8 @@ input[type=checkbox] {
 	visibility: hidden;
 }
 .checkboxRound {
-	width: 20px;
-	height: 20px;
+	width: 40px;
+	height: 40px;
 	background: #ddd;
 	margin: 2px 20px;
 	border-radius: 100%;
@@ -52,8 +56,8 @@ input[type=checkbox] {
 }
 .checkboxRound label {
 	display: block;
-	width: 16px;
-	height: 16px;
+	width: 32px;
+	height: 32px;
 	border-radius: 100px;
 	-webkit-transition: all .5s ease;
 	-moz-transition: all .5s ease;
@@ -62,8 +66,8 @@ input[type=checkbox] {
 	transition: all .5s ease;
 	cursor: pointer;
 	position: absolute;
-	top: 2px;
-	left: 2px;
+	top: 4px;
+	left: 4px;
 	z-index: 1;
 	background: #EAEAEA;
 	-webkit-box-shadow: inset 0px 1px 3px rgba(0,0,0,0.5);
@@ -95,7 +99,7 @@ div#CPPart2 {
 	width: 30%;
 	text-align: center;
 	position: fixed;
-	top: 70px;
+	top: 95px;
 	right: 5px;
 }
 table.gridtable {
@@ -167,25 +171,53 @@ table.gridtable td {
 }
 </style>
 <style type="text/css">
-div#DoctorInfoDiv.ui-grid-a .ui-block-a {
-	width: 25%;
-	text-align: center;
+div#CheckPhoneDiv.ui-grid-d .ui-block-a {
+	width: 4%;
 }
-div#DoctorInfoDiv.ui-grid-a .ui-block-b {
-	width: 75%
+div#CheckPhoneDiv.ui-grid-d .ui-block-b {
+	width: 37%;
 }
-div#BasicInfoDiv.ui-grid-c .ui-block-a {
-	width: 46%;
-	text-align: left;
+div#CheckPhoneDiv.ui-grid-d .ui-block-c {
+	width: 18%;
 }
-div#BasicInfoDiv.ui-grid-c .ui-block-b {
-	width: 4%
+div#CheckPhoneDiv.ui-grid-d .ui-block-d {
+	width: 37%;
 }
-div#BasicInfoDiv.ui-grid-c .ui-block-c {
-	width: 46%;
-	text-align: left;
+div#CheckPhoneDiv.ui-grid-d .ui-block-e {
+	width: 4%;
 }
-div#BasicInfoDiv.ui-grid-c .ui-block-d {
+
+div#SynInfoDiv.ui-grid-d .ui-block-a {
+	width: 4%;
+}
+div#SynInfoDiv.ui-grid-d .ui-block-b {
+	width: 37%;
+}
+div#SynInfoDiv.ui-grid-d .ui-block-c {
+	width: 18%;
+}
+div#SynInfoDiv.ui-grid-d .ui-block-d {
+	width: 37%;
+}
+div#SynInfoDiv.ui-grid-d .ui-block-e {
+	width: 4%;
+}
+
+div#BasicInfoDiv.ui-grid-d .ui-block-a {
+	width: 4%;
+}
+div#BasicInfoDiv.ui-grid-d .ui-block-b {
+	width: 37%
+}
+div#BasicInfoDiv.ui-grid-d .ui-block-c {
+	width: 18%;
+	text-align:center;
+	vertical-align:middle
+}
+div#BasicInfoDiv.ui-grid-d .ui-block-d {
+	width: 37%
+}
+div#BasicInfoDiv.ui-grid-e .ui-block-d {
 	width: 4%
 }
 </style>
@@ -271,14 +303,12 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
 <div data-role="page" id="BasicInfoPage">
   <div data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:45px"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a> 
     <!--<a href="HomePage.html"> <img src = "img/avatar.jpg" id="docimg" value="" style="height:30px"/> </a>-->
-    <h3>患者信息</h3>
+    <h3>基本信息</h3>
     <div class="ui-btn-right">
-      <div style="float:left;"> 
-        <!--      <a id="" href="#" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> 
---> <a id="" href="#ClinicInfoPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
+      <div style="float:left;"> <a id="" href="#ClinicInfoPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
     </div>
   </div>
-  <div data-role="popup" id="SaveInsure" data-theme="a" data-overlay-theme="b" class="ui-content" style="width:300px; height:150px; padding-bottom:2em;">
+  <!--<div data-role="popup" id="SaveInsure" data-theme="a" data-overlay-theme="b" class="ui-content" style="width:300px; height:150px; padding-bottom:2em;">
     <h3 align="center" style="font-size:20px; height:50px">保存确认</h3>
     <p align="center" style="font-size:16px; height:40px"">您确定保存基本信息吗？</p>
     <div data-role="fieldcontain" align="center"> <a href="#ClinicInfoPage" onclick = "SaveInfo()" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">确认</a> <a href="#" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">取消</a> </div>
@@ -287,181 +317,250 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
     <h3 align="center" style="font-size:20px; height:50px">重置确认</h3>
     <p align="center" style="font-size:16px; height:40px"">您确定重置基本信息吗？</p>
     <div data-role="fieldcontain" align="center"> <a href="#" data-rel="back" onclick = "ResetInfo()" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">确认</a> <a href="#" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">取消</a> </div>
-  </div>
+  </div>-->
   <div data-role="navbar" data-position="fixed"> </div>
   <div data-role="content">
     <div  data-role="fieldcontain" style = "margin:0;">
       <label for="points" style="margin-top:5px;">患者建档进度：</label>
-      <input type="range" name="points" class="points" value="0" min="0" max="100" data-highlight="true">
+      <input type="range" name="points" class="points" value="15" min="0" max="100" data-highlight="true">
     </div>
-    <div class="ui-grid-a" id="DoctorInfoDiv">
-      <div class="ui-block-a">
-        <div data-role="fieldcontain">
-          <table>
-            <tr>
-              <td><label for="UserId" style="width:60px">*ID</label></td>
-              <td><input name="UserId" type="text" id="UserId" style="background-color:#EAEAEA; height:40px" readonly></td>
-            </tr>
-          </table>
+    <div data-role="content">
+      <div class="ui-grid-d" id="CheckPhoneDiv">
+        <div class="ui-block-a"></div>
+        <div class="ui-block-b">
+          <div data-role="content">
+            <div data-role="fieldcontain">
+              <table>
+                <tr>
+                  <td><label for="PhoneNo" style="width:80px">手机号</label></td>
+                  <td width="350px"><input type="text" name="PhoneNo" id="PhoneNo" style="height:40px"></td>
+                </tr>
+              </table>
+            </div>
+            <div>
+              <label for="AlertRegistPhone" id="AlertRegistPhone" style="color:red">手机号格式不正确</label>
+            </div>
+          </div>
         </div>
-        <div data-role="fieldcontain">
-          <table>
-            <tr>
-              <td><label for="UserName" style="width:60px">*姓名</label></td>
-              <td><input type="text" name="UserName" id="UserName" style="height:40px; font-weight:50"></td>
-            </tr>
-          </table>
+        <div class="ui-block-c">
+          <div data-role="content">
+            <div data-role="fieldcontain">
+              <table>
+                <tr>
+                  <td><a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini" id="Regist" onClick="CheckPhone()">注册</a></td>
+                </tr>
+              </table>
+            </div>
+          </div>
         </div>
-        <div>
-          <label for="AlertUserName" id="AlertUserName" style="color:red">姓名必填</label>
+        <div class="ui-block-d" id="IdDiv">
+          <div data-role="content">
+            <div data-role="fieldcontain">
+              <table>
+                <tr>
+                  <td><label for="UserId" style="width:100px">*ID</label></td>
+                  <td width="300px"><input name="UserId" type="text" id="UserId" style="background-color:#EAEAEA; height:40px" readonly></td>
+                </tr>
+              </table>
+            </div>
+          </div>
         </div>
-        <div> <img id="Photo" name="Photo" style="max-height:200px; max-width:200px"/> </div>
+        <div class="ui-block-e"></div>
       </div>
-      <div class="ui-block-b">
-        <div class="ui-grid-c" id="BasicInfoDiv">
-          <div class="ui-block-a">
+      <div class="ui-grid-d" id="SynInfoDiv">
+        <div class="ui-block-a"></div>
+        <div class="ui-block-b">
+          <div data-role="content">
             <div data-role="fieldcontain">
               <table>
                 <tr>
-                  <td><label for="SexType" style="width:80px">*性别</label></td>
-                  <td width="300px"><select name="SexType" id="SexType" style="height:40px">
+                  <td><label for="Hospital" style="width:80px">医院</label></td>
+                  <td style="width:300px"><select name="Hospital" id="Hospital" style="height:40px">
                     </select></td>
                 </tr>
               </table>
             </div>
             <div>
-              <label for="AlertSex" id="AlertSex" style="color:red">性别必填</label>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="AboBloodType" style="width:80px">血型</label></td>
-                  <td width="300px"><select name="AboBloodType" size="1" id="AboBloodType" style="height:40px">
-                    </select></td>
-                </tr>
-              </table>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="InsuranceType" style="width:80px">医保类型</label></td>
-                  <td width="300px"><select name="InsuranceType" id="InsuranceType" style="height:40px">
-                    </select></td>
-                </tr>
-              </table>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="Birthday" style="width:80px">*出生日期</label></td>
-                  <td width="300px"><input type="date" name="Birthday" id="Birthday" style="height:40px"></td>
-                </tr>
-              </table>
-            </div>
-            <div>
-              <label for="AlertBirth" id="AlertBirth" style="color:red">生日必填</label>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="Height" style="width:80px">身高(cm)</label></td>
-                  <td width="300px"><input type="text" name="Height" id="Height" style="height:40px"></td>
-                </tr>
-              </table>
-            </div>
-            <div>
-              <label for="AlertHeight" id="AlertHeight" style="color:red">身高必须为正数</label>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="Weight" style="width:80px">体重(kg)</label></td>
-                  <td width="300px"><input type="text" name="Weight" id="Weight" style="height:40px"></td>
-                </tr>
-              </table>
-            </div>
-            <div>
-              <label for="AlertWeight" id="AlertWeight" style="color:red">体重必须为正数</label>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="HomeAddress" style="width:80px">家庭住址</label></td>
-                  <td width="300px"><input type="text" name="HomeAddress" id="HomeAddress" style="height:40px"></td>
-                </tr>
-              </table>
+              <label for="AlertHospital" id="AlertHospital" style="color:red">请选择医院</label>
             </div>
           </div>
-          <div class="ui-block-b"></div>
-          <div class="ui-block-c">
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="IDNo" style="width:120px">身份证号码</label></td>
-                  <td width="300px"><input type="text" name="IDNo" id="IDNo" style="height:40px"></td>
-                </tr>
-              </table>
-            </div>
-            <div>
-              <label for="AlertID" id="AlertID" style="color:red">身份证号码必须为15位或18位</label>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="PhoneNumber" style="width:120px">联系电话</label></td>
-                  <td width="300px"><input type="text" name="PhoneNumber" id="PhoneNumber" style="height:40px"></td>
-                </tr>
-              </table>
-            </div>
-            <div>
-              <label for="AlertPhone" id="AlertPhone" style="color:red; width:200px">联系电话必须为手机或座机</label>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="Nationality" style="width:120px">国籍</label></td>
-                  <td width="300px"><input type="text" name="Nationality" id="Nationality" style="height:40px"></td>
-                </tr>
-              </table>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="Occupation" style="width:120px">职业</label></td>
-                  <td width="300px"><input type="text" name="Occupation" id="Occupation" style="height:40px"></td>
-                </tr>
-              </table>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="EmergencyContact" style="width:120px">紧急联系人</label></td>
-                  <td width="300px"><input type="text" name="EmergencyContact" id="EmergencyContact" style="height:40px"></td>
-                </tr>
-              </table>
-            </div>
-            <div data-role="fieldcontain">
-              <table>
-                <tr>
-                  <td><label for="EmergencyContactPhoneNumber" style="width:120px">紧急联系人电话</label></td>
-                  <td width="300px"><input type="text" name="EmergencyContactPhoneNumber" id="EmergencyContactPhoneNumber" style="height:40px"></td>
-                </tr>
-              </table>
-            </div>
-            <div>
-              <label for="AlertEmergencyPhone" id="AlertEmergencyPhone" style="color:red; width:200px">联系电话必须为手机或座机</label>
-            </div>
-          </div>
-          <div class="ui-block-d"></div>
-          <div class="ui-block-e"></div>
         </div>
+        <div class="ui-block-c"></div>
+        <div class="ui-block-d">
+          <div data-role="content">
+            <div data-role="fieldcontain">
+              <table>
+                <tr>
+                  <td><label for="PId" style="width:100px">就诊号</label></td>
+                  <td style="width:300px"><input type="text" name="PId" id="PId" style="height:40px"></td>
+                  <td><a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini" onClick="SynInfo()">同步信息</a></td>
+                </tr>
+              </table>
+            </div>
+            <div>
+              <label for="AlertPId" id="AlertPId" style="color:red">就诊号必填</label>
+            </div>
+          </div>
+        </div>
+        <div class="ui-block-e"></div>
+      </div>
+      <div class="ui-grid-d" id="BasicInfoDiv">
+        <div class="ui-block-a"></div>
+        <div class="ui-block-b">
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="UserName" style="width:80px">*姓名</label></td>
+                <td width="300px"><input type="text" name="UserName" id="UserName" style="height:40px; font-weight:50"></td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <label for="AlertUserName" id="AlertUserName" style="color:red">姓名必填</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="SexType" style="width:80px">*性别</label></td>
+                <td width="300px"><select name="SexType" id="SexType" style="height:40px">
+                  </select></td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <label for="AlertSex" id="AlertSex" style="color:red">性别必填</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="AboBloodType" style="width:80px">血型</label></td>
+                <td width="300px"><select name="AboBloodType" size="1" id="AboBloodType" style="height:40px">
+                  </select></td>
+              </tr>
+            </table>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="InsuranceType" style="width:80px">医保类型</label></td>
+                <td width="300px"><select name="InsuranceType" id="InsuranceType" style="height:40px">
+                  </select></td>
+              </tr>
+            </table>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="Birthday" style="width:80px">*出生日期</label></td>
+                <td width="300px"><input type="date" name="Birthday" id="Birthday" style="height:40px"></td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <label for="AlertBirth" id="AlertBirth" style="color:red">生日必填</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="Height" style="width:80px">身高(cm)</label></td>
+                <td width="300px"><input type="text" name="Height" id="Height" style="height:40px"></td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <label for="AlertHeight" id="AlertHeight" style="color:red">身高必须为正数</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="Weight" style="width:80px">体重(kg)</label></td>
+                <td width="300px"><input type="text" name="Weight" id="Weight" style="height:40px"></td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <label for="AlertWeight" id="AlertWeight" style="color:red">体重必须为正数</label>
+          </div>
+        </div>
+        <div class="ui-block-c">
+          <div> <img id="Loading" name="Loading" src="img/history_loading.gif"/> </div>
+        </div>
+        <div class="ui-block-d">
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="HomeAddress" style="width:120px">家庭住址</label></td>
+                <td width="300px"><input type="text" name="HomeAddress" id="HomeAddress" style="height:40px"></td>
+              </tr>
+            </table>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="IDNo" style="width:120px">身份证号码</label></td>
+                <td width="300px"><input type="text" name="IDNo" id="IDNo" style="height:40px"></td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <label for="AlertID" id="AlertID" style="color:red">身份证号码必须为15位或18位</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="PhoneNumber" style="width:120px">联系电话</label></td>
+                <td width="300px"><input type="text" name="PhoneNumber" id="PhoneNumber" style="height:40px"></td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <label for="AlertPhone" id="AlertPhone" style="color:red; width:200px">联系电话必须为手机或座机</label>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="Nationality" style="width:120px">国籍</label></td>
+                <td width="300px"><input type="text" name="Nationality" id="Nationality" style="height:40px"></td>
+              </tr>
+            </table>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="Occupation" style="width:120px">职业</label></td>
+                <td width="300px"><input type="text" name="Occupation" id="Occupation" style="height:40px"></td>
+              </tr>
+            </table>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="EmergencyContact" style="width:120px">紧急联系人</label></td>
+                <td width="300px"><input type="text" name="EmergencyContact" id="EmergencyContact" style="height:40px"></td>
+              </tr>
+            </table>
+          </div>
+          <div data-role="fieldcontain">
+            <table>
+              <tr>
+                <td><label for="EmergencyContactPhoneNumber" style="width:120px">紧急联系人电话</label></td>
+                <td width="300px"><input type="text" name="EmergencyContactPhoneNumber" id="EmergencyContactPhoneNumber" style="height:40px"></td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <label for="AlertEmergencyPhone" id="AlertEmergencyPhone" style="color:red; width:200px">联系电话必须为手机或座机</label>
+          </div>
+        </div>
+        <div class="ui-block-e"></div>
       </div>
       <div>
         <input type="text" name="DoctorId" id="DoctorId" data-role="none" style="display: none;">
         <input type="text" name="InvalidFlag" id="InvalidFlag" data-role="none" style="display: none;">
         <input type="text" name="Flag" id="Flag" data-role="none" style="display: none;">
       </div>
-      <div style="text-align:center"> <a href="#ResetInsure" data-inline="true" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">重置</a> <a href="#SaveInsure" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">保存</a> </div>
+      <!--<div style="text-align:center" id="SaveButton"> <a href="#ResetInsure" data-inline="true" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop" onClick="ResetInfo()">重置</a> <a href="#SaveInsure" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop" onClick="SaveInfo()">保存</a> </div>-->
+      <div style="text-align:center" id="SaveButton"> <a href="#ResetInsure" data-inline="true" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop" onClick="ResetInfo()">重置</a> <a href="#" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop" onClick="	$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});SaveInfo(); $.mobile.changePage('#ClinicInfoPage');">保存</a> </div>
     </div>
     <div data-theme="a" data-role="footer" data-position="fixed">
       <h3>copyright</h3>
@@ -470,15 +569,15 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
 </div>
 <div data-role="page" id="ClinicInfoPage">
   <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-    <h1>就诊信息</h1>
-    <div class="ui-btn-right">
+    <h1>临床信息</h1>
+<!--    <div class="ui-btn-right">
       <div style="float:left;"> <a id="" href="#BasicInfoPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> <a id="" href="#ModuleInfoPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
-    </div>
+    </div>-->
   </div>
   <div data-role="content" data-theme="a">
     <div  data-role="fieldcontain" style = "margin:0;">
       <label for="points" style="margin-top:5px;">患者建档进度：</label>
-      <input type="range" name="points" class="points" value="20" min="0" max="100" data-highlight="true">
+      <input type="range" name="points" class="points" value="30" min="0" max="100" data-highlight="true">
     </div>
     <div class="ui-grid-b">
       <div class="ui-block-a"> </div>
@@ -556,14 +655,14 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
 <div data-role="page" id="ModuleInfoPage">
   <div data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:45px"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
     <h1>慢病信息</h1>
-    <div class="ui-btn-right">
+    <!--<div class="ui-btn-right">
       <div style="float:left;"> <a id="" href="#ClinicInfoPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> <a id="" href="#CreatePlanPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
-    </div>
+    </div>-->
   </div>
   <div data-role="content">
     <div  data-role="fieldcontain" style = "margin:0;">
       <label for="points" style="margin-top:5px;">患者建档进度：</label>
-      <input type="range" name="points" class="points" value="35" min="0" max="100" data-highlight="true">
+      <input type="range" name="points" class="points" value="45" min="0" max="100" data-highlight="true">
     </div>
     <div class="ui-grid-a" id="ModuleInfoDiv">
       <div class="ui-block-a">
@@ -600,15 +699,17 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
       <h3>copyright</h3>
     </div>
   </div>
- </div>
-  <div data-role="page" id="SetTargetPage">
-    <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-    <h1>创建计划</h1>
-    
-    <!--navbar -->
-    
+</div>
+<div data-role="page" id="SetTargetPage">
+  <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
+    <h1>目标讨论</h1>
+    <!--            <div class="ui-btn-right">
+      <div style="float:left;"> <a id="" href="#BasicInfoPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> 
+      <a id="" href="#CreatePlanPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
+    </div>
+--> 
   </div>
-  <div data-role="content" data-theme="a" id="MainField">
+ <div data-role="content" data-theme="a" id="MainField">
     <div class="ui-grid-b">
       <div class="ui-block-a">
         <h3 align="center">血压</h3>
@@ -666,249 +767,249 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
     </div>
   </div>
 </div>
-  <div data-role="page" id="CreatePlanPage">
-    <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-      <h1>任务选择</h1>
-      <!--            <div class="ui-btn-right">
+<div data-role="page" id="CreatePlanPage">
+  <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
+    <h1>任务选择</h1>
+    <!--            <div class="ui-btn-right">
       <div style="float:left;"> <a id="" href="#SetTargetPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> 
       <a id="" href="#StartPlanPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
     </div>
 --> 
+  </div>
+  
+  <!--content -->
+  <div data-role="content" data-theme="a">
+    <div  data-role="fieldcontain" style = "margin:0;">
+      <label for="points" style="margin-top:0px;">患者建档进度：</label>
+      <input type="range" name="points" class="points" value="80" min="0" max="100" data-highlight="true">
     </div>
-    
-    <!--content -->
-    <div data-role="content" data-theme="a">
-      <div  data-role="fieldcontain" style = "margin:0;">
-        <label for="points" style="margin-top:0px;">患者建档进度：</label>
-        <input type="range" name="points" class="points" value="75" min="0" max="100" data-highlight="true">
+    <div id="CPPart1">
+      <h4 style="color:#4BAACB">生活方式：</h4>
+      <table data-role="table" class="ui-responsive table-stroke">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>说明</th>
+            <th>效果</th>
+            <th>副作用</th>
+          </tr>
+        </thead>
+        <tbody id="LifeStyleBody">
+          <!--加载“生活方式” -->
+        </tbody>
+      </table>
+      <div class="ui-grid-a">
+        <div class="ui-block-a">
+          <h4 id="drugTitle" style="color:#4BAACB">药物治疗：</h4>
+        </div>
+        <div class="ui-block-b" style="text-align: right"> <a href="#popupDrug" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-btn-inline ui-icon-star ui-btn-icon-left" data-transition="pop" id="drugBtn">医嘱列表</a> </div>
       </div>
-      <div id="CPPart1">
-        <h4 style="color:#4BAACB">生活方式：</h4>
-        <table data-role="table" class="ui-responsive table-stroke">
-          <thead>
-            <tr>
-              <th></th>
-              <th></th>
-              <th>说明</th>
-              <th>效果</th>
-              <th>副作用</th>
-            </tr>
-          </thead>
-          <tbody id="LifeStyleBody">
-            <!--加载“生活方式” -->
-          </tbody>
-        </table>
-        <div class="ui-grid-a">
-          <div class="ui-block-a">
-            <h4 id="drugTitle" style="color:#4BAACB">药物治疗：</h4>
-          </div>
-          <div class="ui-block-b" style="text-align: right"> <a href="#popupDrug" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-btn-inline ui-icon-star ui-btn-icon-left" data-transition="pop" id="drugBtn">医嘱列表</a> </div>
-        </div>
-        <table data-role="table" class="ui-responsive table-stroke" id="DrugListTable">
-          <!--加载“药物治疗” -->
-        </table>
-        <div id="LastDrugListDiv" style="height: 50px; color:#cb6c4b" > 
-          <!--加载“过往药物治疗” --> 
-        </div>
+      <table data-role="table" class="ui-responsive table-stroke" id="DrugListTable">
+        <!--加载“药物治疗” -->
+      </table>
+      <div id="LastDrugListDiv" style="height: 50px; color:#cb6c4b" > 
+        <!--加载“过往药物治疗” --> 
       </div>
-      <div id="CPPart2">
-        <p>生活方式</p>
-        <h1 id="lifestyleChanges" style="color:#4BAACB">0mmHg</h1>
-        <img src="img/plus.png" style="height: 24px; width: 24px;"/>
-        <p>药物治疗</p>
-        <h1 id="drugChanges"  style="color:#4BAACB">0mmHg</h1>
-        <hr style="width:60%;"/>
-        <p>距离目标</p>
-        <h1 id="goal" style="color:#cb6c4b">0mmHg</h1>
+    </div>
+    <div id="CPPart2">
+      <p>生活方式</p>
+      <h1 id="lifestyleChanges" style="color:#4BAACB">0mmHg</h1>
+      <img src="img/plus.png" style="height: 24px; width: 24px;"/>
+      <p>药物治疗</p>
+      <h1 id="drugChanges"  style="color:#4BAACB">0mmHg</h1>
+      <hr style="width:60%;"/>
+      <p>距离目标</p>
+      <h1 id="goal" style="color:#cb6c4b">0mmHg</h1>
+    </div>
+    <div class="ui-grid-b">
+      <div class="ui-block-a"> </div>
+      <div class="ui-block-b" style="text-align:center;">
+        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
+        <button class="ui-btn ui-btn-inline" onclick="setPsTask();startPlanPageInit();$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
+        <!-- startPlanPageInit()开始计划页面初始化 ZC 2015-05-11--> 
       </div>
-      <div class="ui-grid-b">
-        <div class="ui-block-a"> </div>
-        <div class="ui-block-b" style="text-align:center;">
-          <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
-          <button class="ui-btn ui-btn-inline" onclick="setPsTask();startPlanPageInit();$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
-          <!-- startPlanPageInit()开始计划页面初始化 ZC 2015-05-11--> 
-        </div>
-        <div class="ui-block-c"> </div>
+      <div class="ui-block-c"> </div>
+    </div>
+    <div data-role="popup" id="popupDrug" data-theme="a" class="ui-corner-all ui-content" data-dismissible="false"> <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a>
+      <h3 id="popupH3">该患者过往药嘱列表：</h3>
+      <div id="popupDrugDiv"> 
+        <!-- 药嘱列表--> 
       </div>
-      <div data-role="popup" id="popupDrug" data-theme="a" class="ui-corner-all ui-content" data-dismissible="false"> <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a>
-        <h3 id="popupH3">该患者过往药嘱列表：</h3>
-        <div id="popupDrugDiv"> 
-          <!-- 药嘱列表--> 
-        </div>
-        <div class="ui-grid-a" id="divBtn">
-          <div class="ui-block-a"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-btn-a">取 消</a></div>
-          <div class="ui-block-b"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-btn-a" onclick="setPsDrug();">确 定</a></div>
-        </div>
+      <div class="ui-grid-a" id="divBtn">
+        <div class="ui-block-a"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-btn-a">取 消</a></div>
+        <div class="ui-block-b"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-btn-a" onclick="setPsDrug();">确 定</a></div>
       </div>
     </div>
   </div>
-  <div data-role="page" id="StartPlanPage">
-    <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-      <h1>开始计划</h1>
-      <!--            <div class="ui-btn-right">
+</div>
+<div data-role="page" id="StartPlanPage">
+  <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
+    <h1>开始计划</h1>
+    <!--            <div class="ui-btn-right">
       <div style="float:left;"> <a id="" href="#CreatePlanPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> 
       <a id="" href="#InvitationInfoPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
     </div>
 --> 
+  </div>
+  
+  <!--content --> 
+  
+  <!--<h1 align="center">开始计划</h1>-->
+  <div data-role="content" data-theme="a">
+    <div  data-role="fieldcontain" style = "margin:0;">
+      <label for="points" style="margin-top:5px;">患者建档进度：</label>
+      <input type="range" name="points" class="points" value="90" min="0" max="100" data-highlight="true">
     </div>
-    
-    <!--content --> 
-    
-    <!--<h1 align="center">开始计划</h1>-->
-    <div data-role="content" data-theme="a">
-      <div  data-role="fieldcontain" style = "margin:0;">
-        <label for="points" style="margin-top:5px;">患者建档进度：</label>
-        <input type="range" name="points" class="points" value="90" min="0" max="100" data-highlight="true">
-      </div>
-      <div class="ui-grid-a">
-        <div class="ui-block-a">
-          <p align="center"><b>计划目标</b></p>
-          <div style="float:left;width:65%">
-            <div class="ui-grid-a">
-              <div class="ui-block-a">
-                <div id="chart_SBP_2" style="float:left;margin-left:10px ; width: 150px; height: 340px;"></div>
-              </div>
-              <div class="ui-block-b">
-                <div id="chart_DBP_2" style="width: 150px; height: 340px;"></div>
-              </div>
+    <div class="ui-grid-a">
+      <div class="ui-block-a">
+        <p align="center"><b>计划目标</b></p>
+        <div style="float:left;width:65%">
+          <div class="ui-grid-a">
+            <div class="ui-block-a">
+              <div id="chart_SBP_2" style="float:left;margin-left:10px ; width: 150px; height: 340px;"></div>
+            </div>
+            <div class="ui-block-b">
+              <div id="chart_DBP_2" style="width: 150px; height: 340px;"></div>
             </div>
           </div>
-          <div style="float:right;width:35%;height:340px;">
-            <div style="height:95px;">
-              <div style="float:left;width:65%">
-                <p align="center">初始收缩压</p>
-              </div>
-              <div style="float:left;width:25%">
-                <p align="center">
-                  <input name="textarea" type="text" id="OSBP" readonly/>
-                </p>
-              </div>
+        </div>
+        <div style="float:right;width:35%;height:340px;">
+          <div style="height:95px;">
+            <div style="float:left;width:65%">
+              <p align="center">初始收缩压</p>
             </div>
-            <div style="height:95px;">
-              <div style="float:left;width:65%">
-                <p align="center">目标收缩压</p>
-              </div>
-              <div style="float:left;width:25%">
-                <p align="center">
-                  <input name="textarea" type="text" id="TSBP" readonly/>
-                </p>
-              </div>
-            </div>
-            <div style="height:95px;">
-              <div style="float:left;width:65%">
-                <p align="center">初始舒张压</p>
-              </div>
-              <div style="float:left;width:25%">
-                <p align="center">
-                  <input name="textarea" type="text" id="ODBP" readonly/>
-                </p>
-              </div>
-            </div>
-            <div style="height:95px;">
-              <div style="float:left;width:65%">
-                <p align="center">目标舒张压</p>
-              </div>
-              <div style="float:left;width:25%">
-                <p align="center">
-                  <input name="textarea" type="text" id="TDBP" readonly/>
-                </p>
-              </div>
+            <div style="float:left;width:25%">
+              <p align="center">
+                <input name="textarea" type="text" id="OSBP" readonly/>
+              </p>
             </div>
           </div>
-          <div style="float:left;width:33%">
-            <p align="center">计划开始时间</p>
-            <p align="center">结束日期设置</p>
+          <div style="height:95px;">
+            <div style="float:left;width:65%">
+              <p align="center">目标收缩压</p>
+            </div>
+            <div style="float:left;width:25%">
+              <p align="center">
+                <input name="textarea" type="text" id="TSBP" readonly/>
+              </p>
+            </div>
           </div>
-          <div style="float:left;width:33%">
-            <p align="center" id="BeginDate"></p>
-            <p align="center">
-              <input name="textarea" id="EndDate" type="text" onclick="WdatePicker()" readonly/>
-            </p>
-            <p align="center"; style="color:#FF0000" id="Alert"></p>
+          <div style="height:95px;">
+            <div style="float:left;width:65%">
+              <p align="center">初始舒张压</p>
+            </div>
+            <div style="float:left;width:25%">
+              <p align="center">
+                <input name="textarea" type="text" id="ODBP" readonly/>
+              </p>
+            </div>
           </div>
-          <!--      <div style="float:left;width:33%">
+          <div style="height:95px;">
+            <div style="float:left;width:65%">
+              <p align="center">目标舒张压</p>
+            </div>
+            <div style="float:left;width:25%">
+              <p align="center">
+                <input name="textarea" type="text" id="TDBP" readonly/>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div style="float:left;width:33%">
+          <p align="center">计划开始时间</p>
+          <p align="center">结束日期设置</p>
+        </div>
+        <div style="float:left;width:33%">
+          <p align="center" id="BeginDate"></p>
+          <p align="center">
+            <input name="textarea" id="EndDate" type="text" onclick="WdatePicker()" readonly/>
+          </p>
+          <p align="center"; style="color:#FF0000" id="Alert"></p>
+        </div>
+        <!--      <div style="float:left;width:33%">
         <p align="center">
           <button id= "btnToStart" style="width:100px; height:40px;" onclick="$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">返回修改</button>
           <button id= "btnToStart" style="width:100px; height:40px;" onclick="btn1_listener_f()">确认开始</button>
         </p>
       </div>
 --> 
-        </div>
-        <div class="ui-block-b">
-          <p align="center"><b>计划任务</b></p>
-          <table align="center" class="gridtable" id="PlanShow">
-            <thead id="L0">
-              <tr>
-                <th><div align="center" style="width:80px;">编号</div></th>
-                <th><div align="center" style="width:80px;">类型</div></th>
-                <th><div align="center" style="width:80px;">任务名</div></th>
-                <th><div align="center" style="width:185px;";>说明</div></th>
-              </tr>
-            </thead>
-          </table>
-        </div>
       </div>
-      <div class="ui-grid-b">
-        <div class="ui-block-a"> </div>
-        <div class="ui-block-b" style="text-align:center;">
-          <button id= "btnToStart"  class="ui-btn ui-btn-inline"  onclick="$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">返回修改</button>
-          <button id= "btnToStart"  class="ui-btn ui-btn-inline" onclick="btn1_listener_f()">确认开始</button>
-          <!--        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
+      <div class="ui-block-b">
+        <p align="center"><b>计划任务</b></p>
+        <table align="center" class="gridtable" id="PlanShow">
+          <thead id="L0">
+            <tr>
+              <th><div align="center" style="width:80px;">编号</div></th>
+              <th><div align="center" style="width:80px;">类型</div></th>
+              <th><div align="center" style="width:80px;">任务名</div></th>
+              <th><div align="center" style="width:185px;";>说明</div></th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <div class="ui-grid-b">
+      <div class="ui-block-a"> </div>
+      <div class="ui-block-b" style="text-align:center;">
+        <button id= "btnToStart"  class="ui-btn ui-btn-inline"  onclick="$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">返回修改</button>
+        <button id= "btnToStart"  class="ui-btn ui-btn-inline" onclick="btn1_listener_f()">确认开始</button>
+        <!--        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
         <button class="ui-btn ui-btn-inline" onclick="setPsTask();startPlanPageInit();$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
 --> <!-- startPlanPageInit()开始计划页面初始化 ZC 2015-05-11--> 
-        </div>
-        <div class="ui-block-c"> </div>
       </div>
+      <div class="ui-block-c"> </div>
     </div>
   </div>
-  <div data-role="page" id="InvitationInfoPage">
-    <div data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:45px"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-      <h1>发送邀请</h1>
-      <div class="ui-btn-right">
-        <div style="float:left;"> <a id="" href="#StartPlanPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> 
-          <!--      <a id="" href="#ClinicInfoPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
+</div>
+<div data-role="page" id="InvitationInfoPage">
+  <div data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:45px"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
+    <h1>发送邀请</h1>
+    <div class="ui-btn-right">
+      <div style="float:left;"> <a id="" href="#StartPlanPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> 
+        <!--      <a id="" href="#ClinicInfoPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
 --> </div>
-      </div>
-    </div>
-    <div data-role="content">
-      <div  data-role="fieldcontain" style = "margin:0;">
-        <label for="points" style="margin-top:5px;">患者建档进度：</label>
-        <input type="range" name="points" class="points" value="100" min="0" max="100" data-highlight="true">
-      </div>
-      <div class="ui-grid-a" id="InvitationInfoPage">
-        <div class="ui-block-a"></div>
-        <div class="ui-block-b">
-          <div data-role="fieldcontain">
-            <label for="InvitatoinPhoneNo">手机号：</label>
-            <input type="text" name="InvitatoinPhoneNo" id="InvitatoinPhoneNo" style="font-size:18px">
-          </div>
-        </div>
-        <div class="ui-block-c">
-          <input type="button" data-inline="true" data-transition="turn" data-theme="a" onclick="SendInvitation(); Time()" data-iconpos="left"
-						value="发送邀请码" id="SendInvitation">
-        </div>
-      </div>
-      <div class="ui-grid-b" id="InvitationInfoPage">
-        <div class="ui-block-a"></div>
-        <div class="ui-block-b">
-          <label style="alignment-adjust:central; display:none" id="download">下载地址</label>
-        </div>
-        <div class="ui-block-c"></div>
-        <div class="ui-block-d">
-          <label style="alignment-adjust:central; display:none" id="Invitation">您的邀请码</label>
-        </div>
-      </div>
-      <div class="ui-grid-b" id="InvitationInfoPage">
-        <div class="ui-block-a"></div>
-        <div id="Downloadcode" class="ui-block-b"></div>
-        <div class="ui-block-c"></div>
-        <div id="Invitationcode" class="ui-block-d"></div>
-      </div>
-      <!--<div class="clearfloat"></div>--></div>
-    <div data-theme="a" data-role="footer" data-position="fixed">
-      <h3>copyright</h3>
     </div>
   </div>
+  <div data-role="content">
+    <div  data-role="fieldcontain" style = "margin:0;">
+      <label for="points" style="margin-top:5px;">患者建档进度：</label>
+      <input type="range" name="points" class="points" value="100" min="0" max="100" data-highlight="true">
+    </div>
+    <div class="ui-grid-a" id="InvitationInfoPage">
+      <div class="ui-block-a"></div>
+      <div class="ui-block-b">
+        <div data-role="fieldcontain">
+          <label for="InvitatoinPhoneNo">手机号：</label>
+          <input type="text" name="InvitatoinPhoneNo" id="InvitatoinPhoneNo" style="font-size:18px">
+        </div>
+      </div>
+      <div class="ui-block-c">
+        <input type="button" data-inline="true" data-transition="turn" data-theme="a" onclick="SendInvitation(); Time()" data-iconpos="left"
+						value="发送邀请码" id="SendInvitation">
+      </div>
+    </div>
+    <div class="ui-grid-b" id="InvitationInfoPage">
+      <div class="ui-block-a"></div>
+      <div class="ui-block-b">
+        <label style="alignment-adjust:central; display:none" id="download">下载地址</label>
+      </div>
+      <div class="ui-block-c"></div>
+      <div class="ui-block-d">
+        <label style="alignment-adjust:central; display:none" id="Invitation">您的邀请码</label>
+      </div>
+    </div>
+    <div class="ui-grid-b" id="InvitationInfoPage">
+      <div class="ui-block-a"></div>
+      <div id="Downloadcode" class="ui-block-b"></div>
+      <div class="ui-block-c"></div>
+      <div id="Invitationcode" class="ui-block-d"></div>
+    </div>
+    <!--<div class="clearfloat"></div>--></div>
+  <div data-theme="a" data-role="footer" data-position="fixed">
+    <h3>copyright</h3>
+  </div>
+</div>
 </div>
 </body>
 <script>
@@ -942,6 +1043,9 @@ $(document).on("pageshow", "#ModuleInfoPage", function(){
 //$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});
 Progressbar();
 $.mobile.loading( "hide" ); 
+			var UserId = localStorage.getItem("PatientId");
+			var DoctorId = localStorage.getItem('DoctorId');
+
 });
 $(document).on("pageshow", "#InvitationInfoPage", function(){
 Progressbar();
@@ -963,7 +1067,9 @@ $.mobile.loading( "hide" );
 					
 //			var UserId = "test8888";
 			var UserId = localStorage.getItem("PatientId");
-			var DoctorId = localStorage.getItem('DoctorID');
+			var DoctorId = localStorage.getItem('DoctorId');
+
+//			var DoctorId = localStorage.getItem('DoctorID');
 //			var DoctorId = "D003";
 			var CategoryCode = localStorage.getItem("ModuleType");
 			//console.log("module is " + CategoryCode);

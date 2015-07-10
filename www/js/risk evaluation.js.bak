@@ -1,4 +1,8 @@
-$(document).on("pageinit", "#SetTargetPage", function(){
+   var SBPlist = new Array();
+  var DBPlist = new Array();
+  var Tasklist = new Array();
+  var bpi = 0;
+$(document).ready(function () {
     if (localStorage.getItem('EditEnable') == 0) {
       $('#Targetbutton').css('display','none');
       //console.log('targetPage');
@@ -23,11 +27,11 @@ $(document).on("pageinit", "#SetTargetPage", function(){
 	  localStorage.setItem('NewPlanNo', "");
 	  GetBPGrades();
 	  //读取血压值，包括当前和前一个计划的目标
-	  GetCurrentSBP(localStorage.getItem('PatientId'));
-	  GetCurrentDBP(localStorage.getItem('PatientId'));
+	  GetCurrentSBP();
+	  GetCurrentDBP();
 	  
-	  GetTargetSBP(localStorage.getItem('PLType'), localStorage.getItem('PlanNo'), "1");
-	  GetTargetDBP(localStorage.getItem('PLType'), localStorage.getItem('PlanNo'), "2");
+	  GetTargetSBP(localStorage.getItem('PlanNo'), "1");
+	  GetTargetDBP(localStorage.getItem('PlanNo'), "2");
 
 /*	  SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);
 	  DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);
@@ -42,49 +46,9 @@ $(document).on("pageinit", "#SetTargetPage", function(){
 	   setTimeout(function(){
 		  Risk();
 		  },200); 
-  });
-
-  function InTxt() //开始输入，避免输入框被键盘遮挡
-{
-	$('#MainField').attr("class", "ShortField");
-	document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight*0.6;
-}
-
-function OutOfTxt() //输入完成
-{	
-	$('#MainField').attr("class", "NormalField");	
-	
-}
-  
-  
-  //CreatePlanPage自运行
-  $(document).on("pageinit", "#CreatePlanPage", function(){ 
-      //当PlanNo状态为暂存时，把NewPlanNo=PlanNo，只要PLType不变，则不影响页面逻辑
-      if(localStorage.getItem('PLType') == 1){
-		localStorage.setItem('NewPlanNo', localStorage.getItem('PlanNo'));  
-	  }
-      getGoalValue(); 
-	  loadLifeStyle();	
-	  loadLastLifeStyle();
-	  getPatientDrugRecord(); //获取患者的药嘱列表
-      loadDrugList();  //加载以往的“药物治疗”记录
-  });
-   
-  //StartPlanPage自运行
-  $(document).on("pageinit", "#StartPlanPage", function(){ 
-  	  $("#PlanShow").chromatable({		//任务显示滚动(表头不滚动)
-		  width: "495px",
-		  height: "450px",
-		  scrolling: "yes",	
-	  });
-  });
- 
-
-  
-  
+  });  
   //从数据库中读取用户当前收缩压值
-  function GetCurrentSBP(PatientId){
-	 //alert(PatientId);
+  function GetCurrentSBP(){
       var option = "";
 	  $.ajax({  
 		type: "POST",
@@ -115,7 +79,7 @@ function OutOfTxt() //输入完成
       return option;	
   }	 
   //从数据库中读取用户当前舒张压值
-  function GetCurrentDBP(PatientId){
+  function GetCurrentDBP(){
 	  var option;
 	  $.ajax({  
 		  type: "POST",
@@ -142,10 +106,8 @@ function OutOfTxt() //输入完成
   } 
    
   //从数据库中读取用户前一个计划的目标收缩压值
-  function GetTargetSBP(PLType, PlanNo, Id){
+  function GetTargetSBP(PlanNo, Id){
 	  var option;
-	  if(PLType == 1 || PLType == 4)
-	  {
 		  $.ajax({  
 			  type: "POST",
 			  dataType: "xml",
@@ -169,14 +131,11 @@ function OutOfTxt() //输入完成
 			  error: function(msg) {alert("Get Target Sbp Error!");}
 		  });
 		  return option;	
-	  }
   } 
   
   //从数据库中读取用户前一个计划的目标舒张压值
-  function GetTargetDBP(PLType, PlanNo, Id){
+  function GetTargetDBP(PlanNo, Id){
 	  var option;
-	  if(PLType == 1 || PLType == 4)
-	  {
 		  $.ajax({  
 			  type: "POST",
 			  dataType: "xml",
@@ -200,7 +159,6 @@ function OutOfTxt() //输入完成
 			  error: function(msg) {alert("Get Target Dbp Error!");}
 		  });
 		  return option;	
-	  }
   } 
   //从数据库中获取血压等级说明表的信息，Cm.MstBloodPressure
   function GetBPGrades(){  
@@ -227,10 +185,6 @@ function OutOfTxt() //输入完成
   //获取血压等级说明，进入页面能够自动读取当前血压值的时候加载，在修改当前血压值后点击保存后也加载
   function GetDescription(SBP){
 	  var SBP=$("#TextInput1").val();
-	  if(SBP == "") //2015-7-10
-	  {
-		 return; 
-	  }
 	  var option;
 	  $.ajax({  
 		  type: "POST",
@@ -446,33 +400,15 @@ function Risk()
 	  var Harvard="";
 	  var Framingham="";
 	  var Stroke="";
-	  var Heart="";	 
-	  var Age = ""; 
-	  
-	  var Gender  = ""; 
-	  var Height  = ""; 
-	  var Weight  = ""; 
-	  var Heartrate  = ""; 
-	  var Parent  = ""; 
-	  var Smoke  = ""; 
-	  var Stroke  = ""; 
-	  var Lvh  = ""; 
-	  var Diabetes  = ""; 
-	  var Treat  = ""; 
-	  var Heartattack  = ""; 
-	  var Af  = ""; 
-	  var Chd  = ""; 
-	  var Valve  = "";
-	  var Tcho  = "";
-	  var Creatinine  = "";
-	  var Hdlc  = ""; 
-	  
-	  var Hyperother = "";
-	  var HarvardRiskInfactor = "";
-	  var FraminghamRiskInfactor = ""; 
-	  var StrokeRiskInfactor = ""; 
-	  var HeartFailureRiskInfactor = ""; 	
-	  	
+	  var Heart="";	
+	  //创建计划时的评估结果 
+	  var Hyper1="";
+	  var Harvard1="";
+	  var Framingham1="";
+	  var Stroke1="";
+	  var Heart1="";
+	  	 
+	  var Age = ""; 	
 	  $.ajax
 	 	 ({  	 	
           	type: "POST",
@@ -975,71 +911,39 @@ function Risk()
 				     Heart=HeartFailureRisk/100;
 			 } 
 			   //心衰发病率
-               SetRiskResult(Hyper,Harvard,Framingham,Stroke,Heart);
-			   RiskBar(Hyper,Harvard,Framingham,Stroke,Heart);
+              // SetRiskResult(Hyper,Harvard,Framingham,Stroke,Heart);无需插入评估结果
+			   GetRiskResult(PatientId);
+			   RiskBar(Hyper,Harvard,Framingham,Stroke,Heart, Hyper1,Harvard1,Framingham1,Stroke1,Heart1);
           	}, 
             error: function(msg) {alert("RiskInput");}
    });
-   
-	  function SetRiskResult(Hyper,Harvard,Framingham,Stroke,Heart)
-	  {
-		  Hyper = Hyper.toFixed(4);
-		  Harvard = Harvard.toFixed(4);
-		  Framingham = Framingham.toFixed(4);
-		  Stroke = Stroke.toFixed(4);
-		  Heart = Heart.toFixed(4);
-		  var Result = Hyper+"||"+Harvard+"||"+Framingham+"||"+Stroke+"||"+Heart;
-		  //alert(Result);
-		  var ret = false;
-		  var AssessmentTime ="";	
-		  var SortNo = "";  
+   //获取创建计划中最新一次的评估结果
+   function GetRiskResult(PatientId)
+   {
+	  var option;
 		  $.ajax({  
 			  type: "POST",
 			  dataType: "xml",
 			  timeout: 30000,  
-			  url: 'http://'+ serverIP +'/'+serviceName+'/GetServerTime',
+			  url: 'http://'+ serverIP +'/'+serviceName+'/GetRiskResult',
 			  async:false,
-			  data: {},
+			  data: {UserId:PatientId},//输入变量
 			  beforeSend: function(){},
-			  success: function(result) {
-				  AssessmentTime =  $(result).text()
-				  //alert(AssessmentTime);
-				  //RecordDate =  $(result).text().slice(0,10).replace(/-/g,"");	
-			  	  //RecordTime = $(result).text().slice(11,16).replace(/:/g,"");		 
+			  success: function(result) { 
+				  option=$(result).text();
+    			  Hyper1 =  option.slice(0,6);
+				  Harvard1 = option.slice(8,14);
+				  Framingham1 =  option.slice(16,22);
+				  Stroke1 = option.slice(24,30);
+				  Heart1 =  option.slice(32,38);
 			  }, 
-			  error: function(msg) {alert("GetServerTimeError!");}
+			  error: function(msg) {alert("GetRiskResult Error");}
 		  });
-		  //获取系统时间
-		  
-		  $.ajax({  
-			  type: "POST",
-			  dataType: "xml",
-			  timeout: 30000,  
-			  url: 'http://'+ serverIP +'/'+serviceName+'/SetRiskResult',
-			  async:false,
-			  data: {UserId:localStorage.getItem('PatientId'),
-					 SortNo:0,//webservice写好了自增
-					 AssessmentType:"HypertensionComplications",
-					 AssessmentName:"Hyper",
-					 AssessmentTime:AssessmentTime,
-					 Result:Result,
-					 revUserId:localStorage.getItem('UserId'),
-					 TerminalName:localStorage.getItem('TerminalName'),
-					 TerminalIP:localStorage.getItem('TerminalIp'),
-					 DeviceType:localStorage.getItem('DeviceType'),
-					 },//输入变量
-			  beforeSend: function(){},
-			  success: function(result) {
-				  ret =  $(result).text();
-			  },
-			  error: function(msg) {alert("SetRiskResultError!");
-			 
-			  ret =false;} 
-		  });
-		  return ret;  
-	  }
+		  return option;	 
+   }
+   
       //画柱状图
-      function RiskBar(Hyper,Harvard,Framingham,Stroke,Heart)
+      function RiskBar(Hyper,Harvard,Framingham,Stroke,Heart, Hyper1,Harvard1,Framingham1,Stroke1,Heart1)
     {
 	  //alert(Hyper);
 	  Hyper=Hyper*100;
@@ -1047,31 +951,36 @@ function Risk()
 	  Framingham=Framingham*100;
 	  Stroke=Stroke*100;
 	  Heart=Heart*100;
+	  Hyper1=Hyper1*100;
+	  Harvard1=Harvard1*100;
+	  Framingham1=Framingham1*100;
+	  Stroke1=Stroke1*100;
+	  Heart1=Heart1*100;
 	  var chartData = [
                 {
                     "year": "高血压发病率",
-                    "正常": 1,
-                    "您的风险": Hyper.toFixed(2)
+                    "计划初始": Hyper1,
+                    "当前": Hyper.toFixed(2)
                 },
                 {
                     "year": "五年死亡率",
-                    "正常": 1,
-                    "您的风险": Harvard.toFixed(2)
+                    "计划初始": Harvard1,
+                    "当前": Harvard.toFixed(2)
                 },
                 {
                     "year": "心血管疾病",
-                    "正常": 1,
-                    "您的风险": Framingham.toFixed(2)
+                    "计划初始": Framingham1,
+                    "当前": Framingham.toFixed(2)
                 },
                 {
                     "year": "中风发病率",
-                    "正常": 1,
-                    "您的风险": Stroke.toFixed(2)
+                    "计划初始": Stroke1,
+                    "当前": Stroke.toFixed(2)
                 },
                 {
                     "year": "心衰发病率",
-                    "正常": 1,
-                    "您的风险": Heart.toFixed(2)
+                    "计划初始": Heart1,
+                    "当前": Heart.toFixed(2)
                 }
             ];
                 // SERIAL CHART
@@ -1104,9 +1013,9 @@ function Risk()
                 // first graph
                 var graph1 = new AmCharts.AmGraph();
                 graph1.type = "column";
-                graph1.title = "正常";
-                graph1.valueField = "正常";
-                graph1.balloonText = "正常:[[value]]";
+                graph1.title = "计划初始";
+                graph1.valueField = "计划初始";
+                graph1.balloonText = "计划初始:[[value]]";
                 graph1.lineAlpha = 0;
                 graph1.fillColors = "#ADD981";
                 graph1.fillAlphas = 1;
@@ -1115,9 +1024,9 @@ function Risk()
                 // second graph
                 var graph2 = new AmCharts.AmGraph();
                 graph2.type = "column";
-                graph2.title = "您的风险";
-                graph2.valueField = "您的风险";
-                graph2.balloonText = "您的风险:[[value]]";
+                graph2.title = "当前";
+                graph2.valueField = "当前";
+                graph2.balloonText = "当前:[[value]]";
                 graph2.lineAlpha = 0;
                 graph2.fillColors = "#81acd9";
                 graph2.fillAlphas = 1;
@@ -1135,302 +1044,4 @@ function Risk()
       }
 }	  
 
-    //插入当前收缩压压
-    function InsertCurSbp()//PatientId P444
-    {
-		var ret = false;
-	  var CurSbp=$('#TextInput1').val();
-	  if(!TestValue(CurSbp,100,200))
-{
-			  alert("当前收缩压数据错误。");
-
-
-	  return ret;
-}
-	  var RecordDate ="";
-	  var RecordTime = "";
-	  
-	  $.ajax({  
-		  type: "POST",
-		  dataType: "xml",
-		  timeout: 30000,  
-		  url: 'http://'+ serverIP +'/'+serviceName+'/GetServerTime',
-		  async:false,
-		  data: {},
-		  beforeSend: function(){},
-		  success: function(result) {
-			  RecordDate =  $(result).text().slice(0,10).replace(/-/g,"");	
-			  RecordTime = $(result).text().slice(11,16).replace(/:/g,"");	 
-		  }, 
-		  error: function(msg) {alert("Error!");}
-	  });
-	  
-	  $.ajax({  
-		  type: "POST",
-		  dataType: "xml",
-		  timeout: 30000,  
-		  url: 'http://'+ serverIP +'/'+serviceName+'/SetPatientVitalSigns',
-		  async:false,
-		  data: {UserId:localStorage.getItem('PatientId'),
-				 RecordDate:RecordDate,
-				 RecordTime:RecordTime,
-				 ItemType:"Bloodpressure",
-				 ItemCode:"Bloodpressure_1",
-				 Value:CurSbp,
-				 Unit:"mmHg",
-				 revUserId:localStorage.getItem('UserId'),
-				 TerminalName:localStorage.getItem('TerminalName'),
-				 TerminalIp:localStorage.getItem('TerminalIp'),
-				 DeviceType:localStorage.getItem('DeviceType')
-				 },//输入变量
-		  beforeSend: function(){},
-		  success: function(result) {
-			  ret =  $(result).text();
-			  //alert(RecordDate);
-			  var SBP = CurSbp;
-			  GetDescription(SBP); 
-     
-		 },
-		 error: function(msg) {alert("InsertcurSBPError!");
-		 
-		 ret =false;} 
-	  });
-	  return ret;
-    }  
-    //插入当前舒张压
-    function InsertCurDbp()
-    {
-		var ret = false;
-	  var CurDbp=$('#TextInput2').val();
-	  if(!TestValue(CurDbp,40,140))
-{
-			  alert("当前舒张压数据错误。");
-	  return ret;
-}
-	  var RecordDate ="";
-	  var RecordTime = "";
-	  
-	  $.ajax({  
-		  type: "POST",
-		  dataType: "xml",
-		  timeout: 30000,  
-		  url: 'http://'+ serverIP +'/'+serviceName+'/GetServerTime',
-		  async:false,
-		  data: {},
-		  beforeSend: function(){},
-		  success: function(result) {
-			  RecordDate =  $(result).text().slice(0,10).replace(/-/g,"");	
-			  RecordTime = $(result).text().slice(11,16).replace(/:/g,"");	 
-		  }, 
-		  error: function(msg) {alert("Error!");}
-	  });
-	  
-	  $.ajax({  
-		  type: "POST",
-		  dataType: "xml",
-		  timeout: 30000,  
-		  url: 'http://'+ serverIP +'/'+serviceName+'/SetPatientVitalSigns',
-		  async:false,
-		  data: {UserId:localStorage.getItem('PatientId'),
-				 RecordDate:RecordDate,
-				 RecordTime:RecordTime,
-				 ItemType:"Bloodpressure",
-				 ItemCode:"Bloodpressure_2",
-				 Value:CurDbp,
-				 Unit:"mmHg",
-				 revUserId:localStorage.getItem('UserId'),
-				 TerminalName:localStorage.getItem('TerminalName'),
-				 TerminalIp:localStorage.getItem('TerminalIp'),
-				 DeviceType:localStorage.getItem('DeviceType')
-				 },//输入变量
-		  beforeSend: function(){},
-		  success: function(result) { 
-ret = true;    
-		 }, 
-		 error: function(msg) {alert("InsertCurDbpError!");
-		 ret = false;}
-	  });
-	  return ret; 
-  }    
-  //插入新Plan、当前血压、目标血压
-  function InsertTarget()
-  {
-	  var ret = false;
-	  var PlanNo = "";
-	  var PLType = localStorage.getItem("PLType");
-	  if(PLType == 3 || PLType == 4)
-	  {
-		  PlanNo = localStorage.getItem("NewPlanNo");
-		  if(PlanNo == ""){
-			  GetNewPlanNo();
-			  PlanNo = localStorage.getItem("NewPlanNo");
-			  InsertPlan(PlanNo); //将新生成的PlanNo插入Plan表
-		  }
-	  }
-	  else if(PLType == 1)
-	  {
-	      PlanNo = localStorage.getItem("PlanNo");
-	  }
-	 ret = InsertCurSbp() && InsertCurDbp() && InsertTargetSbp(PlanNo) && InsertTargetDbp(PlanNo);
-	 //alert(ret);
-	 return ret;		
-  }
-  //生成PlanNo
-  //修改函数名，改为GetNewPlanNo ZC 2015-05-07
-  function GetNewPlanNo(){
-	  $.ajax({  
-		  
-		  type: "POST",
-		  dataType: "xml",
-		  timeout: 30000,  
-		  url: 'http://'+ serverIP +'/'+serviceName+'/GetNo',
-		  async:false,
-		  data: {NumberingType:15,
-		         TargetDate:""
-				 },//输入变量
-		  success: function(result) { 
-		  	PlanNo=$(result).text();
-		  	localStorage.setItem('NewPlanNo', PlanNo);//将新生成的PlanNo插入localstorage
-		  },
-		  error: function(msg) {alert("GetNewPlanNoError!");}
-	  });
-  }
-  //将PlanNo插入Plan表
-  function InsertPlan(PlanNo)
-  {
-	  var PlanNo2=PlanNo;
-	  //ZAM 2015-4-28
-	  var StartDate =0;
-	  $.ajax({  
-		  type: "POST",
-		  dataType: "xml",
-		  timeout: 30000,  
-		  url: 'http://'+ serverIP +'/'+serviceName+'/GetServerTime',
-		  async:false,
-		  data: {},
-		  beforeSend: function(){},
-		  success: function(result) {
-			  StartDate =  $(result).text().slice(0,10).replace(/-/g,"");		    
-		  }, 
-		  error: function(msg) {alert("Error!");}
-	  });
-	  
-	  $.ajax({  
-		  type: "POST",
-		  dataType: "xml",
-		  timeout: 30000,  
-		  url: 'http://'+ serverIP +'/'+serviceName+'/SetPlan',
-		  async:false,
-		  data: {PlanNo:PlanNo2,
-				 PatientId:localStorage.getItem('PatientId'),
-				 StartDate:StartDate,
-				 EndDate:99999999,
-				 Module:localStorage.getItem('ModuleType'),
-				 Status:1,	//ZAM 2015-5-4
-				 DoctorId:localStorage.getItem('UserId'),
-				 piUserId:localStorage.getItem('UserId'),
-				 piTerminalName:localStorage.getItem('TerminalName'),
-				 piTerminalIp:localStorage.getItem('TerminalIp'),
-				 piDeviceType:localStorage.getItem('DeviceType')
-				 },//输入变量
-		  beforeSend: function(){},
-		  success: function(result) {},
-		  error: function(msg) {alert("SetPlanError!");}
-	  });
-  }  
-  //插入目标收缩压
-  function InsertTargetSbp(PlanNo)
-  {
-	  var ret = false;
-	  var PlanNo3=PlanNo;//取生成的PlanNo
-	  var TarSbp=$('#TextInput3').val();
-	  var CurSbp=$('#TextInput1').val();
-if(!TestValue(TarSbp,100,200))
-{
-		  alert("目标收缩压数据错误。");	  
-
-		  return ret;
-}
-
-if(!TestValue(CurSbp,100,200))
-{
-			  alert("当前收缩压数据错误。");
-
-	  return ret;
-}
-	  $.ajax({  
-		  type: "POST",
-		  dataType: "xml",
-		  timeout: 30000,  
-		  url: 'http://'+ serverIP +'/'+serviceName+'/SetTarget',
-		  async:false,
-		  data: {Plan:PlanNo3,
-				 Id:"1",
-				 Type:"Bloodpressure",
-				 Code:"Bloodpressure_1",
-				 Value:TarSbp,
-				 Origin:CurSbp,
-				 Instruction:"",
-				 Unit:"mmhg",
-				 piUserId:localStorage.getItem('UserId'),
-				 piTerminalName:localStorage.getItem('TerminalName'),
-				 piTerminalIp:localStorage.getItem('TerminalIp'),
-				 piDeviceType:localStorage.getItem('DeviceType')
-				 },//输入变量
-		  beforeSend: function(){},
-		  success: function(result) {  
-ret= true;
-		  },
-		  error: function(msg) {alert("SetTargetSBPError!"); 
-		  ret=false; }
-	  }); 
-	  return ret;
-  }
-  //插入目标舒张压
-  function InsertTargetDbp(PlanNo)
-  {
-	  var ret =false;
-	  var PlanNo1=PlanNo;//取生成的PlanNo
-	 // alert(PlanNo1);
-	  var TarSbp=$('#TextInput4').val();
-	  var CurSbp=$('#TextInput2').val();
-if(!TestValue(TarSbp,40,140))
-{		  alert("目标舒张压数据错误。");
-
-		  return ret;
-}
-
-if(!TestValue(CurSbp,40,140))
-{		  alert("当前舒张压数据错误。");
-
-		  return ret;
-}
-
-	  $.ajax({  
-		  type: "POST",
-		  dataType: "xml",
-		  timeout: 30000,  
-		  url: 'http://'+ serverIP +'/'+serviceName+'/SetTarget',
-		  async:false,
-		  data: {Plan:PlanNo1,
-				 Id:"2",
-				 Type:"Bloodpressure",
-				 Code:"Bloodpressure_2",
-				 Value:TarSbp,
-				 Origin:CurSbp,
-				 Instruction:"",
-				 Unit:"mmhg",
-				 piUserId:localStorage.getItem('UserId'),
-				 piTerminalName:localStorage.getItem('TerminalName'),
-				 piTerminalIp:localStorage.getItem('TerminalIp'),
-				 piDeviceType:localStorage.getItem('DeviceType')
-				 },//输入变量
-		  beforeSend: function(){},
-		  success: function(result) { 
-ret = true;
-		  },
-		  error: function(msg) {alert("SetTargetDBPError!");
-		  ret = false;}
-      });
-return ret;
-  }  
+   

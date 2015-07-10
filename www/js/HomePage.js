@@ -930,7 +930,7 @@ function DrawRates(p,c,g)
 	var goalRate = new Rate('goalloader');
 
 
-console.log(planRate);
+//console.log(planRate);
 	planRate.draw(p*100);
 	complianceRate.draw(c*100);
 	goalRate.draw(g*100);

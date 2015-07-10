@@ -7,12 +7,13 @@
      	if(r!=null)return  unescape(r[2]); return null;
 	}*/
 
-
  function GetImplementationForPadFirst(PatientId, Module){
+	 chart_imp="";
+	 document.getElementById("chartdiv").innerHTML="";
 	$.ajax({  
         type: "POST",
         dataType: "json",
-		//timeout: 30000,  
+		timeout: 30000,  
 		url: 'http://'+ serverIP +'/'+serviceName+'/GetImplementationForPadFirst',
 		//async:false,
         data: {PatientId:PatientId, 
@@ -132,7 +133,9 @@
 				  {
 			          createStockChart(data.ChartData);
 					  //监听下部图的bullet点 的点击事件
-					  chart.panels[1].addListener("clickGraphItem",showDetailInfo); 
+					  
+					  setTimeout(function(){chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); },500);
+					  //chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); 
 					  //监听下部图的横坐标lable 的点击事件
 					 //chart.panels[1].categoryAxis.addListener("clickItem",showDetailInfo);
 					  
@@ -300,7 +303,7 @@ function showDetailInfo(event)
        //$("#BPoriginal").text(ChartData.GraphGuide.original);
 	  // $("#BPtarget").text(ChartData.GraphGuide.target);
        //图
-	   chart=AmCharts.makeChart("chartdiv", {
+	   chart_imp=AmCharts.makeChart("chartdiv", {
 		       // addClassNames:true,
 				type: "stock",
 				pathToImages: "amcharts-images/",
@@ -567,7 +570,7 @@ function showDetailInfo(event)
 				  if(data.OtherTasks=="1")  //除体征测量外，有其他任务
 				  {
 			          createStockChart(data);
-					  chart.panels[1].addListener("clickGraphItem",showDetailInfo); 
+					  chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); 
 				  }
 				  else  //没有其他任务
 				  {
@@ -576,13 +579,13 @@ function showDetailInfo(event)
 				  
 				  if((ItemCode=="Bloodpressure|Bloodpressure_1")||(ItemCode=="Bloodpressure|Bloodpressure_2"))
 				  {
-					  chart.panels[0].title="血压 （单位：mmHg）";
+					  chart_imp.panels[0].title="血压 （单位：mmHg）";
 				  }
 				  else if(ItemCode=="Pulserate|Pulserate_1")
 				  {
-					  chart.panels[0].title="脉率 （单位：次/分）";
+					  chart_imp.panels[0].title="脉率 （单位：次/分）";
 				  }
-				  chart.validateNow();
+				  chart_imp.validateNow();
 				  
 				  //类似脉率没有初始值和目标值，则隐藏
 			   if(((data.GraphGuide.original==null)||(data.GraphGuide.original=="")) && ((data.GraphGuide.target==null)||(data.GraphGuide.target=="")))
@@ -800,7 +803,7 @@ function rechange(loop){
 			         createStockChart(data.ChartData);
 					  
 					   //监听下部图的bullet点 的点击事件
-					  chart.panels[1].addListener("clickGraphItem",showDetailInfo); 
+					  chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); 
 					  //监听下部图的横坐标lable 的点击事件
 					 //chart.panels[1].categoryAxis.addListener("clickItem",showDetailInfo);
 				  }
@@ -895,7 +898,7 @@ function rechange(loop){
        //$("#BPoriginal").text(ChartData.GraphGuide.original);
 	   //$("#BPtarget").text(ChartData.GraphGuide.target);
        //图
-	   chart=AmCharts.makeChart("chartdiv", {
+	   chart_imp=AmCharts.makeChart("chartdiv", {
 				type: "stock",
 				pathToImages: "amcharts-images/",
 				dataDateFormat:"YYYYMMDD",

@@ -2,7 +2,7 @@
 //var UserId = "PID201505210002";
 //var serverIP = '10.12.43.94:8089';
   localStorage.setItem('DownloadAddress',"http://10.13.22.66:8011/cdmisAPP-debug.apk") ;
-  var UserId = localStorage.getItem("PatientId");
+  //var UserId = localStorage.getItem("PatientId");
   var serviceName = 'Services.asmx';
   var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
   var ImageAddressFile = "PersonalPhoto";
@@ -12,6 +12,8 @@
   var TerminalName = window.localStorage.getItem("TerminalName");
   var DeviceType = window.localStorage.getItem("DeviceType");
   var revUserId  = window.localStorage.getItem("UserId");
+  
+  var SynserverAddress = "http://10.13.22.139:57772/csp/hz_mb/Bs.WebService.cls"
 
 /**********************初始页面************************/
 $(document).ready(function (event) {
@@ -24,16 +26,154 @@ $(document).ready(function (event) {
 	document.getElementById("AlertHeight").style.display = "none";	//2015-6-3 ZCY增加
 	document.getElementById("AlertWeight").style.display = "none";	//2015-6-3 ZCY增加
 	document.getElementById("AlertEmergencyPhone").style.display = "none";//2015-6-3 ZCY增加
+	document.getElementById("AlertRegistPhone").style.display = "none";
+	document.getElementById("AlertHospital").style.display = "none";
+	document.getElementById("AlertPId").style.display = "none";
+	
+	document.getElementById("IdDiv").style.display = "none";
+	document.getElementById("SynInfoDiv").style.display = "none";
+	document.getElementById("BasicInfoDiv").style.display = "none";
+	document.getElementById("SaveButton").style.display = "none";
+	
+	document.getElementById("Loading").style.display = "none";
 	
 	GetTypeList("SexType");
 	GetTypeList("AboBloodType");
+	//GetTypeList("InsuranceType");
 	GetInsuranceTypeList();
+	GetHospitalList();
 
-	GetDetailInfo(UserId);
-	GetBasicInfo(UserId);
-	GetUserBasicInfo(UserId);
+	/*if (localStorage.getItem("NewPatientFlag") == 'true') {
+		//alert('Get new PID.');
+		GetNewPatientID();
+		//localStorage.setItem('NewPatientFlag',true);
+	}
+	else {
+				
+		//localStorage.setItem('NewPatientFlag',false);
+		GetDetailInfo(UserId);
+		GetBasicInfo(UserId);
+		GetUserBasicInfo(UserId);
+	}
+	UserId = localStorage.getItem("PatientId");*/
 	
 });
+
+/**********************验证手机号************************/
+function CheckPhone()
+{
+	var PhoneNo = document.getElementById("PhoneNo").value;
+	var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;
+	if(!isMob.test(PhoneNo))
+	{
+		document.getElementById("AlertRegistPhone").style.display = "block";
+	}
+	else
+	{
+		document.getElementById("AlertRegistPhone").style.display = "none";
+		document.getElementById("IdDiv").style.display = "block";
+		document.getElementById("PhoneNo").disabled = true;
+		document.getElementById("PhoneNo").style.backgroundColor = "#EAEAEA";
+		document.getElementById("Regist").style.display = "none";
+		document.getElementById("BasicInfoDiv").style.display = "block";
+		document.getElementById("SaveButton").style.display = "block";
+		$.ajax({
+		  type: "POST",
+		  dataType: "xml",
+		  timeout: 30000,
+		  url: 'http://' + serverIP + '/' + serviceName + '/CheckRepeat',
+		  async: false,
+		  data:
+		  {
+			  Input: PhoneNo,
+			  Type: 'PhoneNo'
+		  },
+		  beforeSend: function () {
+		  },
+		  success: function (result) {
+			  Flag = $(result).find("int").text();
+			  if(Flag == 1)
+			  {
+				  GetNewPatientID();
+				  document.getElementById("SynInfoDiv").style.display = "block";
+			  }
+			  if(Flag == 0)
+			  {
+				  GetUserId(PhoneNo);
+				  var UserId = localStorage.getItem("PatientId");
+				  CheckRole(UserId);
+			  }
+		  },
+		  error: function (msg) {
+			  alert("CheckRepeat出错啦！");
+		  }
+		});
+	}
+}
+
+/**********************同步信息************************/
+function SynInfo()
+{
+	var UserId = localStorage.getItem("PatientId");
+	var PatientId = document.getElementById("PId").value;
+	var HospitalCode = document.getElementById("Hospital").value;
+	
+	if(HospitalCode == 0 || HospitalCode == '')
+	{
+		document.getElementById("AlertHospital").style.display = "block";
+	}
+	else
+	{
+		document.getElementById("AlertHospital").style.display = "none";
+	}
+	if(PatientId == '')
+	{
+		document.getElementById("AlertPId").style.display = "block";
+	}
+	else
+	{
+		document.getElementById("AlertPId").style.display = "none";
+	}
+	if(HospitalCode != 0 && HospitalCode != '' && PatientId != '')
+	{
+		document.getElementById("Loading").style.display = "block";
+		document.getElementById("AlertHospital").style.display = "none";
+		document.getElementById("AlertPId").style.display = "none";
+		setTimeout(function(){
+			$.ajax({
+				type: "POST",
+				dataType: "xml",
+				timeout: 30000,
+				url: SynserverAddress + '?soap_method=GetBasicInfo&UserId=' + UserId + '&PatientId=' + PatientId + '&HospitalCode=' + HospitalCode,
+				async: false,
+				data:
+				{
+				},
+				beforeSend: function () {
+				},
+				success: function (result) {
+					Status = $(result).find("Status").text();
+					document.getElementById("Loading").style.display = "none";
+					if(Status != '')
+					{
+						alert(Status);
+					}
+					else
+					{
+						GetDetailInfo(UserId);
+						GetBasicInfo(UserId);
+						GetUserBasicInfo(UserId);	
+					}
+				},
+				error: function (msg) {
+					document.getElementById("Loading").style.display = "none";
+					alert("SynInfo出错啦！");
+				}
+			});
+		},1000);
+	}
+	document.getElementById("Loading").style.display = "none";
+}
 
 /**********************重置信息************************/
 function ResetInfo()
@@ -46,7 +186,16 @@ function ResetInfo()
 	document.getElementById("AlertHeight").style.display = "none";
 	document.getElementById("AlertWeight").style.display = "none";
 	document.getElementById("AlertEmergencyPhone").style.display = "none";
+	document.getElementById("AlertRegistPhone").style.display = "none";
+	document.getElementById("AlertHospital").style.display = "none";
+	document.getElementById("AlertPId").style.display = "none";
+	
+	//document.getElementById("IdDiv").style.display = "none";
+//	document.getElementById("SynInfoDiv").style.display = "none";
+//	document.getElementById("BasicInfoDiv").style.display = "none";
+//	document.getElementById("SaveButton").style.display = "none";
 
+	var UserId = localStorage.getItem("PatientId");
 	GetDetailInfo(UserId);
 	GetBasicInfo(UserId);
 	GetUserBasicInfo(UserId);
@@ -55,13 +204,6 @@ function ResetInfo()
 /**********************保存信息************************/
 function SaveInfo()
 {
-	$.mobile.loading('show', {  
-		text: '保存信息中...', //加载器中显示的文字  
-		textVisible: true, //是否显示文字  
-		theme: 'a',        //加载器主题样式a-e  
-		textonly: false,   //是否只显示文字  
-		html: ""           //要显示的html内容，如图片等  
-	}); 
 	var UserId = localStorage.getItem("PatientId");
 	var UserName = document.getElementById("UserName").value;
 	var Gender = document.getElementById("SexType").value;
@@ -71,13 +213,13 @@ function SaveInfo()
 	var PhoneNumber = document.getElementById("PhoneNumber").value;
 	var EmergencyContactPhoneNumber = document.getElementById("EmergencyContactPhoneNumber").value;
 	var lengthIDNo = $("#IDNo").val().length;
-	var reg = /^\d+(?=\.{0,1}\d+$|$)/
+	var reg = /^\d+(?=\.{0,1}\d+$|$)/;
 	var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;	//2015-5-22 ZCY增加
 	var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;	//2015-5-22 ZCY增加
  
 	if (Gender == "0" || Gender == "" || Birthday == "" || UserName == "")	//2015-5-22 ZCY更改
 	{
-		$.mobile.loading('hide');
+		//alert("打*为必填信息，请完善基本信息！");
 		if (UserName == "") {
 			document.getElementById("AlertUserName").style.display = "block";
 		}
@@ -110,7 +252,7 @@ function SaveInfo()
 	}
 	
 	if(!reg.test(Height) && Height != ""){ 
-        $.mobile.loading('hide');
+        //alert("身高格式不正确，请重新输入!");
 		document.getElementById("AlertHeight").style.display = "block";
     } 
 	else 
@@ -119,7 +261,7 @@ function SaveInfo()
 	}
 	
 	if(!reg.test(Weight) && Weight != ""){
-        $.mobile.loading('hide');
+        //alert("体重格式不正确，请重新输入!");
 		document.getElementById("AlertWeight").style.display = "block";
     } 
 	else
@@ -129,7 +271,8 @@ function SaveInfo()
 	
 	if (lengthIDNo != 15 && lengthIDNo != 18 && lengthIDNo != 0)	//2015-5-22 ZCY更改
 	{
-		$.mobile.loading('hide');
+		//alert("证件号码格式不正确，请重新输入！");
+		//document.getElementById("IDStyle").style.display = "block";
 		document.getElementById("AlertID").style.display = "block";
 	}
 	else
@@ -139,7 +282,7 @@ function SaveInfo()
 	
 	if (!isMob.test(PhoneNumber) && !isPhone.test(PhoneNumber) && PhoneNumber != "")
 	{
-		$.mobile.loading('hide');
+		//alert("联系电话格式不正确，请重新输入！");
 		document.getElementById("AlertPhone").style.display = "block";
 	}
 	else
@@ -149,7 +292,7 @@ function SaveInfo()
 	
 	if (!isMob.test(EmergencyContactPhoneNumber) && !isPhone.test(EmergencyContactPhoneNumber) && EmergencyContactPhoneNumber != "")
 	{
-		$.mobile.loading('hide');
+		//alert("紧急联系电话格式不正确，请重新输入！");
 		document.getElementById("AlertEmergencyPhone").style.display = "block";
 	}
 	else
@@ -159,6 +302,7 @@ function SaveInfo()
 	
 	if (Gender != "0" && Gender != "" && Birthday != "" && UserName != "" && (reg.test(Height) || Height == "") && (reg.test(Weight) || Weight == "") && (lengthIDNo == 15 || lengthIDNo == 18 || lengthIDNo == 0) && (isMob.test(PhoneNumber) || isPhone.test(PhoneNumber) || PhoneNumber == "") && (isMob.test(EmergencyContactPhoneNumber) || isPhone.test(EmergencyContactPhoneNumber) || EmergencyContactPhoneNumber == ""))
 	{
+		document.getElementById("Loading").style.display = "block";
 		var IDNo = document.getElementById("IDNo").value;
 		var BloodType = document.getElementById("AboBloodType").value;
 		//var Height = document.getElementById("Height").value;
@@ -181,7 +325,7 @@ function SaveInfo()
 		//var EmergencyContactPhoneNumber = document.getElementById("EmergencyContactPhoneNumber").value;
 		var DoctorId = localStorage.getItem("DoctorId");
 		//var InvalidFlag = document.getElementById("InvalidFlag").value;
-		//var PhoneNo = document.getElementById("PhoneNo").value;
+		var PhoneNo = document.getElementById("PhoneNo").value;
 		/*
 		var revUserId = "zcy";
 		var TerminalName = "zcy-PC";
@@ -200,6 +344,8 @@ function SaveInfo()
 			localStorage.setItem('NewPatientFlag',false);
 		}*/
 		var InvalidFlag = 0;
+		
+		SetPhoneRole(PhoneNo, UserId, UserName);
 		SetBasicInfo(UserId, UserName, Birthday, Gender, BloodType, IDNo, DoctorId, InsuranceType, InvalidFlag, revUserId, TerminalName, TerminalIP, DeviceType);
 		var Flag = document.getElementById("Flag").value;
 		SetDetailInfo(UserId, "Contact", "Contact001_1", ItemSeq, IDNo, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
@@ -259,12 +405,222 @@ function SaveInfo()
 			  })
 		  },
 		  error: function (msg) {
-			  $.mobile.loading('hide');
+			  document.getElementById("Loading").style.display = "none";
 			  alert("GetAllRoleMatch出错啦！");
 		  }
 	  });
 	}
-	$.mobile.loading('hide');
+	document.getElementById("Loading").style.display = "none";
+}
+
+//根据注册手机号获取用户Id
+function GetUserId(PhoneNo)
+{
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/GetIDByInput',
+		async: false,
+		data:
+		{
+			Type: 'PhoneNo',
+			Name: PhoneNo
+		},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			var UserId = $(result).find("string").text();
+			if(UserId == '')
+			{
+				GetNewPatientID();
+				document.getElementById("SynInfoDiv").style.display = "block";
+			}
+			else
+			{
+			  $("#UserId").val(UserId);
+			  $('#InvalidFlag').attr('value', 1);
+			  localStorage.setItem('PatientId', $(result).text());	
+			}
+		},
+		error: function (msg) {
+			alert("GetIDByInput出错啦！");
+		}
+	});
+}
+
+//根据Id判断角色并获取基本信息
+function CheckRole(UserId)
+{
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/GetAllRoleMatch',
+		async: false,
+		data:
+		{
+			UserId: UserId
+		},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			var Length = $(result).find('Table1').length;
+			for(var i= 0; i < Length; i++)
+			{
+				 var RoleClass = $(result).find('RoleClass').eq(i).text();
+				 if(RoleClass == 'Patient')
+				  {
+					  $('#SaveButton').css('display','none');
+					  alert("该手机号已注册过患者！");
+					  GetDetailInfo(UserId);
+					  GetBasicInfo(UserId);
+					  GetUserBasicInfo(UserId);	
+					  return;  
+				  }
+			}
+			for(var i= 0; i < Length; i++)
+			{
+				 var RoleClass = $(result).find('RoleClass').eq(i).text(); 	
+				 if(RoleClass != 'Patient')
+				  {
+					  alert("该手机号已注册过医生！");
+					  GetDoctorDetailInfo(UserId);
+					  GetDoctorBasicInfo(UserId);
+					  return;  
+				  }
+			}
+		},
+		error: function (msg) {
+			alert("GetAllRoleMatch出错啦！");
+		}
+	});
+}
+/*function CheckRole(UserId)
+{
+	$.ajax({
+		  type: "POST",
+		  dataType: "xml",
+		  timeout: 30000,
+		  url: 'http://' + serverIP + '/' + serviceName + '/GetAllRoleMatch',
+		  async: false,
+		  data:
+		  {
+			  UserId: UserId
+		  },
+		  beforeSend: function () {
+		  },
+		  success: function (result) {
+			  $(result).find('Table1').each(function () {
+				  var RoleClass = $(this).find("RoleClass").text();
+				  alert(RoleClass);
+				  if(RoleClass == 'Patient')
+				  {
+					  alert("该手机号已注册过患者！");
+					  GetDetailInfo(UserId);
+					  GetBasicInfo(UserId);
+					  GetUserBasicInfo(UserId);	
+					  return;  
+				  }
+			  })
+			  $(result).find('Table1').each(function () {
+				  var RoleClass = $(this).find("RoleClass").text();
+				  alert(RoleClass);
+				  if(RoleClass != 'Patient')
+				  {
+					  GetDoctorDetailInfo(UserId);
+					  GetDoctorBasicInfo(UserId);
+					  
+					  return;  
+				  }
+			  })
+		  },
+		  error: function (msg) {
+			  alert("GetAllRoleMatch出错啦！");
+		  }
+	  });
+}*/
+
+//获取医生基本信息
+function GetDoctorBasicInfo(UserId)
+{
+	$.ajax({
+    type: "POST",
+    dataType: "xml",
+    timeout: 30000,
+	url: 'http://'+ serverIP +'/'+serviceName+'/GetDoctorInfo',
+    async: false,
+	data: 
+	{
+		UserId: UserId
+	},
+    beforeSend: function() {
+   },
+    success: function(result) {      	  
+		$(result).find('Table1').each(function() {
+			var DoctorId = $(this).find("DoctorId").text();
+			var DoctorName = $(this).find("DoctorName").text();
+			var Birthday = $(this).find("Birthday").text();
+			var Gender = $(this).find("Gender").text();
+			var IDNo = $(this).find("Gender").text();
+			
+			$("#UserName").val(DoctorName);
+			var Birthday = Birthday.substring(0, 4) + "-" + Birthday.substring(4, 6) + "-" + Birthday.substring(6, 8);
+			$("#Birthday").val(Birthday);
+			$("#SexType").val(Gender);
+			$('#SexType').selectmenu('refresh');
+		})	
+    },
+    error: function(msg) {
+	  document.getElementById("Loading").style.display = "none";
+      alert("GetDoctorInfo出错啦！");
+    }
+  });
+}
+
+//获取医生详细信息
+function GetDoctorDetailInfo(UserId)
+{
+	$.ajax({
+    type: "POST",
+    dataType: "xml",
+    timeout: 30000,
+	url: 'http://'+ serverIP +'/'+serviceName+'/GetDoctorInfoDetail',
+    async: false,
+	data: 
+	{
+		Doctor: UserId
+	},
+    beforeSend: function() {
+   },
+    success: function(result) {          	  
+		var PhoneNumber = $(result).find("DoctorDetailInfo0").find("PhoneNumber").text();
+		var HomeAddress = $(result).find("DoctorDetailInfo0").find("HomeAddress").text();
+		var Occupation = $(result).find("DoctorDetailInfo0").find("Occupation").text();
+		var Nationality = $(result).find("DoctorDetailInfo0").find("Nationality").text();
+		var EmergencyContact = $(result).find("DoctorDetailInfo0").find("EmergencyContact").text();
+		var EmergencyContactPhoneNumber = $(result).find("DoctorDetailInfo0").find("EmergencyContactPhoneNumber").text();
+		var PhotoAddress = $(result).find("DoctorDetailInfo0").find("PhotoAddress").text();
+		var IDNo = $(result).find("DoctorDetailInfo0").find("IDNo").text();
+
+		if (PhotoAddress == '') {
+			PhotoAddress = ImageAddressIP + '/' + ImageAddressFile + '/add.jpg';
+		}
+		//$("#Photo").attr("src", PhotoAddress);
+		$("#PhoneNumber").val(PhoneNumber);
+		$("#HomeAddress").val(HomeAddress);
+		$("#Occupation").val(Occupation);
+		$("#Nationality").val(Nationality);
+		$("#EmergencyContact").val(EmergencyContact);
+		$("#EmergencyContactPhoneNumber").val(EmergencyContactPhoneNumber);
+		$("#IDNo").val(IDNo);
+		
+    },
+    error: function(msg) {
+	  document.getElementById("Loading").style.display = "none";
+      alert("GetDoctorInfoDetail出错啦！");
+    }
+  });
 }
 
 //获取病人基本信息
@@ -303,7 +659,6 @@ function GetBasicInfo(UserId) {
 			$('#InsuranceType').selectmenu('refresh');
 		},
 		error: function (msg) {
-					  $.mobile.loading('hide');
 			alert("GetPatBasicInfo出错啦！");
 		}
 	});
@@ -340,11 +695,7 @@ function GetDetailInfo(UserId) {
 			if (PhotoAddress == '') {
 				PhotoAddress = ImageAddressIP + '/' + ImageAddressFile + '/add.jpg';
 			}
-			else 
-			{
-				PhotoAddress = ImageAddressIP + '/' + ImageAddressFile + '/'+PhotoAddress;
-			}
-			$("#Photo").attr("src", PhotoAddress);
+			//$("#Photo").attr("src", PhotoAddress);
 			$("#PhoneNumber").val(PhoneNumber);
 			$("#HomeAddress").val(HomeAddress);
 			$("#Occupation").val(Occupation);
@@ -357,12 +708,179 @@ function GetDetailInfo(UserId) {
 
 		},
 		error: function (msg) {
-					  $.mobile.loading('hide');
 			alert("GetPatientDetailInfo出错啦！");
 		}
 	});
 }
 
+//新增数据到Cm.MstUser
+function SetMstUser(UserId, UserName)
+{
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/SetMstUserUM',
+		async: false,
+		data:
+		{
+			UserId:	UserId,
+			UserName:	UserName,
+			Password: "123456"	,
+			Class:	 "Patient",
+			PatientClass:	"",
+			EndDate: 20201212,
+			revUserId:	localStorage.getItem("UserId"),
+			TerminalName:		localStorage.getItem("TerminalName"),
+			TerminalIP:		localStorage.getItem("TerminalIP"),
+			DeviceType:	localStorage.getItem("DeviceType"),
+					},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			
+		},
+		error: function (msg) {
+			alert("SetMstUser出错啦！");
+		}
+	});
+	/*
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/SetMstUser',
+		async: false,
+		data:
+		{
+			UserId:	UserId,
+			UserName:	UserName,
+			Password: "123456"	,
+			Class:	 "Patient",
+			PatientClass:	"",
+			DoctorClass: 1,	
+			StartDate: 0,	
+			EndDate: 20201212,
+			LastLoginDateTime:	" ",
+			revUserId:	localStorage.getItem("UserId"),
+			TerminalName:		localStorage.getItem("TerminalName"),
+			TerminalIP:		localStorage.getItem("TerminalIP"),
+			DeviceType:	localStorage.getItem("DeviceType"),
+					},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			
+		},
+		error: function (msg) {
+			alert("SetMstUser出错啦！");
+		}
+	});	*/
+}
+
+//新增数据到Cm.MstUserDetail
+function SetMstUserDetail(UserId, PhoneNo)
+{
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/GetServerTime',
+		async: false,
+		data:
+		{
+		},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			ServerTime = $(result).find("string").text();
+		},
+		error: function (msg) {
+			alert("GetServerTime出错啦！");
+		}
+	});
+	
+	var ServerTime = ServerTime.replace("-", "");
+	var ServerTime = ServerTime.replace("-", "");
+	var StartDate = ServerTime.substr(0, 8);
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/SetCmMstUserDetail',
+		async: false,
+		data:
+		{
+			UserId:	UserId,
+			StartDate: StartDate,
+			Type: 'PhoneNo',
+			Name: PhoneNo,
+			Value: '',
+			piUserId: revUserId,
+			piTerminalName:	TerminalName,
+			piTerminalIP: TerminalIP,
+			piDeviceType: DeviceType,
+					},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			var Flag = $(result).find("boolean ").text();
+			$("#Flag").val(Flag);
+		},
+		error: function (msg) {
+			alert("SetCmMstUserDetail出错啦！");
+		}
+	});
+}
+
+//新增患者角色
+function SetNewRoleMatch(UserId)
+{
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/SetPsRoleMatch',
+		async: false,
+		data:
+		{
+			PatientId:	UserId,
+			RoleClass: 'Patient',
+			ActivationCode: '',
+			ActivatedState: '',
+			Description: ''
+		},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			var Flag = $(result).find("int").text();
+			$("#Flag").val(Flag);
+		},
+		error: function (msg) {
+			alert("SetPsRoleMatch出错啦！");
+		}
+	});
+}
+
+//插入 医生详细信息表 负责患者信息
+function SetPsDoctorDetailOnPat(CategoryCode,Value,Description,SortNo){
+  var  DoctorId = localStorage.getItem('DoctorId');
+  $.ajax({  								
+	  type: "POST",
+	  dataType: "xml",
+	  timeout: 30000,  
+	  url: 'http://'+ serverIP +'/'+serviceName+'/SetPsDoctorDetailOnPat',
+	  async:false,
+	  data: {Doctor:DoctorId,CategoryCode:CategoryCode,Value:Value,Description:Description,SortNo:SortNo,piUserId:revUserId,piTerminalName:TerminalName,piTerminalIP:TerminalIP,piDeviceType:DeviceType},
+	  beforeSend: function(){},
+	  success: function(result) { 
+		  //alert("2");								 
+	  }, 
+	  error: function(msg) {
+		document.getElementById("Loading").style.display = "none";
+		alert("SetPsDoctorDetailOnPatError!");}
+  });
+}
 
 //获取下拉框内容
 function GetTypeList(Category) {
@@ -388,7 +906,6 @@ function GetTypeList(Category) {
 			})
 		},
 		error: function (msg) {
-					  $.mobile.loading('hide');
 			alert("GetTypeList出错啦！");
 		}
 	});
@@ -419,8 +936,37 @@ function GetInsuranceTypeList() {
 			})
 		},
 		error: function (msg) {
-					  $.mobile.loading('hide');
 			alert("GetInsuranceType出错啦！");
+		}
+	});
+}
+
+//获取医院下拉框内容
+function GetHospitalList() {
+	$("#Hospital").append('<option value=0>--请选择--</option>');
+
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/GetHospitalList',
+		async: false,
+		data:
+		{
+		},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			$(result).find('Table1').each(function () {
+				var Code = $(this).find("Code").text();
+				var Name = $(this).find("Name").text();
+				//alert(Code);
+				//alert(Name);
+				$("#Hospital").append('<option value=' + Code + '>' + Name + '</option>');
+			})
+		},
+		error: function (msg) {
+			alert("GetHospitalList出错啦！");
 		}
 	});
 }
@@ -446,7 +992,6 @@ function GetUserBasicInfo(UserId) {
 			$("#InvalidFlag").val(InvalidFlag);
 		},
 		error: function (msg) {
-					  $.mobile.loading('hide');
 			alert("GetPatBasicInfo出错啦！");
 		}
 	});
@@ -483,7 +1028,6 @@ function SetBasicInfo(UserId, UserName, Birthday, Gender, BloodType, IDNo, Docto
 			$("#Flag").val(Flag);
 		},
 		error: function (msg) {
-					  $.mobile.loading('hide');
 			alert("SetPatBasicInfo出错啦！");
 		}
 	});
@@ -518,7 +1062,6 @@ function SetDoctorInfo(UserId, UserName, Birthday, Gender, IDNo, InvalidFlag, re
 			$("#Flag").val(Flag);
 		},
 		error: function (msg) {
-					  $.mobile.loading('hide');
 			alert("SetPsDoctor出错啦！");
 		}
 	});
@@ -554,6 +1097,7 @@ function SetDetailInfo(Patient, CategoryCode, ItemCode, ItemSeq, Value, Descript
 		$("#Flag").val(Flag);
     },
     error: function(msg) {
+	  document.getElementById("Loading").style.display = "none";
       alert("SetPatBasicInfoDetail出错啦！");
     }
   });
@@ -588,25 +1132,138 @@ function SetDoctorInfoDetail(Doctor, CategoryCode, ItemCode, ItemSeq, Value, Des
 			$("#Flag").val(Flag);
 		},
 		error: function (msg) {
-					  $.mobile.loading('hide');
 			alert("SetDoctorInfoDetail出错啦！");
 		}
 	});
 }
 
-//显示加载器  
-function ShowLoader() {  
-    $.mobile.loading('show', {  
-        text: 'Loading...', //加载器中显示的文字  
-        textVisible: true, //是否显示文字  
-        theme: 'a',        //加载器主题样式a-e  
-        textonly: false,   //是否只显示文字  
-        html: ""           //要显示的html内容，如图片等  
-    });  
-}  
-  
-//隐藏加载器  
-function HideLoader()  
-{    
-    $.mobile.loading('hide');  
-}  
+function SetPhoneRole(PhoneNo, UserId, UserName)
+{
+	$.ajax({
+	  type: "POST",
+	  dataType: "xml",
+	  timeout: 30000,
+	  url: 'http://' + serverIP + '/' + serviceName + '/CheckRepeat',
+	  async: false,
+	  data:
+	  {
+		  Input: PhoneNo,
+		  Type: 'PhoneNo'
+	  },
+	  beforeSend: function () {
+	  },
+	  success: function (result) {
+		  Flag = $(result).find("int").text();
+		  if(Flag == 1)
+		  {
+			  SetMstUser(UserId, UserName);
+			  SetMstUserDetail(UserId, PhoneNo);
+			  SetNewRoleMatch(UserId);
+			  SetPsDoctorDetailOnPat("HM1", UserId,"",1);
+		  }
+		  if(Flag == 0)
+		  {
+			  $.ajax({
+				  type: "POST",
+				  dataType: "xml",
+				  timeout: 30000,
+				  url: 'http://' + serverIP + '/' + serviceName + '/GetIDByInput',
+				  async: false,
+				  data:
+				  {
+					  Type: 'PhoneNo',
+					  Name: PhoneNo
+				  },
+				  beforeSend: function () {
+				  },
+				  success: function (result) {
+					  var UserId = $(result).find("string").text();
+					  if(UserId == '')
+					  {
+						  var UserId = localStorage.getItem("PatientId");
+						  SetMstUser(UserId, UserName);
+						  SetMstUserDetail(UserId, PhoneNo);
+						  SetNewRoleMatch(UserId);
+						  SetPsDoctorDetailOnPat("HM1", UserId,"",1);
+					  }
+					  else
+					  {
+						  $.ajax({
+							  type: "POST",
+							  dataType: "xml",
+							  timeout: 30000,
+							  url: 'http://' + serverIP + '/' + serviceName + '/GetAllRoleMatch',
+							  async: false,
+							  data:
+							  {
+								  UserId: UserId
+							  },
+							  beforeSend: function () {
+							  },
+							  success: function (result) {
+								  var Length = $(result).find('Table1').length;
+								  for(var i= 0; i < Length; i++)
+								  {
+									   var RoleClass = $(result).find('RoleClass').eq(i).text();
+									   if(RoleClass == 'Patient')
+										{	
+											return;  
+										}
+								  }
+								  for(var i= 0; i < Length; i++)
+								  {
+									   var RoleClass = $(result).find('RoleClass').eq(i).text(); 	
+									   if(RoleClass != 'Patient')
+										{
+											SetNewRoleMatch(UserId);
+											SetPsDoctorDetailOnPat("HM1", UserId,"",1);
+											return;  
+										}
+								  }
+							  },
+							  error: function (msg) {
+								  alert("GetAllRoleMatch出错啦！");
+							  }
+						  });
+					  }
+				  },
+				  error: function (msg) {
+					  alert("GetIDByInput出错啦！");
+				  }
+			  });
+			  
+		  }
+	  },
+	  error: function (msg) {
+		  alert("CheckRepeat出错啦！");
+	  }
+	});
+}
+
+//获取新的PID
+function GetNewPatientID() {
+		  $.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/GetNoByNumberingType',
+		async: false,
+		data:
+		{
+			NumberingType: 17
+		},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			//alert($(result).text());
+			$('#UserId').attr('value', $(result).text());
+			$('#UserId').attr('text', $(result).text());
+			$('#InvalidFlag').attr('value', 1);
+			localStorage.setItem('PatientId', $(result).text());
+
+		},
+		error: function (msg) {
+			alert("GetNewPatientID出错啦！");
+		}
+		  });
+}

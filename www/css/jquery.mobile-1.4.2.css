@@ -2578,12 +2578,12 @@ li.ui-block-e {
 	/* margin-right: -.5px; BB5 */
 	width: 50%;
 }
-.ui-grid-b > .ui-block-a{width: 30%}
-.ui-grid-b > .ui-block-b{width: 30%}
+.ui-grid-b > .ui-block-a,
+.ui-grid-b > .ui-block-b,
 .ui-grid-b > .ui-block-c {
 	/* width: 33.25%; IE7 */
 	/* margin-right: -.5px; BB5 */
-	width: 40%;
+	width: 33.333%;
 }
 .ui-grid-c > .ui-block-a,
 .ui-grid-c > .ui-block-b,
