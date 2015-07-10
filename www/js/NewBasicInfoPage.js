@@ -847,7 +847,7 @@ function SetNewRoleMatch(UserId)
 			PatientId:	UserId,
 			RoleClass: 'Patient',
 			ActivationCode: '',
-			ActivatedState: '',
+			ActivatedState: '1',
 			Description: ''
 		},
 		beforeSend: function () {
