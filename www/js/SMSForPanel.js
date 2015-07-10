@@ -23,10 +23,6 @@ var isUserloggedout = false;
 $(document).ready(function(event){
   $('#SMSHeader').html(localStorage.getItem("PatientName"));
   $('#GenaralField').height(GetHeight()-450); //设定文档高度
-  if (flag == "Panel")
-  {
-      SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
-  }
   GetSMSDialogue(ThisUserId, TheOtherId);
   document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
   
@@ -39,6 +35,13 @@ $(document).ready(function(event){
 })
 
 document.getElementById('SMSbtn').onclick = submitSMS;
+
+
+//进入HyperTension页面SMSPanel时调用
+function HyperSetSMS()
+{
+	 SetSMSRead(ThisUserId, localStorage.getItem("PatientId"));//改写阅读状态
+}
 
 //改写Panel调用flag并改写消息数
 function ChangePanelFlag ()
