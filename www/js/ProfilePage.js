@@ -9,7 +9,7 @@ var ImageAddressFile = "/PersonalPhoto";
 var ImageAddress = ImageAddressIP + ImageAddressFile + "/" + UserId + ".jpg";
 var DoctorId = localStorage.getItem('DoctorId');
 /**********************初始页面************************/
-$(document).ready(function (event) {
+$(document).on("pageshow", "#InvitationInfoPage", function () {
 	
 	/*document.getElementById("AlertUserName").style.display = "none";
 	//document.getElementById("SexStyle").style.display = "none";
@@ -43,10 +43,37 @@ $(document).ready(function (event) {
 	}*/
 	
 	
-	
 	UserId = localStorage.getItem("PatientId");
 	var width1 = 0.25*($("#InvitationInfoPage").width());
 	var width2 = 0.25*($("#InvitationInfoPage").width());
+	$("#Downloadcode").empty();
+	$("#Invitationcode").empty();
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,  
+		url: 'http://'+ serverIP +'/'+serviceName+'/GetPhoneNoByUserId',
+		async: false,
+		data: {UserId: UserId},
+		beforeSend: function() {},
+		success: function(result) {
+			var str = $(result).find("string").text();
+			if (str != "")
+			{
+				$("#InvitatoinPhoneNo").attr("value", str);
+			}
+			else
+			{
+				$(document).on("pageshow", "#InvitationInfoPage", function() {
+					$('#InvitatoinPhoneNo').val($('#PhoneNumber').val());
+				});			
+			}
+		},
+		error: function(msg) {
+			alert("Error:GetPhoneNoByUserId");
+		}
+	});
+	
 	$.ajax({
 			type: "POST",
 			dataType: "xml",
@@ -92,31 +119,38 @@ $(document).ready(function (event) {
 			}
 		});
 		
-	$.ajax({
-		type: "POST",
-		dataType: "xml",
-		timeout: 30000,  
-		url: 'http://'+ serverIP +'/'+serviceName+'/GetPhoneNoByUserId',
-		async: false,
-		data: {UserId: UserId},
-		beforeSend: function() {},
-		success: function(result) {
-			var str = $(result).find("string").text();
-			if (str != "")
+	/**********************手机号码正则验证***********************/	
+	
+    $("#InvitatoinPhoneNo").blur(function () {
+		var PHONENUMBER = $("#InvitatoinPhoneNo").val();
+		var isPhone = /^1[3|4|5|7|8][0-9]\d{4,8}$/;
+
+		//alert(isPhone.test(PHONENUMBER));
+		//alert(PHONENUMBER.length)
+		if (PHONENUMBER.length == 11)
+		{
+			if (isPhone.test(PHONENUMBER))
 			{
-				$("#InvitatoinPhoneNo").attr("value", str);
-			}
+				document.getElementById("AlertUserId").style.display = "none";
+				//alert(PHONENUMBER);
+			}	
 			else
 			{
-				$(document).on("pageshow", "#InvitationInfoPage", function() {
-					$('#InvitatoinPhoneNo').val($('#PhoneNumber').val());
-				});			
+				//alert(PHONENUMBER.length);
+				document.getElementById("AlertUserId").innerHTML = "请输入正确的手机号码";
+				document.getElementById("AlertUserId").style.display = "block";
+				//alert("不是正确的手机号码");
 			}
-		},
-		error: function(msg) {
-			alert("Error:GetPhoneNoByUserId");
+		}
+		else
+		{
+			//alert(PHONENUMBER.length);
+			document.getElementById("AlertUserId").innerHTML = "请输入11位手机号码";
+			document.getElementById("AlertUserId").style.display = "block";
+			//alert("请输入11位手机号码");	
 		}
 	});
+	
 	
 });
 
@@ -659,7 +693,8 @@ Downloadcode = localStorage.getItem('DownloadAddress')
 				beforeSend: function () { },
 				success: function (result) {
 					var Flag = $(result).find("int").text();
-					if (Flag == 1) {
+					if (Flag == 1)
+					{
 						$("#Downloadcode").empty();
 						$("#Invitationcode").empty();
 						$.ajax({
@@ -734,15 +769,113 @@ Downloadcode = localStorage.getItem('DownloadAddress')
 							}
 						});
 					}
-					else 
+					else
 					{
-						alert("此手机号已被使用，请输入新的手机号");
+						$.ajax({
+							  type: "POST",
+							  timeout: 30000,
+							  //contentType: "application/json;charset=utf-8",
+							  url: 'http://'+ serverIP +'/'+serviceName+'/GetIDByInput',
+							  data: { Type: Type, Name: InvitatoinPhoneNo},
+							  dataType: 'xml',
+							  async: false,
+							  beforeSend: function() {},
+							  success: function(result) {	
+							  	  var checkid = $(result).find("string").text();
+								  if (checkid == UserId)
+								  {
+									  $("#Downloadcode").empty();
+						$("#Invitationcode").empty();
+						$.ajax({
+							type: "POST",
+							dataType: "xml",
+							timeout: 30000,
+							url: 'http://' + serverIP + '/' + serviceName + '/GetNoByNumberingType',
+							async: false,
+							data: { NumberingType: "14" },
+							beforeSend: function () { },
+							success: function (result) {
+								//alert(1);
+								var str = $(result).find("string").text();
+								//alert(str);
+								if (str != "") {
+									//var Invitationcode = utf16to8('您的邀请码是：' + str);
+									$.ajax({
+										type: "POST",
+										dataType: "xml",
+										timeout: 30000,
+										url: 'http://' + serverIP + '/' + serviceName + '/SetPsRoleMatch',
+										async: false,
+										data: { PatientId: UserId, RoleClass: "Patient", ActivationCode: str, ActivatedState: "1", Description: "" },
+										beforeSend: function () { },
+										success: function (result) {
+											SetFlag1 = $(result).find("int").text();
+											//alert(SetFlag1);
+										},
+										error: function (msg) {
+											alert("Error: SetPsRoleMatch");
+
+										}
+									});
+									$.ajax({
+										type: "POST",
+										dataType: "xml",
+										timeout: 30000,
+										url: 'http://' + serverIP + '/' + serviceName + '/SetPhoneNo',
+										async: false,
+										data: { UserId: UserId, Type: Type, Name: InvitatoinPhoneNo, piUserId: revUserId, piTerminalName: TerminalName, piTerminalIP: TerminalIP, piDeviceType: DeviceType },
+										beforeSend: function () { },
+										success: function (result) {
+											SetFlag2 = $(result).find("int").text();
+											//alert(SetFlag2);
+										},
+										error: function (msg) {
+											alert("Error: SetPhoneNo");
+										}
+									});
+									if (SetFlag1 == 1 && SetFlag2 == 1) {
+										//alert("数据库连接失败");	
+										$("#Downloadcode").qrcode({
+											render: "canvas", //canvas方式
+											width: width1, //宽度
+											height: width1, //高度
+											text: Downloadcode //任意内容
+										});
+										document.getElementById("download").style.display = "block";
+										$("#Invitationcode").qrcode({
+											render: "canvas", //canvas方式
+											width: width2, //宽度
+											height: width2, //高度
+											text: str //任意内容
+										});
+										document.getElementById("Invitation").style.display = "block";
+										document.getElementById("Invitation").innerHTML = '您的邀请码是：' + str;
+									}
+								}
+							},
+							error: function (msg) {
+								alert("Error: GetNoByNumberingType");
+							}
+						});
+								  }
+								  else
+								  {
+									  alert("此手机号已被使用，请输入新的手机号码");
+									  wait = 0;
+								  }
+							  },
+							  error: function(msg) {
+								  alert("Error: GetIDByInput");
+							  }
+						});
 					}
 				},
 				error: function (msg) {
 					alert("Error: CheckRepeat");
 				}
 			});
+
+				
 		}
 		else 
 		{
@@ -849,9 +982,41 @@ function  showInvitationInfoPage() {
 		}
 	});
 	
+	/**********************手机号码正则验证***********************/	
+	
+    $("#InvitatoinPhoneNo").blur(function () {
+		var PHONENUMBER = $("#InvitatoinPhoneNo").val();
+		var isPhone = /^1[3|4|5|7|8][0-9]\d{4,8}$/;
+
+		//alert(isPhone.test(PHONENUMBER));
+		//alert(PHONENUMBER.length)
+		if (PHONENUMBER.length == 11)
+		{
+			if (isPhone.test(PHONENUMBER))
+			{
+				document.getElementById("AlertUserId").style.display = "none";
+				//alert(PHONENUMBER);
+			}	
+			else
+			{
+				//alert(PHONENUMBER.length);
+				document.getElementById("AlertUserId").innerHTML = "请输入正确的手机号码";
+				document.getElementById("AlertUserId").style.display = "block";
+				//alert("不是正确的手机号码");
+			}
+		}
+		else
+		{
+			//alert(PHONENUMBER.length);
+			document.getElementById("AlertUserId").innerHTML = "请输入11位手机号码";
+			document.getElementById("AlertUserId").style.display = "block";
+			//alert("请输入11位手机号码");	
+		}
+	});
 }
 
 
+	
 function GetNewPatientID() {
 		  $.ajax({
 		type: "POST",
