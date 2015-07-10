@@ -24,7 +24,7 @@ function Time() {
 
 }
 
-function SendInvitation() {
+function PanelSendInvitation() {
 				//alert(1);
 		var InvitatoinPhoneNo = $("#InvitatoinPhoneNo").val();
 		var width1 = 0.9*$("#Downloadcode").width();
@@ -148,9 +148,109 @@ Downloadcode = localStorage.getItem('DownloadAddress')
 					}
 					else 
 					{
-						document.getElementById("AlertUserId").innerHTML = "此手机号已被使用，请输入新的手机号!";
-						document.getElementById("AlertUserId").style.display = "block";
-						wait = 0;
+						$.ajax({
+							  type: "POST",
+							  timeout: 30000,
+							  //contentType: "application/json;charset=utf-8",
+							  url: 'http://'+ serverIP +'/'+serviceName+'/GetIDByInput',
+							  data: { Type: Type, Name: InvitatoinPhoneNo},
+							  dataType: 'xml',
+							  async: false,
+							  beforeSend: function() {},
+							  success: function(result) {	
+							  	  var checkid = $(result).find("string").text();
+								  if (checkid == UserId)
+								  {
+									  $("#Downloadcode").empty();
+									  $("#Invitationcode").empty();
+									  $.ajax({
+										  type: "POST",
+										  dataType: "xml",
+										  timeout: 30000,
+										  url: 'http://' + serverIP + '/' + serviceName + '/GetNoByNumberingType',
+										  async: false,
+										  data: { NumberingType: "14" },
+										  beforeSend: function () { },
+										  success: function (result) {
+											  //alert(1);
+											  var str = $(result).find("string").text();
+											  //alert(str);
+											  if (str != "") {
+												  //var Invitationcode = utf16to8('您的邀请码是：' + str);
+												  $.ajax({
+													  type: "POST",
+													  dataType: "xml",
+													  timeout: 30000,
+													  url: 'http://' + serverIP + '/' + serviceName + '/SetPsRoleMatch',
+													  async: false,
+													  data: { PatientId: UserId, RoleClass: "Patient", ActivationCode: str, ActivatedState: "1", Description: "" },
+													  beforeSend: function () { },
+													  success: function (result) {
+														  SetFlag1 = $(result).find("int").text();
+														  //alert(SetFlag1);
+													  },
+													  error: function (msg) {
+														  alert("Error: SetPsRoleMatch");
+													  }
+												  });
+												  $.ajax({
+													  type: "POST",
+													  dataType: "xml",
+													  timeout: 30000,
+													  url: 'http://' + serverIP + '/' + serviceName + '/SetPhoneNo',
+													  async: false,
+													  data: { UserId: UserId, Type: Type, Name: InvitatoinPhoneNo, piUserId: revUserId, piTerminalName: TerminalName, piTerminalIP: TerminalIP, piDeviceType: DeviceType },
+													  beforeSend: function () { },
+													  success: function (result) {
+														  SetFlag2 = $(result).find("int").text();
+														  //alert(SetFlag2);
+													  },
+													  error: function (msg) {
+														  alert("Error: SetPhoneNo");
+													  }
+												  });
+												  if (SetFlag1 == 1 && SetFlag2 == 1) {
+													  //alert("数据库连接失败");	
+													  $("#Downloadcode").qrcode({
+														  render: "canvas", //canvas方式
+														  width: width1, //宽度
+														  height: width1, //高度
+														  text: Downloadcode //任意内容
+													  });
+													  document.getElementById("download").style.display = "block";
+													  $("#Invitationcode").qrcode({
+														  render: "canvas", //canvas方式
+														  width: width2, //宽度
+														  height: width2, //高度
+														  text: str //任意内容
+													  });
+													  document.getElementById("Invitation").style.display = "block";
+													  document.getElementById("Invitation").innerHTML = '您的邀请码是：' + str;
+												  }
+												  if (SetFlag2 == 0)
+												  {
+													  document.getElementById("AlertUserId").innerHTML = "患者信息还未保存，请返回基本信息保存患者信息!";
+													  document.getElementById("AlertUserId").style.display = "block";
+												  }
+											  }
+										  },
+										  error: function (msg) {
+											  alert("Error: GetNoByNumberingType");
+										  }
+									  });
+								  }
+								  else
+								  {
+									  document.getElementById("AlertUserId").innerHTML = "此手机号已被使用，请输入新的手机号!";
+									  document.getElementById("AlertUserId").style.display = "block";
+									  wait = 0;
+								  }
+							  },
+							  error: function(msg) {
+								  alert("Error: GetIDByInput");
+							  }
+						});
+						
 					}
 				},
 				error: function (msg) {
