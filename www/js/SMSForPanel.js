@@ -23,10 +23,6 @@ var isUserloggedout = false;
 $(document).ready(function(event){
   $('#SMSHeader').html(localStorage.getItem("PatientName"));
   $('#GenaralField').height(GetHeight()-450); //设定文档高度
-  if (flag == "Panel")
-  {
-  SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
-  }
   GetSMSDialogue(ThisUserId, TheOtherId);
   document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
   
@@ -39,6 +35,13 @@ $(document).ready(function(event){
 })
 
 document.getElementById('SMSbtn').onclick = submitSMS;
+
+
+//进入HyperTension页面SMSPanel时调用
+function HyperSetSMS()
+{
+	 SetSMSRead(ThisUserId, localStorage.getItem("PatientId"));//改写阅读状态
+}
 
 //改写Panel调用flag并改写消息数
 function ChangePanelFlag ()
@@ -61,20 +64,29 @@ function ChangePanelFlag ()
 }
 
 //点击实时计数产生的图标触发
-function AddFunction()
-{
-	var PatientId = localStorage.getItem("PatientId");
-	SetSMSRead(localStorage.getItem('UserId'), PatientId);
-	localStorage.setItem('PanelFlag',"Panel"); //Panel调用flag
-}
 
+function AddFunction(obj)
+{
+	$("#SMSPanel").panel("open");
+	var PatientName = $(obj).parent().parent().parent().parent().find("td:first").find('ul').find('li:first').text();
+	var PatientId = $(obj).parent().parent().parent().parent().find("td:first").find('ul').find('li:eq(1)').find('p').attr("id");
+	$('#GenaralField').height(GetHeight()-150);
+	$('#SMSContent').val("");
+	SetSMSRead(localStorage.getItem('UserId'), PatientId);
+	GetSMSDialogue(localStorage.getItem('UserId'), PatientId);
+	document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
+	localStorage.setItem('PanelFlag',"Panel"); //Panel调用flag
+	localStorage.setItem('PatientId',PatientId);
+	$('#SMSHeader').html(PatientName);		
+}
 
 //消息推送
 window.onunload = function () //断开连接
 {
 	SocketCreated = false;
 	isUserloggedout = true;
-	ws.close();
+	//ws.close();
+	ws.send("");
 }
 
 function WsPush ()
@@ -119,15 +131,11 @@ function WsPush ()
  function WSonMessage(event) {
 	var DataArry = event.data.split("||");
 	flag = localStorage.getItem("PanelFlag");
-	if (flag == "Panel")
-	{
-		TheOtherId = localStorage.getItem("PatientId");
-		if (DataArry[0] == TheOtherId)
-		{
-			CreateSMS("Receive", DataArry[1], DataArry[2]);
-			document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
-			SetSMSRead(ThisUserId, TheOtherId);//改写阅读状态
-		}
+	if ((flag == "Panel")&&(DataArry[0] == localStorage.getItem("PatientId")))
+	{	
+		CreateSMS("Receive", DataArry[1], DataArry[2]);
+		document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
+		SetSMSRead(ThisUserId, localStorage.getItem("PatientId"));//改写阅读状态
 	}
 	else
 	{
@@ -150,8 +158,8 @@ function WsPush ()
 						Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), DataArry[0]);
 						$(this).find('td:last').find('div').empty();
 					}
-					var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li><a href="#SMSPanel" class="SMS" onclick = "AddFunction()" value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
-					$(this).find('td:last').find('div').append(Str);
+					var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li onclick = "AddFunction(this)"><a href="" class="SMS"  value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
+					$(this).find('td:last').find('div').append(Str); 
 					$(this).parent().trigger('create');
 					
 					//总收件箱

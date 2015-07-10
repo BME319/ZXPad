@@ -436,13 +436,14 @@ div#ModuleInfoDiv.ui-grid-a .ui-block-b {
       </div>
     </div>
   </div>
-  <div data-role="panel" data-position="right" data-position-fixed="false" data-display="overlay" data-theme="a" id="SMSPanel" data-dismissible="false"
-      style="z-index: 2000;" id="SMSPanel">
-  <div  align="center" style="z-index:2;">
-    <div style="float:left;"> <a href="#homepage_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" ></a> </div>
-    <div id="SMSHeader" data-role = "Header" style="font-size:20px;font-weight:bold;"></div>
-  </div>
-  <div data-role="content" style="z-index:1;">
+
+  <div data-role="panel" data-position="right" data-position-fixed="false" data-swipe-close="false" data-display="overlay" data-theme="a" id="SMSPanel" data-dismissible="false"
+      style="z-index: 2000;">
+    <div id="" align="center" style="z-index:2;">
+      <div style="float:left;"> <a href="#homepage_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" onclick="ChangePanelFlag()"></a> </div>
+      <div id="SMSHeader" data-role = "Header" style="font-size:20px;font-weight:bold;"></div>
+    </div>
+    <div data-role="content" style="z-index:1;">
     <div style="position:relative; height:100%; margin-top:30px;" id="GenaralField">
       <div id="OutField" style="position:absolute; width: 99%;">
         <div id="MainField" class="NormalField"></div>
@@ -523,7 +524,7 @@ div#ModuleInfoDiv.ui-grid-a .ui-block-b {
         <div align="center">
           <h> <b>患者综合信息管理</b> </h>
         </div>
-        <div data-role="controlgroup" data-corners="false"> <a id="navBasicInfo" href="#BasicInfoPanel" data-role="button">基本信息</a> <a id='navClinicInfo' href="#ClinicInfoPanel" data-role="button">临床信息</a> <a id="navModuleInfo" href="#ModuleInfoPanel" data-role="button">慢病信息</a><a id='navRisk' href="#RiskPanel" data-role="button">风险评估</a><a id='navPlan' href="#PlanPanel" data-role="button">创建与调整计划</a> <a id="navSMS" href="#SMSPanel" data-role="button">即时消息</a> <a id="navInvite" href="#InvitationInfoPage" data-role="button" onClick="showInvitationInfoPage()">发送邀请</a></div>
+        <div data-role="controlgroup" data-corners="false"> <a id="navBasicInfo" href="#BasicInfoPanel" data-role="button">基本信息</a> <a id='navClinicInfo' href="#ClinicInfoPanel" data-role="button">临床信息</a> <a id="navModuleInfo" href="#ModuleInfoPanel" data-role="button">慢病信息</a><a id='navRisk' href="#RiskPanel" data-role="button">风险评估</a><a id='navPlan' href="#PlanPanel" data-role="button">创建与调整计划</a> <a id="navSMS" href="#SMSPanel" data-role="button" onclick = "HyperSetSMS()">即时消息</a> <a id="navInvite" href="#InvitationInfoPage" data-role="button" onClick="showInvitationInfoPage()">发送邀请</a></div>
       </div>
     </div>
     <div  style="width:80%;float:left;margin-top:0px;">
