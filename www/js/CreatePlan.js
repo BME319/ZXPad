@@ -2576,7 +2576,7 @@ return ret;
 		alert("新建计划： " + PlanNo + " 成功！");
 
 					  //location.href = "HomePage.html?";	//ZAM 2015-5-4
-					  location.href = "#InvitationInfoPage";
+					  //location.href = "#InvitationInfoPage";
 				  }
 				  else
 				  {
@@ -2593,7 +2593,53 @@ return ret;
   }
   
   //得到任务清单
-  function GetPsTask(PlanNo){
+  function GetPsTask(){
+	  	var task_str = "";
+		task_str += 'VitalSign#Bloodpressure|Bloodpressure_1#@' + 'VitalSign#Bloodpressure|Bloodpressure_2#@';
+		$("input[name='LifeStyle']:checked").each(function () {
+			task_str = task_str + this.name.toString() + '#' + this.value.toString() + '#@'; 
+		});
+	
+	
+	//$("input[name='Drug']:checked").each(function () {
+	//	task_str = task_str + this.name.toString() + '#' + this.value.toString() + '@'; 
+	//});
+		if($("#DrugListTable").find("tbody"))
+		{
+			for(var i = 0; i < $("#DrugListTable").find("tbody").find("tr").length; i++){
+				task_str = task_str + 'Drug#' + trim($("#DrugListBody tr:eq(" + i + ") td:eq(0)").text()) + '#' + trim($("#DrugListBody tr:eq(" + i + ") td:eq(2)").text()) + '，' + trim($("#DrugListBody tr:eq(" + i + ") td:eq(3)").text()) + '@';		
+			}
+		}
+	
+		if(task_str != ""){
+			task_str = task_str.substring(0,task_str.length-1);	
+		}
+	
+		if(task_str != ""){
+			$.ajax({
+				type: "POST",
+				dataType: "xml",
+				timeout: 30000,  
+				url: 'http://'+ serverIP +'/'+serviceName+'/CreateTask',
+				async:false,
+				data: {PlanNo: localStorage.getItem('NewPlanNo'),
+				   Task: task_str,
+				   UserId: localStorage.getItem('UserId'),
+				   TerminalName: localStorage.getItem('TerminalName'),
+				   TerminalIP: localStorage.getItem('TerminalIP'),
+				   DeviceType: localStorage.getItem('DeviceType')
+				   },
+				success: function(result) { 
+					if($(result).text()){
+				 	}  
+				 	else{
+						alert("任务创建失败");
+				 	}
+				},
+				error: function(msg) {alert("Error! setPsTask");}
+			});
+		}
+		else{alert("请选择任务")};
 		$.ajax({  
         type: "POST",
         dataType: "xml",
@@ -2601,7 +2647,7 @@ return ret;
 		url: 'http://'+ serverIP +'/'+serviceName+'/GetPsTask',
 		//url: 'http://localhost:58895/Services.asmx/GetPsTask',
 		async:false,
-        data: {PlanNo:PlanNo},
+        data: {PlanNo:localStorage.getItem('NewPlanNo')},
 		beforeSend: function(){},
         success: function(result) {
 			var ret =  $.trim($(result).text()).replace(/ /g,"").split("\n\n\n");
@@ -2612,28 +2658,28 @@ return ret;
 						ret[j] = ret[j].replace("\n","");
 					}
 					var res = ret[j].split("\n");
-					if(res[1]=="LifeStyle"){
-						res[1] = "生活方式";
-					}
-					if(res[1]=="VitalSign"){
-					    res[1] = "体征测量";
-					}
-					if(res[1]=="Drug"){
-					    res[1] = "药物治疗";
-					}
-					if(res[4] == null){
-						res[4] = "";
-					}
+					//if(res[1]=="LifeStyle"){
+					//	res[1] = "生活方式";
+					//}
+					//if(res[1]=="VitalSign"){
+					//    res[1] = "体征测量";
+					//}
+					//if(res[1]=="Drug"){
+					//    res[1] = "药物治疗";
+					//}
+					//if(res[4] == null){
+					//	res[4] = "";
+					//}
 					Tasklist[j] = res[0];
-					if(j == 0){
-						$("#L" + j).next().remove();
-						$("#L" + j).after('<tbody><tr id="L' + (j+1) + '"><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[0] + '</div></td><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[1] + '</div></td><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[3] + '</div></td><td><div style="width:185px;word-wrap:break-word;">' + res[4] + '</div></td></tr>');
-					}
-					else{
-						$("#L" + j).after('<tr id="L' + (j+1) + '"><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[0] + '</div></td><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[1] + '</div></td><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[3] + '</div></td><td><div style="width:185px;word-wrap:break-word;">' + res[4] + '</div></td></tr>');
-					}
+					//if(j == 0){
+//						$("#L" + j).next().remove();
+//						$("#L" + j).after('<tbody><tr id="L' + (j+1) + '"><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[0] + '</div></td><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[1] + '</div></td><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[3] + '</div></td><td><div style="width:185px;word-wrap:break-word;">' + res[4] + '</div></td></tr>');
+//					}
+//					else{
+//						$("#L" + j).after('<tr id="L' + (j+1) + '"><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[0] + '</div></td><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[1] + '</div></td><td><div align="center" style="width:80px;word-wrap:break-word;">' + res[3] + '</div></td><td><div style="width:185px;word-wrap:break-word;">' + res[4] + '</div></td></tr>');
+//					}
 				}
-				$("#L" + (j-1)).after('</tbody>');
+				//$("#L" + (j-1)).after('</tbody>');
 			}
 			else
 			{		
@@ -2759,7 +2805,7 @@ return ret;
   }
   
   //按下"确认开始"后发生LY
-  function btn1_listener_f()
+  function PlanStart()
   {
 	  $.ajax({  
 		  type: "POST",
@@ -2774,17 +2820,16 @@ return ret;
 		  }, 
 		  error: function(msg) {alert("Error!");}
 	  });
-	  var EndDate = $("#EndDate").val().replace(/-/g,"");
+	  var EndDate = $("#EndDateSet").val().replace(/-/g,"");
 	  //GetPlanInfo(localStorage.getItem('NewPlanNo'));
 	  if(EndDate == ""){
-	  	  $("#Alert").html("请输入结束时间");
+	  	  $(".dateinvalid").html("请输入结束时间");
+		  $(".dateinvalid").show();
 		  return;
 	  }
 	  if(EndDate < StartDate){
-	  	  $("#Alert").html("结束日期不能早于开始日期");
 		  return;
 	  }
-	  $("#Alert").html("");
 	  SetCompliance(localStorage.getItem('PatientId'), StartDate, localStorage.getItem('NewPlanNo'), 0, localStorage.getItem('UserId'), localStorage.getItem('TerminalName'), localStorage.getItem('TerminalIP'), localStorage.getItem('DeviceType'));
 	  for(q = 0; q < Tasklist.length; q++){
 	      SetComplianceDetail(localStorage.getItem('PatientId'), StartDate, localStorage.getItem('NewPlanNo'), Tasklist[q], 0, localStorage.getItem('UserId'), localStorage.getItem('TerminalName'), localStorage.getItem('TerminalIP'), localStorage.getItem('DeviceType'));
@@ -2797,4 +2842,30 @@ return ret;
 	if(value != "" && (value>=minValue &&value<=maxValue))
 	   ret = true;
 	   return ret; 
+  }
+  
+  //判断结束日期是否合法
+  function DateIsLegal() {
+	var StartDate = "";
+    $.ajax({  
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,  
+		url: 'http://'+ serverIP +'/'+serviceName+'/GetServerTime',
+		async:false,
+		data: {},
+		beforeSend: function(){},
+		success: function(result) {
+			StartDate =  $(result).text().slice(0,10);		    
+		}, 
+		error: function(msg) {alert("Error!");}
+	});
+    var EndDate = $("#EndDateSet").val();
+	if (EndDate < StartDate){
+        $(".dateinvalid").html("结束日期不能早于开始日期");
+		$(".dateinvalid").show();
+	}
+    else {
+    	$(".dateinvalid").hide();
+    }
   }
