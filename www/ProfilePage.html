@@ -783,6 +783,11 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
       <label for="points" style="margin-top:0px;">患者建档进度：</label>
       <input type="range" name="points" class="points" value="80" min="0" max="100" data-highlight="true">
     </div>
+    <div align="left" style="width:60%; float:right" >
+    	<button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
+        <button class="ui-btn ui-btn-inline" onclick="setPsTask();startPlanPageInit();$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
+        <button class="ui-btn ui-btn-inline" onclick="GetPsTask();PlanStart();">开始计划</button>
+    </div>
     <div id="CPPart1">
       <h4 style="color:#4BAACB">生活方式：</h4>
       <table data-role="table" class="ui-responsive table-stroke">
@@ -824,9 +829,11 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
     </div>
     <div class="ui-grid-b">
       <div class="ui-block-a"> </div>
-      <div class="ui-block-b" style="text-align:center;">
-        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
-        <button class="ui-btn ui-btn-inline" onclick="setPsTask();startPlanPageInit();$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
+      <div class="ui-block-b"></div>
+      <div class="ui-block-c" style="text-align:center;">
+      	<label>结束日期</label>
+      	<input type="date" name="EndDate" id="EndDateSet" style="height:40px" onChange="DateIsLegal();"/>
+        <p class="dateinvalid" style="font-size: 24px; color: Red"></p>
         <!-- startPlanPageInit()开始计划页面初始化 ZC 2015-05-11--> 
       </div>
       <div class="ui-block-c"> </div>
