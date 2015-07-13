@@ -748,7 +748,7 @@ patientInfo = ' <div style="width: 300px;"><div style="width: 25%;float:left;mar
 		 InitialSMS();
 		$( "#SMSPanel" ).panel( "open" );	
 		$('#SMSHeader').html(table.row(row_clicked).data()[8]);
-		$('#GenaralField').height(GetHeight()-150);
+		$('#GenaralField').height(GetHeight()-100);
 		GetSMSDialogue(localStorage.getItem('UserId'), table.row(row_clicked).data()[5]);
 		document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
 		SetSMSRead(localStorage.getItem('UserId'), table.row(row_clicked).data()[5]);//改写阅读状态
@@ -767,7 +767,7 @@ patientInfo = ' <div style="width: 300px;"><div style="width: 25%;float:left;mar
 		//$('#SMSPanel').trigger('updatelayout');
 		$( "#SMSPanel" ).panel( "open" );
 		$('#SMSHeader').html(table.row(row_clicked).data()[8]);
-		$('#GenaralField').height(GetHeight()-150); 
+		$('#GenaralField').height(GetHeight()-100); 
 		GetSMSDialogue(localStorage.getItem('UserId'), pid);
 		document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
 		SetSMSRead(localStorage.getItem('UserId'), pid);//改写阅读状态

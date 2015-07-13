@@ -70,7 +70,7 @@ function AddFunction(obj)
 	$("#SMSPanel").panel("open");
 	var PatientName = $(obj).parent().parent().parent().parent().find("td:first").find('ul').find('li:first').text();
 	var PatientId = $(obj).parent().parent().parent().parent().find("td:first").find('ul').find('li:eq(1)').find('p').attr("id");
-	$('#GenaralField').height(GetHeight()-150);
+	$('#GenaralField').height(GetHeight()-100);
 	$('#SMSContent').val("");
 	SetSMSRead(localStorage.getItem('UserId'), PatientId);
 	GetSMSDialogue(localStorage.getItem('UserId'), PatientId);
