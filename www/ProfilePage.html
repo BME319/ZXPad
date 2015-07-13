@@ -1109,7 +1109,8 @@ $.mobile.loading( "hide" );
 				else
 				{
 					//alert("New Patient fromDict");
-					GetItemInfoFromDict(UserId,"M1",CategoryName)
+					GetItemInfoFromDict(UserId,"M1",CategoryName);
+					//GetItemInfoByPIdAndModule(UserId,CategoryCode,CategoryName);
 				}
   			   	$.mobile.loading( "hide" ); 
 		  });
@@ -1128,6 +1129,12 @@ $.mobile.loading( "hide" );
   var target = 0;
   var toTarget = 0; //距离目标多少mmHg
   var evaluate={};
+  var HPNumber = 1;
+  var DANumber = 1;
+  var HPDrugList = "";
+  var HPDrugListDetail = "";
+  var DADrugList = "";
+  var DADrugListDetail = "";
 
 
 	//Loading hide
