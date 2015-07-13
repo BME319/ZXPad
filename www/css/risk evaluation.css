@@ -1,13 +1,3 @@
-	.NormalField 
-	{
-	  overflow-y: auto;
-	  height: 600px;
-    }
-	.ShortField 
-   {
-	 overflow-y: auto;
-	 height: 130px;
-   }
 input[type=checkbox] {
 	visibility: hidden;
 }
