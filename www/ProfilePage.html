@@ -722,11 +722,11 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
           </div>
           <div data-role="fieldcontain" id="test1">
             <label style="width:50%">当前收缩压</label>
-            <input  type="text" id="TextInput1" onkeyup="this.value=this.value.replace(/\D/g,'') ;GetDescription();SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);Risk() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" />
+            <input  type="text" id="TextInput1" onkeyup="this.value=this.value.replace(/\D/g,'') ;GetDescription();SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);Risk() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onfocus="clearContent(this);"/>
             <label style="width:50%">当前舒张压</label>
             </br>
             </br>
-            <input type="text" id="TextInput2" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);Risk() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}"/>
+            <input type="text" id="TextInput2" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);Risk() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onfocus="clearContent(this);"/>
             </br>
             </br>
             </br>
@@ -743,11 +743,11 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
        </div>
         <div data-role="fieldcontain" id="test2">
           <label style="width:50%">目标收缩压</label>
-          <input type="text" id="TextInput3" onkeyup="this.value=this.value.replace(/\D/g,'') ;SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1)  ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}"/>
+          <input type="text" id="TextInput3" onkeyup="this.value=this.value.replace(/\D/g,'') ;SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1)  ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onfocus="clearContent(this);"/>
           <label style="width:50%">目标舒张压</label>
           </br>
           </br>
-          <input type="text" id="TextInput4" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1) ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}"/>
+          <input type="text" id="TextInput4" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1) ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onfocus="clearContent(this);"/>
           </br>
           </br>
           </br>
@@ -759,7 +759,7 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
         <h3 align="center">风险评估</h3>
         <!--        <div id="chartdiv3" style="width:300px; height:400px;"> </div>
 -->
-        <div id="chartdiv3" style="width:350px; height:325px;"> </div>
+        <div id="chartdiv3" style="width:320px; height:325px;"> </div>
         <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#ClinicInfoPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
         <button class="ui-btn ui-btn-inline" onclick="if(InsertTarget()) {$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});}getGoalValue();">下一步</button>
       </div>
@@ -1197,36 +1197,7 @@ $.mobile.loading( "hide" );
       }
   });
   
-  //SetTargetPage自运行
-  $(document).on("pageshow", "#SetTargetPage", function(){
-    if (localStorage.getItem('EditEnable') == 0) {
-      $('#Targetbutton').css('display','none');
-      //console.log('targetPage');
-    }
-	  $("#TextInput1").css("width","80px").parent().css("width","80px");
-	  $("#TextInput2").css("width","80px").parent().css("width","80px");
-	  $("#TextInput3").css("width","80px").parent().css("width","80px");
-	  $("#TextInput4").css("width","80px").parent().css("width","80px");
-	  //先对NewPlanNo置为空，以对“下一步”按钮点击状态进行判断 ZC 2015-05-07
-	  localStorage.setItem('NewPlanNo', "");
-	  //读取血压值，包括当前和前一个计划的目标
-	  GetCurrentSBP(localStorage.getItem('PatientId'));
-	  GetCurrentDBP(localStorage.getItem('PatientId'));
-	  
-	  GetTargetSBP(localStorage.getItem('PLType'), localStorage.getItem('PlanNo'), "1");
-	  GetTargetDBP(localStorage.getItem('PLType'), localStorage.getItem('PlanNo'), "2");
-	  GetBPGrades();
-	   setTimeout(function(){
-		  SBPBar($("#TextInput1").val(), $("#TextInput3").val(), SBPlist, chart_SBP_1);
-		  },0);
-	   setTimeout(function(){
-		  DBPBar($("#TextInput2").val(), $("#TextInput4").val(), DBPlist, chart_DBP_1);
-		  },0);
-	   setTimeout(function(){
-		  Risk();
-		  },0); 
-  });
-  
+ 
   //CreatePlanPage自运行
   $(document).on("pageinit", "#CreatePlanPage", function(){ 
       //当PlanNo状态为暂存时，把NewPlanNo=PlanNo，只要PLType不变，则不影响页面逻辑
