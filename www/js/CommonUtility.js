@@ -5,10 +5,11 @@
 //var serverIP = '10.12.43.101:8088'; //backupservice
 //var serverIP = '10.12.43.101:8085';
 //var serverIP = '10.12.43.101:8098';	//mulitiple-users
-
-
  var serviceName = 'Services.asmx';
  var imgStoreFile="PersonalPhoto";
+ 
+ var synInfoIP='10.13.22.139:57772'; //同步的ip等变量设置
+ var synInfoSpace='hz_mb';
 
 /**********************CheckNetwork************************/
 function CheckNetwork() {
