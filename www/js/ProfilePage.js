@@ -1093,25 +1093,31 @@ function GetNewPatientID() {
 								 //alert(OptionCategory);
 								 var Value = $(this).find("Value").text(); //
 								 var Content = $(this).find("Content").text(); //
+								 var ItemSeq = $(this).find("ItemSeq").text();
 								 //增加下拉框  
 								 if(OptionCategory!="")
 								 {
 									  if(ControlType==7)
 									  {
+										  var DrugType = Value.split(",")[0];
+										  var DrugName = Value.split(",")[1];
 										  if (OptionCategory == "Cm.MstHypertensionDrug")
 										  {
 											//高血压药物
-											OptionList = GetHypertensionDrugTypeNameList(Value);
+											OptionList = GetHypertensionDrugTypeNameList(DrugType);
+											OptionDetailList = GetHypertensionDrugNameList(DrugType,DrugName);
 										  }
 										  if (OptionCategory == "Cm.MstDiabetesDrug")
 										  {
 											//糖尿病药物
-											OptionList = GetDiabetesDrugTypeNameList(Value);
+											OptionList = GetDiabetesDrugTypeNameList(DrugType);
+											OptionDetailList = GetDiabetesDrugNameList(DrugType,DrugName);
 										  }
 										  if (OptionCategory == "")
 										  {
 											//合并用药
 											OptionList = GetOptionList(OptionCategory,Value);
+											OptionDetailList = GetOptionList(OptionCategory,"");
 										  }
 									  }
 									  else if(ControlType==2)
@@ -1143,8 +1149,52 @@ function GetNewPatientID() {
 									}
 									if(ControlType==7)	//两层单选
 									{
-										var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdrowlist">' + OptionList + '</select></div>';
-										//var ModuleDetailInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdrowlist">' + OptionList + '</select></div>';							
+										//var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdrowlist">' + OptionList + '</select></div>';
+										if (OptionCategory == "Cm.MstHypertensionDrug")
+										{
+										  //高血压药物
+										  	HPDrugList = OptionList;
+											HPDrugListDetail = OptionDetailList;
+											if(ItemSeq==1)
+											{
+												var ModuleInfo = '<div class="' + ItemCode + '" id="HypertensionDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="HypertensionOptionList1" onChange="GetHypertensionOptionDetailList(this.value, 1)">' + OptionList + '</select>' + '<select class="dropdownlist" id="HypertensionOptionDetailList1">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddHypertensionDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteHypertensionDrugList();" >删除</button></div>';	
+											}
+											else
+											{
+												$("#HypertensionDrugList" + (ItemSeq - 1)).after('<div class="M1004_1 ui-field-contain" id="HypertensionDrugList' + ItemSeq + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="HypertensionOptionList' + ItemSeq + '" onChange="GetHypertensionOptionDetailList(this.value, ' + ItemSeq + ')">' + HPDrugList + '</select><select class="dropdownlist" id="HypertensionOptionDetailList' + ItemSeq + '">' + HPDrugListDetail + '</select></div>');
+												HPNumber = ItemSeq;
+												localStorage.setItem('HPNumber', HPNumber);
+												$(".dropdownlist")
+													.attr("data-role", "none")
+													.css("width", "25%")
+													.css("height", "40px");
+											}
+										}
+										if (OptionCategory == "Cm.MstDiabetesDrug")
+										{
+										  //糖尿病药物
+										    DADrugList = OptionList;
+											DADrugListDetail = OptionDetailList;
+											if(ItemSeq==1)
+											{
+												var ModuleInfo = '<div class="' + ItemCode + '" id="DiabetesDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="DiabetesOptionList1" onChange="GetDiabetesOptionDetailList(this.value, 1)">' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList1">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddDiabetesDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteDiabetesDrugList();" >删除</button></div>';	
+											}
+											else
+											{
+												$("#DiabetesDrugList" + (ItemSeq - 1)).after('<div class="M1004_2 ui-field-contain" id="DiabetesDrugList' + ItemSeq + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="DiabetesOptionList' + ItemSeq + '" onChange="GetDiabetesOptionDetailList(this.value, ' + ItemSeq + ')">' + DADrugList + '</select><select class="dropdownlist" id="DiabetesOptionDetailList' + ItemSeq + '">' + DADrugListDetail + '</select></div>');
+												DANumber = ItemSeq;
+												localStorage.setItem('DANumber', DANumber);
+												$(".dropdownlist")
+													.attr("data-role", "none")
+													.css("width", "25%")
+													.css("height", "40px");
+											}
+										}
+										if (OptionCategory == "")
+										{
+										  //合并用药
+										  var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist">' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList">' + OptionDetailList + '</select></div>';	
+										}				
 									}
 									if(ControlType==2)		//复选框
 									{	
@@ -1158,20 +1208,35 @@ function GetNewPatientID() {
 						 }	
 					 }
 					});	
+					
+					
 					$('.chzn-select').chosen({
 						placeholder_text_multiple: ""
 					});
 					$(".chosen-container")
 						.attr("data-role", "none")
-						.css("width", "78%");
+						.css("width", "78%")
+						.css("height", "40px");
 						
 					$(".chosen-container li input").attr("data-role", "none");
+					$(".dropdownlist")
+						.attr("data-role", "none")
+						.css("width", "25%")
+						.css("height", "40px");
+					$(".dropdrowlist")
+						.attr("data-role", "none")
+						.css("width", "78%")
+						.css("height", "40px");
+					$(".textbox")
+						.css("height", "40px");
 						
-					$(".chzn-select").attr("disabled","disabled");
-					$(".dropdrowlist").attr("disabled","disabled");
-					$(".dropdownlist").attr("disabled","disabled");
-					$(".textbox").attr("disabled","disabled");
-					$("#saveModuleInfo").attr("disabled","disabled");			    				
+					//$(".chzn-select").attr("disabled","disabled");
+//					$(".dropdrowlist").attr("disabled","disabled");
+//					$(".dropdownlist").attr("disabled","disabled");
+//					$(".textbox").attr("disabled","disabled");
+//					$("#saveModuleInfo").attr("disabled","disabled");
+
+					$("#editModuleInfo").attr("disabled","disabled");			    				
 					$(".mainInfo").trigger("create");  //jquery mobile渲染	
 				
 			   }, 
@@ -1548,8 +1613,9 @@ function GetNewPatientID() {
 				beforeSend: function(){},
 		        success: function(result) { 
 				//&& ""!=result.trim()
+				 var Flag = 1;
 				 var test = $(result).find('Table1').length;
-				 test= 0;
+				 //test= 0;
 				 //alert(test);
 					if(test != 0)
 					{
@@ -1557,6 +1623,7 @@ function GetNewPatientID() {
 						//不为空的操作 已经购买过M1
 					 $(result).find('Table1').each(function() {
 						 var ItemCode = $(this).find("ItemCode").text();
+						 var ControlType = $(this).find("ControlType").text();
 						 //alert(ItemCode);
 						 if(ItemCode!="InvalidFlag")
 						 {
@@ -1571,6 +1638,7 @@ function GetNewPatientID() {
 								 var ItemSeq = $(this).find("ItemSeq").text(); //
 								 var Description = $(this).find("Description").text(); //
 								 var SortNo = $(this).find("SortNo").text(); //
+								 var OptionCategory = $(this).find("OptionCategory").text();
 								 var value;			 
 								 if(ParentCode=="")
 								 {
@@ -1579,24 +1647,100 @@ function GetNewPatientID() {
 								 else
 								 {						 	
 								 	//按ItemCode从界面对应元素取值
+									//var div = $("."+ItemCode);	
+//									if(div.find('select').length)
+//									{
+//										//alert("1");
+//										 value = div.find('select').val();
+//									}
+//									else
+//									{
+//										value = div.find('input').val();
+//									}
+//								 	//更新数据
+//									SetPatBasicInfoDetail(CategoryCode,ItemCode,ItemSeq,value,Description,SortNo);
+									
 									var div = $("."+ItemCode);	
 									if(div.find('select').length)
 									{
-										//alert("1");
-										 value = div.find('select').val();
+												//alert("1");
+										if(ControlType!=7)
+										{
+											if(ControlType==2)
+											{
+												value = div.find('select').val();
+												if(value != null)
+												{
+													value = value.toString();
+												}
+											}
+											else
+											{
+												value = div.find('select').val();
+											}
+										}
+										else
+										{
+											var div = $("."+ItemCode);	
+											if (OptionCategory == "Cm.MstHypertensionDrug")
+											{
+											  //高血压药物
+												var HPNumber = localStorage.getItem('HPNumber');
+												for(i=1;i<=HPNumber;i++)
+												{
+													var DrugType = div.find('#HypertensionOptionList'+i).val();
+													var DrugName = div.find('#HypertensionOptionDetailList'+i).val();
+													
+													value = DrugType + ',' + DrugName;
+													SetPatBasicInfoDetail(CategoryCode,ItemCode,i,value,"",1);
+												}
+											}
+											if (OptionCategory == "Cm.MstDiabetesDrug")
+											{
+											  //糖尿病药物
+												var DANumber = localStorage.getItem('DANumber');
+												for(i=1;i<=DANumber;i++)
+												{
+													var DrugType = div.find('#DiabetesOptionList' + i).val();
+													var DrugName = div.find('#DiabetesOptionDetailList' + i).val();
+													value = DrugType + ',' + DrugName;
+													SetPatBasicInfoDetail(CategoryCode,ItemCode,i,value,"",1);
+												}
+											}
+										}
 									}
 									else
 									{
 										value = div.find('input').val();
+										var reg = /^\d+(?=\.{0,1}\d+$|$)/;
+										if(!reg.test(value) && value != "")
+										{
+											Flag = 0;
+										}
 									}
-								 	//更新数据
-									SetPatBasicInfoDetail(CategoryCode,ItemCode,ItemSeq,value,Description,SortNo);
+									if(Flag == 1)
+									{
+										if(ControlType!=7)
+										{
+											SetPatBasicInfoDetail(CategoryCode,ItemCode,1,value,"",1);
+										}
+										$(".chzn-select").attr("disabled","disabled").parent().addClass("ui-state-disabled");
+										$(".dropdrowlist").attr("disabled","disabled").parent().addClass("ui-state-disabled");
+										$(".dropdownlist").attr("disabled","disabled").parent().addClass("ui-state-disabled");
+										$(".textbox").attr("disabled","disabled").parent().addClass("ui-state-disabled");	
+										$("#editModuleInfo").removeAttr("disabled","disabled").parent().removeClass("ui-state-disabled");	
+										$("#saveModuleInfo").attr("disabled","disabled").parent().addClass("ui-state-disabled");
+									}
 								 }					
 							 }
 						 }	
 						 		 
 					})
-					
+					if(Flag == 0)
+				   {
+					  alert('体格检查输入格式不正确！');
+					  return;
+				   }	
 					}
 					else
 					{
@@ -1620,7 +1764,9 @@ function GetNewPatientID() {
                         SetPatBasicInfoDetail("HC", "Doctor", 1, DoctorId, "", 1);
 						//插入患者详细信息表中的模块关注详细信息
 						//SetPatBasicInfoDetail("M1",ItemCode,1,value,"",1);
-						SetNewModuleInfo("M1");						
+						SetNewModuleInfo("M1");	
+						SetNewModuleInfo2("M1");
+										
 					}
 					//全部更新成功后
 					
@@ -1637,6 +1783,12 @@ function GetNewPatientID() {
 		       }, 
 		       error: function(msg) {alert("Error!");}
 		     });
+			 $(".chzn-select").attr("disabled","disabled").parent().addClass("ui-state-disabled");
+			$(".dropdrowlist").attr("disabled","disabled").parent().addClass("ui-state-disabled");
+			$(".dropdownlist").attr("disabled","disabled").parent().addClass("ui-state-disabled");
+			$(".textbox").attr("disabled","disabled").parent().addClass("ui-state-disabled");	
+			$("#editModuleInfo").removeAttr("disabled","disabled").parent().removeClass("ui-state-disabled");	
+			$("#saveModuleInfo").attr("disabled","disabled").parent().addClass("ui-state-disabled");
 			}
 			
 			function SetNewModuleInfo(CategoryCode){
@@ -1665,32 +1817,20 @@ function GetNewPatientID() {
 								if(div.find('select').length)
 								{
 											//alert("1");
-									if(ControlType==7)
+									if(ControlType!=7)
 									{
-										var DrugType = div.find('select').val();
-										if (OptionCategory == "Cm.MstHypertensionDrug")
+										if(ControlType==2)
 										{
-										  //高血压药物
-										 	var DrugName = div.find('#HypertensionOptionDetailList').val();
+											value = div.find('select').val();
+											if(value != null)
+											{
+												value = value.toString();
+											}
 										}
-										if (OptionCategory == "Cm.MstDiabetesDrug")
+										else
 										{
-										  //糖尿病药物
-										  	var DrugName = div.find('#DiabetesOptionDetailList').val();
+											value = div.find('select').val();
 										}
-										value = DrugType + ',' + DrugName;
-									}
-									else if(ControlType==2)
-									{
-										value = div.find('select').val();
-										if(value != null)
-										{
-											value = value.toString();
-										}
-									}
-									else
-									{
-										value = div.find('select').val();
 									}
 								}
 								else
@@ -1728,6 +1868,76 @@ function GetNewPatientID() {
 							$("#editModuleInfo").removeAttr("disabled","disabled").parent().removeClass("ui-state-disabled");	
 							$("#saveModuleInfo").attr("disabled","disabled").parent().addClass("ui-state-disabled");	
 						 }	 
+		      		}, 
+		       		error: function(msg) {alert("GetMstInfoItemByCategoryCodeError!");}
+		     	}); 
+			}
+			
+			function SetNewModuleInfo2(CategoryCode){
+				
+				$.ajax({  								
+		        	type: "POST",
+		        	dataType: "xml",
+					timeout: 30000,  
+					url: 'http://'+ serverIP +'/'+serviceName+'/GetMstInfoItemByCategoryCode',
+					async:false,
+		        	data: {CategoryCode:CategoryCode},
+					beforeSend: function(){},
+		        	success: function(result) { 
+						$(result).find('Table1').each(function() {
+						 	var ItemCode = $(this).find("Code").text();
+							var ControlType = $(this).find("ControlType").text();
+							var Name = $(this).find("Name").text();
+							var OptionCategory = $(this).find("OptionCategory").text();
+						 //alert(ItemCode);	
+						 //alert(ItemCode.split("_").length);
+						 	if(ItemCode.split("_").length==2)
+							{	
+							//alert("length1");
+								if(ControlType ==7)
+								{
+									var div = $("."+ItemCode);	
+									if (OptionCategory == "Cm.MstHypertensionDrug")
+									{
+									  //高血压药物
+										var HPNumber = localStorage.getItem('HPNumber');
+										for(i=1;i<=HPNumber;i++)
+										{
+											var DrugType = div.find('#HypertensionOptionList'+i).val();
+											var DrugName = div.find('#HypertensionOptionDetailList'+i).val();
+											
+											value = DrugType + ',' + DrugName;
+											SetPatBasicInfoDetail(CategoryCode,ItemCode,i,value,"",1);
+										}
+									}
+									if (OptionCategory == "Cm.MstDiabetesDrug")
+									{
+									  //糖尿病药物
+										var DANumber = localStorage.getItem('DANumber');
+										for(i=1;i<=DANumber;i++)
+										{
+											var DrugType = div.find('#DiabetesOptionList' + i).val();
+											var DrugName = div.find('#DiabetesOptionDetailList' + i).val();
+											value = DrugType + ',' + DrugName;
+											SetPatBasicInfoDetail(CategoryCode,ItemCode,i,value,"",1);
+										}
+									}
+								}
+							}
+							else
+							{
+								//alert("length2");
+								value = "";
+								SetPatBasicInfoDetail(CategoryCode,ItemCode,1,value,"",1);
+							}
+						 })	
+
+						$(".chzn-select").attr("disabled","disabled").parent().addClass("ui-state-disabled");
+						$(".dropdrowlist").attr("disabled","disabled").parent().addClass("ui-state-disabled");
+						$(".dropdownlist").attr("disabled","disabled").parent().addClass("ui-state-disabled");
+						$(".textbox").attr("disabled","disabled").parent().addClass("ui-state-disabled");	
+						$("#editModuleInfo").removeAttr("disabled","disabled").parent().removeClass("ui-state-disabled");	
+						$("#saveModuleInfo").attr("disabled","disabled").parent().addClass("ui-state-disabled");	 
 		      		}, 
 		       		error: function(msg) {alert("GetMstInfoItemByCategoryCodeError!");}
 		     	}); 
@@ -1866,12 +2076,18 @@ function GetNewPatientID() {
 										if (OptionCategory == "Cm.MstHypertensionDrug")
 										{
 										  //高血压药物
-											var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" onChange="GetHypertensionOptionDetailList(this.value)">' + OptionList + '</select>' + '<select class="dropdownlist" id="HypertensionOptionDetailList">' + OptionDetailList + '</select></div>';		
+										  	HPDrugList = OptionList;
+											HPDrugListDetail = OptionDetailList;
+											var ModuleInfo = '<div class="' + ItemCode + '" id="HypertensionDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="HypertensionOptionList1" onChange="GetHypertensionOptionDetailList(this.value, 1)">' + OptionList + '</select>' + '<select class="dropdownlist" id="HypertensionOptionDetailList1">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddHypertensionDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteHypertensionDrugList();" >删除</button></div>';	
+											localStorage.setItem('HPNumber', 1);	
 										}
 										if (OptionCategory == "Cm.MstDiabetesDrug")
 										{
 										  //糖尿病药物
-											var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" onChange="GetDiabetesOptionDetailList(this.value)">' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList">' + OptionDetailList + '</select></div>';		
+										    DADrugList = OptionList;
+											DADrugListDetail = OptionDetailList;
+											var ModuleInfo = '<div class="' + ItemCode + '" id="DiabetesDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="DiabetesOptionList1" onChange="GetDiabetesOptionDetailList(this.value, 1)">' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList1">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddDiabetesDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteDiabetesDrugList();" >删除</button></div>';
+											localStorage.setItem('DANumber', 1);		
 										}
 										if (OptionCategory == "")
 										{
@@ -1896,6 +2112,8 @@ function GetNewPatientID() {
 					//$("#saveModuleInfo").removeAttr("disabled","disabled").parent().removeClass("ui-state-disabled");	
 					//$("#editModuleInfo").attr("disabled","disabled").parent().addClass("ui-state-disabled");	
 					//editModuleInfo
+					
+					
 					$('.chzn-select').chosen({
 						placeholder_text_multiple: ""
 					});
@@ -1925,16 +2143,58 @@ function GetNewPatientID() {
 		     });
 		  }
 		  
-		  function GetHypertensionOptionDetailList(type)
+		  function GetHypertensionOptionDetailList(type, i)
 		  {
 			OptionDetailList = GetHypertensionDrugNameList(type,"");
-			$("#HypertensionOptionDetailList option").remove();
-			$("#HypertensionOptionDetailList").append(OptionDetailList);
+			$("#HypertensionOptionDetailList" + i + " option").remove();
+			$("#HypertensionOptionDetailList" + i).append(OptionDetailList);
 		  }
 		  
-		  function GetDiabetesOptionDetailList(type)
+		  function GetDiabetesOptionDetailList(type, i)
 		  {
 			OptionDetailList = GetDiabetesDrugNameList(type,"");
-			$("#DiabetesOptionDetailList option").remove();
-			$("#DiabetesOptionDetailList").append(OptionDetailList);
+			$("#DiabetesOptionDetailList" + i + " option").remove();
+			$("#DiabetesOptionDetailList" + i).append(OptionDetailList);
+		  }
+		  
+		  function AddHypertensionDrugList()
+		  {
+			$("#HypertensionDrugList" + HPNumber).after('<div class="M1004_1 ui-field-contain" id="HypertensionDrugList' + (HPNumber + 1) + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="HypertensionOptionList' + (HPNumber + 1) + '" onChange="GetHypertensionOptionDetailList(this.value, ' + (HPNumber + 1) + ')">' + HPDrugList + '</select><select class="dropdownlist" id="HypertensionOptionDetailList' + (HPNumber + 1) + '">' + HPDrugListDetail + '</select></div>');
+          	HPNumber = HPNumber + 1;
+			localStorage.setItem('HPNumber', HPNumber);
+			$(".dropdownlist")
+				.attr("data-role", "none")
+				.css("width", "25%")
+				.css("height", "40px");
+    	  }
+		  
+		  function DeleteHypertensionDrugList()
+		  {
+		  	if (HPNumber == 1) {
+         		return;
+          	}
+			$("#HypertensionDrugList" + HPNumber).remove();
+			HPNumber = HPNumber - 1;
+			localStorage.setItem('HPNumber', HPNumber);
+		  }
+		  
+		  function AddDiabetesDrugList()
+		  {
+			$("#DiabetesDrugList" + DANumber).after('<div class="M1004_2 ui-field-contain" id="DiabetesDrugList' + (DANumber + 1) + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="DiabetesOptionList' + (DANumber + 1) + '" onChange="GetDiabetesOptionDetailList(this.value, ' + (DANumber + 1) + ')">' + DADrugList + '</select><select class="dropdownlist" id="DiabetesOptionDetailList' + (DANumber + 1) + '">' + DADrugListDetail + '</select></div>');
+          	DANumber = DANumber + 1;
+			localStorage.setItem('DANumber', DANumber);
+			$(".dropdownlist")
+				.attr("data-role", "none")
+				.css("width", "25%")
+				.css("height", "40px");
+    	  }
+		  
+		  function DeleteDiabetesDrugList()
+		  {
+		  	if (DANumber == 1) {
+         		return;
+          	}
+			$("#DiabetesDrugList" + DANumber).remove();
+			DANumber = DANumber - 1;
+			localStorage.setItem('DANumber', DANumber);
 		  }
