@@ -30,6 +30,198 @@
       return str.replace(/(^\s*)|(\s*$)/g, "");
   } 
   
+  
+   //进入临床信息页面调取初始化函数
+function integration_initial()
+{   
+   var syn_HospitalCode="";
+   //获取医院下拉框
+	$.ajax({
+	type: "POST",
+	dataType: "xml",
+	timeout: 30000,
+	url: 'http://' + serverIP + '/' + serviceName + '/GetHospitalList',
+	async: false,
+	data:
+	{ },
+	beforeSend: function () {
+	},
+	success: function (result) {
+		var str_Hospital='';
+		$(result).find('Table1').each(function(){	
+		   var syn_HosCode= $(this).find("Code").text();
+		   var syn_HosName= $(this).find("Name").text(); 
+		   str_Hospital+='<option value="'+syn_HosCode+'" id="">'+ syn_HosName+'</option>';
+		});
+
+		$('#syn_Hospital').append(str_Hospital); 
+		$("#syn_Hospital").selectmenu('refresh', true);  
+		
+		syn_HospitalCode=$(result).find('Table1').first().find("Code").text();
+	},
+	error: function (msg) {
+		alert("initialization GetHospitalList出错啦！");
+	}
+   });
+
+   //获取最近已有最新就诊ID
+   $.ajax({
+	type: "POST",
+	dataType: "xml",
+	timeout: 30000,
+	url: 'http://' + serverIP + '/' + serviceName + '/getLatestHUserIdByHCode',
+	async: false,
+	data:
+	{UserId:localStorage.getItem('PatientId'),//"PID201506170005"
+	 HospitalCode:syn_HospitalCode},
+	beforeSend: function () {
+	},
+	success: function (result) {
+		
+		  document.getElementById("syn_ID").value=$(result).find('string').text();
+
+	},
+	error: function (msg) {
+		alert("initialization GetHospitalList出错啦！");
+	}
+   });
+
+}
+
+ //同步：就诊医院与最新就诊id的联动
+function HospitalChange(selectedValue)
+{
+	document.getElementById("syn_ID").value="";
+	//获取最近已有就诊ID
+   $.ajax({
+	type: "POST",
+	dataType: "xml",
+	timeout: 30000,
+	url: 'http://' + serverIP + '/' + serviceName + '/getLatestHUserIdByHCode',
+	async: false,
+	data:
+	{UserId:localStorage.getItem('PatientId'),
+	 HospitalCode:selectedValue},
+	beforeSend: function () {
+	},
+	success: function (result) {
+		
+		  document.getElementById("syn_ID").value=$(result).find('string').text();
+	},
+	error: function (msg) {
+		alert("initialization HospitalChange出错啦！");
+	}
+   });
+}
+
+
+//临床信息同步——有效性验证
+function integration_synchronization()
+{ 
+   $("#AlertSynInfoText").innerHTML="加载中...";
+   $("#AlertSynInfo").popup("open");
+   //PatientId 全局变量？
+   var syn_Hospital = document.getElementById("syn_Hospital").value;
+   var syn_ID = document.getElementById("syn_ID").value;
+   var syn_StartDate = document.getElementById("syn_StartDate").value; //输出形式""或"2015-07-03"
+
+   if (syn_StartDate == "")
+   {
+	  syn_StartDate = "1900-01-01";
+   }
+  
+   //输入有效性验证
+   var mark=0;
+   if(syn_ID =="")
+   { 
+       //$("#syn_ID").placeholder="就诊ID必填"
+	   
+	   $("#AlertSyn_ID").popup("open");
+	   setTimeout(function(){$("#AlertSyn_ID").popup("close");},1000);
+	   $("#syn_ID").focus();
+	   //document.getElementById("AlertSyn_ID").style.display = "block";
+   }
+   else
+   {
+	   mark=1;
+	   //document.getElementById("AlertSyn_ID").style.display = "none";
+   }
+   
+   if(mark==1)
+   {
+	  //document.getElementById("AlertSynInfoText").innerHTML="加载中...";
+      $("#AlertSynInfo").popup("open");
+      setTimeout(function(){integration_synchronization_continue( syn_ID,syn_StartDate,syn_Hospital);},200);
+   //integration_synchronization_continue();
+   }
+}
+
+
+//临床信息同步——数据库操作
+function integration_synchronization_continue(syn_ID,syn_StartDate,syn_Hospital)
+{   
+
+	 $.ajax({
+	type: "POST",
+	dataType: "xml",
+	timeout: 30000,
+url:'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_method=GetPatient',
+	//url: 'http://10.13.22.139:57772/csp/hz_mb/Bs.WebService.cls?soap_method=GetPatient',
+	async: false,
+	data:
+	{ 
+		UserId:localStorage.getItem('PatientId'),
+		PatientId:syn_ID,   //实际是医院就诊号
+		StartDateTime:syn_StartDate,
+		HospitalCode:syn_Hospital,
+	},
+	beforeSend: function () {
+		//滚动条显示正在加载 弹窗覆盖在上
+		//alert(localStorage.getItem('PatientId'));
+		//alert(syn_ID);
+		//alert(syn_StartDate);
+		//alert(syn_Hospital);
+		
+		//$("#AlertSynInfoText").innerHTML="加载中...";
+	     //$("#AlertSynInfo").popup("open");
+	},
+	success: function (result) {
+         $("#AlertSynInfo").popup("close");
+		 if (result != "") 
+		 {
+			  //同步成功，刷新临床信息时间轴（清空在加载）
+			  document.getElementById("demo").style.display = "block";
+		      document.getElementById("norecord").style.display = "none";
+			 document.getElementById("historyUl").innerHTML="";
+			 document.getElementById("AdmissionDateMark").value = "1897-01-01 00:00:00";  
+             document.getElementById("ClinicDateMark").value = "1897-01-01 00:00:00";
+			 document.getElementById("history_loading").style.display = "block";
+			 document.getElementById("historyButton").style.display = "none";
+             setTimeout(function(){GetMoreClinic();},500);
+			 syn_initial(); 
+		 }
+		 else 
+		 {
+			 document.getElementById("AlertSynInfoText").innerHTML="数据集成失败，请重试！";
+	          $("#AlertSynInfo").popup("open");
+	          setTimeout(function(){$("#AlertSynInfo").popup("close");},1000);
+			 //alert("数据集成失败，请重试！");
+		  }
+	},
+	error: function (msg) {
+		document.getElementById("AlertSynInfoText").innerHTML="数据集成失败，请重试！";
+	    $("#AlertSynInfo").popup("open");
+	    setTimeout(function(){$("#AlertSynInfo").popup("close");},1000);
+		alert("integration_synchronization_continue出错啦！");
+	}
+});
+    $("#AlertSynInfo").popup("close");
+
+   }
+
+
+
+  
   //获取患者就诊信息 WF
   function GetMoreClinic() {
 	  var length=0;
@@ -73,12 +265,13 @@
 						  str += '</li>';
 					  }
 					  $("#historyUl").append(str);
-					  $("#historyButton").show();
+					  //$("#historyButton").show();
+					  document.getElementById("historyButton").style.display = "block";
 				  }
 				  
 				  else {
-					  $("#historyButton").hide();
-		
+					  //$("#historyButton").hide();
+		              document.getElementById("historyButton").style.display = "none";
 				  }
 
 			  }
@@ -112,7 +305,7 @@
 	  else if(Type=="ExaminationInfo")
 	  {
 		  TypeStr+="检查信息";
-		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>检查类型</th><th data-priority='2'>检查日期</th><th>检查项目名称</th><th data-priority='4'>检查参数</th><th data-priority='5'>检查所见</th><th data-priority='6'>印象</th><th data-priority='7'>建议</th><th data-priority='8'>是否阳性</th><th data-priority='9'>检查结果状态</th><th data-priority='10'>报告日期</th><th data-priority='11'>图像地址</th><th data-priority='12'>具体参数</th></tr>";
+		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>检查类型</th><th data-priority='2'>检查日期</th><th>检查项目名称</th><th data-priority='4'>检查参数</th><th data-priority='5'>检查所见</th><th data-priority='6'>印象</th><th data-priority='7'>建议</th><th data-priority='8'>是否阳性</th><th data-priority='9'>检查结果状态</th><th data-priority='10'>报告日期</th><th data-priority='11'>图像地址</th></tr>";//<th data-priority='12'>具体参数</th>
 	  }
 	  else
 	  {
@@ -195,7 +388,7 @@
 						  var SortNo=$(this).find("SortNo").text();
 						  var ItemCode=$(this).find("ItemCode").text();
 						  
-						 var trcontent="<tr><td>"+ExamTypeName+"</td><td>"+ExamDate+"</td><td>"+ItemName+"</td><td>"+ExamPara+"</td><td>"+Description+"</td><td>"+Impression+"</td><td>"+Recommendation+"</td><td>"+IsAbnormal+"</td><td>"+Status+"</td><td>"+ReportDate+"</td><td>"+ImageURL+"</td><td id='ClinicInfoDetailByType-ExaminationInfo'><a id = "+localStorage.getItem('PatientId')+"|"+VisitId+"|"+SortNo+"|"+ItemCode+' onclick="OpenClinicInfoDetailExam(this.id);">详细</a></td></tr>';
+						 var trcontent="<tr><td>"+ExamTypeName+"</td><td>"+ExamDate+"</td><td>"+ItemName+"</td><td>"+ExamPara+"</td><td>"+Description+"</td><td>"+Impression+"</td><td>"+Recommendation+"</td><td>"+IsAbnormal+"</td><td>"+Status+"</td><td>"+ReportDate+"</td><td>"+ImageURL+"</td></tr>";//<td id='ClinicInfoDetailByType-ExaminationInfo'><a id = "+localStorage.getItem('PatientId')+"|"+VisitId+"|"+SortNo+"|"+ItemCode+' onclick="OpenClinicInfoDetailExam(this.id);">详细</a></td>
 			  
 						  $("#table-column-toggle-tbody").append(trcontent);
 					  }
@@ -2497,7 +2690,7 @@ return ret;
   //创建计划，插入Ps.Task
   function setPsTask(){
 	var task_str = "";
-	task_str += 'VitalSign#Bloodpressure|Bloodpressure_1#@' + 'VitalSign#Bloodpressure|Bloodpressure_2#@';
+	task_str += 'VitalSign#Bloodpressure|Bloodpressure_1#@' + 'VitalSign#Bloodpressure|Bloodpressure_2#@'+ 'VitalSign#Pulserate|Pulserate_1#@';
 	$("input[name='LifeStyle']:checked").each(function () {
 		task_str = task_str + this.name.toString() + '#' + this.value.toString() + '#@'; 
 	});
