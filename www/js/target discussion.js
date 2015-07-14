@@ -55,8 +55,11 @@ function OutOfTxt() //输入完成
 	$('#MainField').attr("class", "NormalField");	
 	
 }
-  
-  
+//点击后清空文本框  
+function clearContent(txt)
+	{
+		txt.value="";
+	}  
   //CreatePlanPage自运行
   $(document).on("pageinit", "#CreatePlanPage", function(){ 
       //当PlanNo状态为暂存时，把NewPlanNo=PlanNo，只要PLType不变，则不影响页面逻辑
