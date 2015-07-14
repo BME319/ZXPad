@@ -169,6 +169,7 @@ function SynInfo()
 					}
 					else
 					{
+						SetHUserId(UserId, PatientId, HospitalCode);
 						GetDetailInfo(UserId);
 						GetBasicInfo(UserId);
 						GetUserBasicInfo(UserId);	
@@ -1307,4 +1308,35 @@ function GetNewPatientID() {
 			alert("GetNewPatientID出错啦！");
 		}
 		  });
+}
+
+//插入患者在就诊医院的就诊号
+function SetHUserId(UserId, HUserId, HospitalCode)
+{
+	$.ajax({
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,
+		url: 'http://' + serverIP + '/' + serviceName + '/SetHUserId',
+		async: false,
+		data:
+		{
+			UserId: UserId,
+			HUserId: HUserId,
+			HospitalCode: HospitalCode,
+			Description: '',
+			revUserId: revUserId,
+			TerminalName: TerminalName,
+			TerminalIP: TerminalIP,
+			DeviceType: DeviceType
+		},
+		beforeSend: function () {
+		},
+		success: function (result) {
+			var Flag = $(result).find("boolean").text();
+		},
+		error: function (msg) {
+			alert("GetNewPatientID出错啦！");
+		}
+	});
 }
