@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="css/SMSForHyper.css">
 <link href="css/risk evaluation.css" rel="stylesheet" type="text/css" />
 <link href="css/chosen.css" rel="stylesheet" type="text/css" />
+<link href="css/Clinic-timeLine.css" rel="stylesheet" type="text/css" />
 <!--<script src="js/jquery-2.1.3.js"></script>
 <script src="js/jquery.mobile-1.4.2.js"></script>-->
 <script src="js/jquery-2.1.3.js"></script>
@@ -26,6 +27,7 @@
 <script type="text/javascript" src="js/BasicInfoPage.js"></script>
 <script type="text/javascript" src="js/ProfilePage.js"></script>
 <script type="text/javascript" src="js/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="js/ClinicInfo.js"></script>
 </head>
 <body>
 <style type="text/css">
@@ -151,6 +153,10 @@ div#ModuleInfoDiv.ui-grid-a .ui-block-b {
 	font-weight: bold;
  //text-align: center;
  //border: 1px solid #F00;
+}
+#detail_overflow a.ui-table-columntoggle-btn.ui-btn.ui-btn-a.ui-corner-all.ui-shadow.ui-mini
+{
+	display:none;
 }
 </style>
 <div data-role="page"> 
@@ -367,12 +373,135 @@ div#ModuleInfoDiv.ui-grid-a .ui-block-b {
       <p>慢病信息</p>
     </div>
   </div>
-  <div data-role="panel" data-position="right" data-position-fixed="false" data-display="overlay" data-theme="a" id="ClinicInfoPanel" data-dismissible="false"
-      style="z-index: 2000;">
-    <div> <a href="#page_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" ></a>
-      <p>临床信息</p>
+  
+  
+ <div data-role="panel" data-position="right" data-position-fixed="false" data-swipe-close="false" data-display="overlay" data-theme="a" id="ClinicInfoPanel" data-dismissible="false" style="z-index:1000;">
+    <div> <a href="#page_header" data-rel="close" data-role="button" data-icon="arrow-l" data-iconpos="notext" ></a>
+      <p style="font-size:22px;font-weight:bold;margin-bottom:0px;margin-top:0px;margin-top: -40px;margin-left: 50px;">临床信息</p>
+        </div>
+      
+            <div data-role="fieldcontain" style="margin-bottom:0px;margin-top: 0px;">
+              <table>
+                  <tr>
+                  <td><label for="syn_Hospital" style="width:80px">就诊医院</label></td>
+                  <td width="300px"><select name="syn_Hospital" size="" id="syn_Hospital" style="height:40px" data-native-menu="false" ></select></td>
+                  <td width="50px"></td>
+                  <td><label for="syn_ID" style="width:80px">就诊ID</label></td>
+                  <td width="300px"><input type="text" name="syn_ID" id="syn_ID" style="height:40px"></td>  
+                  </tr>
+              </table>
+      </div>   
+      <div data-role="fieldcontain" style="margin-bottom:0px;margin-top: 0px;">
+              <table>
+                <tr>
+                  <td><label for="syn_StartDate" style="width:80px">起始日期</label></td>
+                  <td width="260px"><input type="date" name="syn_StartDate" id="syn_StartDate" style="height:40px"></td>
+                  <td width="50px"></td>
+                  <td width="50px"><button data-theme="a" onclick="synchronization()">同步</button></td>
+                </tr>
+              </table>
+       </div>
+      
+     <div data-role="popup" id="AlertSyn_ID" data-position-to="#syn_ID" >
+          <p  style="font-size:20px;color:red;">就诊ID必填！</p>
+      </div>
+      <div data-role="popup" id="AlertSynInfo" data-position-to="" >
+          <p style="font-size:24px;color:blue;" id="AlertSynInfoText"><b>同步中...</b></p>
+      </div>
+        
+        
+ <div style="height:350px;width;overflow:auto;" >
+      <div id="ClinicInfoContent" >
+      <input id="AdmissionDateMark" name="AdmissionDateMark" type="hidden" value="1897-01-01 
+
+00:00:00" />
+      <input id="ClinicDateMark" name="ClinicDateMark" type="hidden" value="1897-01-01 
+
+00:00:00" />
+      <div id="norecord" style="display: none; margin-top: 20px;margin-bottom:40px;" 
+
+align="center">
+        <p style="font-size: 20px; color: Red;">还没有任何临床信息</p>
+      </div>
+      <div class="demo" id="demo" style="display: block;margin-top:30px;">
+        <div class="history">
+          <div class="history-date">
+            <ul id="historyUl">
+            </ul>
+          </div>
+        </div>
+        
+        <div class="white" style="height:20px;"> </div>
+
+        <div id="history_loading" style="display: none; margin-top:0px" align="center"> <img alt="Load" src="img/history_loading.gif" style="width:50px;height:50px;" />
+          <p>加载中，请稍后</p>
+        </div>
+        <div style="height:30px;text-align:center;"> 
+        <button data-theme="a" onclick="GetMoreClinicBut();" id="historyButton" style="width:60%;margin:0 auto;">加载更多</button>
+        </div>
+        
+       <div data-role="popup" id="pop_historyLoading" data-position-to="" data-dismissible="false">
+           <img alt="Load" src="img/history_loading.gif" style="width:50px;height:50px;" />
+          <p>加载中，请稍后</p>
+      </div>
+       <div class="white" style="height:20px;"> </div>
+        <!--<div id="historyButton">
+                    <input type="button" style="width:800px;height:40px;" class="btn btn-
+
+primary" onclick="GetMoreClinic();" value="加载更多" />
+                </div>--> 
+      </div>
     </div>
-  </div>
+      
+   </div>   
+      
+    </div>
+
+  
+  
+  
+  <div data-role="popup" id="ClinicalDetailPop" class="ui-content" style="width:70%;z-index:3000;margin-left:15%;" data-dismissible="false" data-position-to="window"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a>
+  
+    <div id="detailTitle" align="center">
+      <h2 id = "DetailType" style="margin-bottom: 0px; margin-top: 0px;"></h2>
+    </div>
+    
+    <table cellpadding="3" style="margin-top:5px;">
+      <tr>
+        <td width="8%" style="border: 0;"> 患者ID: </td>
+        <td id="ClinicalDetail_PatientId" width="15%" style="border: 0;" ></td>
+        <td width="10%" style="border: 0;"> 患者姓名: </td>
+        <td id = "ClinicalDetail_UserName" width="10%" style="border: 0;"></td>
+        <td width="8%" style="border: 0;"> 日期: </td>
+        <td id= "ClinicalDetail_NowDate" width="15%" style="border: 0;"></td>
+      </tr>
+    </table>
+    
+    <div style="height:160px;overflow:auto;" id="detail_overflow">
+    <table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" data-column-btn-text="显示/隐藏">
+      <thead id = "table-column-toggle-thead">
+      </thead>
+      <tbody id = "table-column-toggle-tbody">
+      </tbody>
+    </table>
+    </div>
+    <br />
+    <br />
+    
+    <div style="height:150px;overflow:auto;" id="detail_detail_overflow">
+    <table id="table-ClinicInfoDetailByType" class="dtypetable">
+      <thead id = "table-ClinicInfoDetailByType-thead">
+      </thead>
+      <tbody id = "table-ClinicInfoDetailByType-tbody">
+      </tbody>
+    </table>
+    </div>
+
+  
+</div>
+  
+  
+  
   <div data-role="panel" data-position="right" data-position-fixed="false" data-display="overlay" data-theme="a" id="PlanPanel" data-dismissible="false"
       style="z-index: 2000;">
     <div> <a href="#page_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" ></a>
@@ -526,7 +655,7 @@ div#ModuleInfoDiv.ui-grid-a .ui-block-b {
         <div align="center">
           <h> <b>患者综合信息管理</b> </h>
         </div>
-        <div data-role="controlgroup" data-corners="false"> <a id="navBasicInfo" href="#BasicInfoPanel" data-role="button">基本信息</a> <a id='navClinicInfo' href="#ClinicInfoPanel" data-role="button">临床信息</a> <a id="navModuleInfo" href="#ModuleInfoPanel" data-role="button">慢病信息</a><a id='navRisk' href="#RiskPanel" data-role="button">风险评估</a><a id='navPlan' href="#PlanPanel" data-role="button">创建与调整计划</a> <a id="navSMS" href="#SMSPanel" data-role="button" onclick = "HyperSetSMS()">即时消息</a> <a id="navInvite" href="#InvitationInfoPage" data-role="button" onClick="showInvitationInfoPage()">发送邀请</a></div>
+        <div data-role="controlgroup" data-corners="false"> <a id="navBasicInfo" href="#BasicInfoPanel" data-role="button">基本信息</a> <a id='navClinicInfo' href="#" data-role="button" onclick="OpenClinicInfoPanel()">临床信息</a><a id="navModuleInfo" href="#ModuleInfoPanel" data-role="button">慢病信息</a><a id='navRisk' href="#RiskPanel" data-role="button">风险评估</a><a id='navPlan' href="#PlanPanel" data-role="button">创建与调整计划</a> <a id="navSMS" href="#SMSPanel" data-role="button" onclick = "HyperSetSMS()">即时消息</a> <a id="navInvite" href="#InvitationInfoPage" data-role="button" onClick="showInvitationInfoPage()">发送邀请</a></div>
       </div>
     </div>
     <div  style="width:80%;float:left;margin-top:0px;">
@@ -795,10 +924,7 @@ div#ModuleInfoDiv.ui-grid-a .ui-block-b {
 				}
   			   	$.mobile.loading( "hide" ); 
 		  });
-			
-			
 
-		  
 	</script>
 
 </body>

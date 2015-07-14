@@ -567,6 +567,8 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
     </div>
   </div>
 </div>
+
+
 <div data-role="page" id="ClinicInfoPage">
   <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
     <h1>临床信息</h1>
@@ -590,6 +592,37 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
       </div>
       <div class="ui-block-c"> </div>
     </div>
+    
+     <div data-role="fieldcontain" style="margin-bottom:0px;margin-top: 0px;">
+              <table>
+                  <tr>
+                  <td><label for="syn_Hospital" style="width:80px">就诊医院</label></td>
+                  <td width="300px"><select name="int_Hospital" size="" id="syn_Hospital" style="height:40px" data-native-menu="false" ></select></td>
+                  <td width="50px"></td>
+                  <td><label for="syn_ID" style="width:80px">就诊ID</label></td>
+                  <td width="300px"><input type="text" name="syn_ID" id="syn_ID" style="height:40px"></td>  
+                  </tr>
+              </table>
+      </div>   
+      <div data-role="fieldcontain" style="margin-bottom:0px;margin-top: 0px;">
+              <table>
+                <tr>
+                  <td><label for="syn_StartDate" style="width:80px">起始日期</label></td>
+                  <td width="300px"><input type="date" name="syn_StartDate" id="syn_StartDate" style="height:40px"></td>
+                  <td width="50px"></td>
+                  <td width="50px"><button data-theme="a" onclick="integration_synchronization()">同步</button></td>
+                </tr>
+              </table>
+       </div>
+      
+     <div data-role="popup" id="AlertSyn_ID" data-position-to="#syn_ID" >
+          <p  style="font-size:20px;color:red;">就诊ID必填！</p>
+      </div>
+       <div data-role="popup" id="AlertSynInfo" data-position-to="" >
+          <p style="font-size:24px;color:blue;" id="AlertSynInfoText"><b>同步中...</b></p>
+      </div>
+    
+
     <div id="ClinicInfoContent" >
       <input id="AdmissionDateMark" name="AdmissionDateMark" type="hidden" value="1897-01-01 00:00:00" />
       <input id="ClinicDateMark" name="ClinicDateMark" type="hidden" value="1897-01-01 00:00:00" />
@@ -652,6 +685,8 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
     </table>
   </div>
 </div>
+
+
 <div data-role="page" id="ModuleInfoPage">
   <div data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:45px"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
     <h1>慢病信息</h1>
@@ -1175,7 +1210,7 @@ $.mobile.loading( "hide" );
 
   //ClinicInfoPage自运行
   $(document).on("pageinit", "#ClinicInfoPage", function(){
-
+     
 	 /*localStorage.setItem('UserId', 'D003');
 	  localStorage.setItem('TerminalName', 'ZC-PC');
 	  localStorage.setItem('TerminalIP', '10.12.43.94');
@@ -1188,6 +1223,7 @@ $.mobile.loading( "hide" );
 	  localStorage.setItem('PLType', '1');*/
 	  
 	  $("#PatientId").text(localStorage.getItem('PatientId'));
+	  integration_initial();
 	  
 	  L = GetMoreClinic();
 	  if(L > 0){
@@ -1201,7 +1237,11 @@ $.mobile.loading( "hide" );
 		  target.style.display = "none";
 		  var target = document.getElementById("norecord");
 		  target.style.display = "block";
-      }
+      } 
+
+	  $('#syn_Hospital').change(function(){ 
+	      HospitalChange($(this).children('option:selected').val());  //下拉框切换体征
+	   });
   });
   
  
