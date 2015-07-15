@@ -2799,7 +2799,8 @@ return ret;
   //得到任务清单
   function GetPsTask(){
 	  	var task_str = "";
-		task_str += 'VitalSign#Bloodpressure|Bloodpressure_1#@' + 'VitalSign#Bloodpressure|Bloodpressure_2#@';
+		//task_str += 'VitalSign#Bloodpressure|Bloodpressure_1#@' + 'VitalSign#Bloodpressure|Bloodpressure_2#@';
+		task_str += 'VitalSign#Bloodpressure|Bloodpressure_1#@' + 'VitalSign#Bloodpressure|Bloodpressure_2#@'+ 'VitalSign#Pulserate|Pulserate_1#@';
 		$("input[name='LifeStyle']:checked").each(function () {
 			task_str = task_str + this.name.toString() + '#' + this.value.toString() + '#@'; 
 		});
