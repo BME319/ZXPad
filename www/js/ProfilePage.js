@@ -1608,6 +1608,7 @@ function GetNewPatientID() {
 				beforeSend: function(){},
 		        success: function(result) { 
 				//&& ""!=result.trim()
+				var UserId = localStorage.getItem("PatientId");
 				 var Flag = 1;
 				 var test = $(result).find('Table1').length;
 				 //test= 0;
@@ -1941,7 +1942,7 @@ function GetNewPatientID() {
 			
 			//修改健康模块中的一条信息
 			function SetPatBasicInfoDetail(CategoryCode,ItemCode,ItemSeq,value,Description,SortNo){
-				
+				var UserId = localStorage.getItem("PatientId");
 				$.ajax({  								
 		        	type: "POST",
 		        	dataType: "xml",
