@@ -709,6 +709,9 @@ primary" onclick="GetMoreClinic();" value="加载更多" />
   </div>
   <div data-role="panel" data-position="right" data-position-fixed="false" data-display="overlay"
             data-theme="a" id="editPlan" data-dismissible="false">
+    <div> <a href="#page_header" data-rel="close" data-role="button" data-icon="arrow-r" data-iconpos="notext" ></a>
+      <p>创建与编辑计划</p>
+    </div>
     <div data-role="navbar" data-position="fixed">
       <div class="ui-grid-b">
         <div class="ui-block-a">
@@ -747,7 +750,7 @@ primary" onclick="GetMoreClinic();" value="加载更多" />
       <div data-role="fieldcontain">
         <label style="width: 50%"> 结束日期</label>
         <!--<input type="hidden" value="" id="StartDate" />-->
-        <input type="text" value="" id="EndDate" onclick="WdatePicker({minDate:'%y-%M-%d'})" />
+        <input type="date" value="" id="EndDate"  />
       </div>
       <input type="button" data-inline="true" data-transition="turn" data-theme="a" onclick="resetTarget()"
                     data-icon="edit" data-iconpos="left" value="重&nbsp置">
@@ -766,7 +769,7 @@ primary" onclick="GetMoreClinic();" value="加载更多" />
               <th> </th>
               <th> 说明 </th>
               <th> 效果 </th>
-              <th> 副作用 </th>
+              <th style="display:none"> 副作用 </th>
             </tr>
           </thead>
           <tbody id="LifeStyleBody">
