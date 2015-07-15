@@ -86,8 +86,15 @@
 	
 	function saveTarget(){
 		//不进行数据库操作，只跳转到下一个界面
-		panelnav2();
-		$("#nav1").addClass("ui-btn-active");
+		var curSBPValue = $("#curSBPValue").val();
+		var curDBPValue = $("#curDBPValue").val();
+		if(curSBPValue==""||curDBPValue==""){
+			alert("当前收缩压和舒张压必填！");
+		}
+		else{
+			panelnav2();
+			$("#nav1").addClass("ui-btn-active");
+		}
 	}
 	
 	function gotoTarget(){
@@ -479,11 +486,13 @@
 		var curSBPValue = $("#curSBPValue").val();
 		var curDBPValue = $("#curDBPValue").val();
 		
+		
 		var StartDate = new Date().Format("yyyyMMdd");
 		var EndDate = $("#EndDate").val().replace(/-/g,"");
 		
 		if(PlanNo == "")
 		{
+			
 		}
 		else
 		{
@@ -495,7 +504,8 @@
 		InsertTargetBP(NewPlanNo,1,"Bloodpressure","Bloodpressure_1",SBPValue,curSBPValue);
 		InsertTargetBP(NewPlanNo,2,"Bloodpressure","Bloodpressure_2",DBPValue,curDBPValue);
 		//alert(NewPlanNo);
-		
+		InsertCurBP(curSBPValue,"Bloodpressure_1");
+			InsertCurBP(curDBPValue,"Bloodpressure_2");
 	  
 	var task_str = "";
 	//task_str += 'VitalSign#Bloodpressure|Bloodpressure_1#@' + 'VitalSign#Bloodpressure|Bloodpressure_2#@';
@@ -673,3 +683,60 @@
     return fmt;
 }
 
+ 	//插入当前收缩压 Ps.VitalSign
+    function InsertCurBP(CurSbp,ItemCode)
+    {
+		var ret = false;
+	  //var CurSbp=$('#TextInput1').val();
+
+		  var RecordDate ="";
+		  var RecordTime = "";
+		  
+		  $.ajax({  
+			  type: "POST",
+			  dataType: "xml",
+			  timeout: 30000,  
+			  url: 'http://'+ serverIP +'/'+serviceName+'/GetServerTime',
+			  async:false,
+			  data: {},
+			  beforeSend: function(){},
+			  success: function(result) {
+				  RecordDate =  $(result).text().slice(0,10).replace(/-/g,"");	
+				  RecordTime = $(result).text().slice(11,16).replace(/:/g,"");	 
+			  }, 
+			  error: function(msg) {alert("Error!");}
+		  });
+	  
+		  $.ajax({  
+			  type: "POST",
+			  dataType: "xml",
+			  timeout: 30000,  
+			  url: 'http://'+ serverIP +'/'+serviceName+'/SetPatientVitalSigns',
+			  async:false,
+			  data: {UserId:localStorage.getItem('PatientId'),
+					 RecordDate:RecordDate,
+					 RecordTime:RecordTime,
+					 ItemType:"Bloodpressure",
+					 ItemCode:ItemCode,
+					 Value:CurSbp,
+					 Unit:"mmHg",
+					 revUserId:localStorage.getItem('UserId'),
+					 TerminalName:localStorage.getItem('TerminalName'),
+					 TerminalIp:localStorage.getItem('TerminalIp'),
+					 DeviceType:localStorage.getItem('DeviceType')
+					 },//输入变量
+			  beforeSend: function(){},
+			  success: function(result) {
+				 ret =  $(result).text();
+//				  //alert(RecordDate);
+//				  var SBP = CurSbp;
+//				  GetDescription(SBP); 
+		 
+			 },
+			 error: function(msg) {alert("InsertcurBPError!");
+			 
+			 ret =false;} 
+		  });
+	  return ret;
+    }  
+   
