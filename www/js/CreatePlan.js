@@ -209,7 +209,7 @@ url:'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_met
 			 document.getElementById("history_loading").style.display = "block";
 			 document.getElementById("historyButton").style.display = "none";
              setTimeout(function(){GetMoreClinic();},500);
-			 syn_initial(); 
+			 integration_initial(); 
 		 }
 		 else 
 		 {
