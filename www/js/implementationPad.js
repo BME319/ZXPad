@@ -15,7 +15,7 @@
         dataType: "json",
 		timeout: 30000,  
 		url: 'http://'+ serverIP +'/'+serviceName+'/GetImplementationForPadFirst',
-		//async:false,
+		async:false,
         data: {PatientId:PatientId, 
 		        Module:Module,
 			  },
@@ -177,6 +177,7 @@ function showDetailInfo(event)
 	//清空弹框内内容
 	//$("#ul_targetDetial li").remove();
 	$('#ul_targetDetial').find("li").remove();
+	document.getElementById("ul_targetDetial").innerHTML="";
 	
 	//获取被点击的bullet的时间值，事件格式，许处理成string"20150618"格式传到webservice
 	var dateSelected=event.item.category;
@@ -205,7 +206,7 @@ function showDetailInfo(event)
         dataType: "json",
 		//timeout: 30000,  
 	url: 'http://'+ serverIP +'/'+serviceName+'/GetImplementationByDate',
-		//async:false,
+		async:false,
         data: {PatientId:PatientId, 
 		        PlanNo:NowPlanNo,
 				DateSelected:theDate
@@ -480,7 +481,7 @@ function showDetailInfo(event)
 				},
 				chartCursorSettings:{
 					zoomable:false,
-					pan:true,
+					//pan:true,
 					usePeriod: "7DD",
 					//pan:false,
 				    //zoomable:true,
@@ -535,7 +536,7 @@ function showDetailInfo(event)
         dataType: "json",
 		//timeout: 30000,  
 		url: 'http://'+ serverIP +'/'+serviceName+'/GetSignInfoByCode',
-		//async:false,
+		async:false,
         data: {PatientId:PatientId, 
 		        PlanNo:NowPlanNo,
 				ItemCode:ItemCode, 
@@ -1031,7 +1032,7 @@ function rechange(loop){
 				chartCursorSettings:{
 					usePeriod: "7DD",
 				    zoomable:false,
-					pan:true,
+					//pan:true,
 					//leaveCursor:"false",
 					//cursorPosition:"middle",
 					categoryBalloonEnabled:false,

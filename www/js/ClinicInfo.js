@@ -1,10 +1,16 @@
+
+  //同步时间控件清零
+  function Date_clear()
+  {
+	  document.getElementById("syn_StartDate").value="";
+  }  
   
-  
-  		  //临床信息同步的下拉选项改变 监控
+  //临床信息同步的下拉选项改变 监控
   $('#syn_Hospital').change(function(){ 
 	      HospitalChange($(this).children('option:selected').val());  //下拉框切换体征
 	   });	
   
+  //弹出临床信息页面
  function OpenClinicInfoPanel()
 {
 	//弹出框，正在加载中
@@ -13,6 +19,7 @@
     document.getElementById("history_loading").style.display = "block";
     setTimeout(function(){Clinic_initialization();},200);
 	
+	/*
 	var opt = {
         preset: 'date', //日期
         theme: 'jqm', //皮肤样式
@@ -27,6 +34,7 @@
     };
     
     $('input:jqmData(role="datebox")').mobiscroll(opt);
+	*/
 }
   
   
@@ -88,7 +96,7 @@
 		  type: "GET",
 		  dataType: "json",
 		  async: false,
-		  data: { UserId: localStorage.getItem('PatientId'), AdmissionDate: admissionDateMark, ClinicDate: clinicDateMark, Num: 1},//localStorage.getItem('PatientId')
+		  data: { UserId: localStorage.getItem('PatientId'), AdmissionDate: admissionDateMark, ClinicDate: clinicDateMark, Num: 10},//localStorage.getItem('PatientId')
 		  success: function (res) {
 
 			  document.getElementById("AdmissionDateMark").value = res.AdmissionDateMark;  
@@ -352,6 +360,9 @@ function syn_initial()
 	beforeSend: function () {
 	},
 	success: function (result) {
+		
+		document.getElementById("syn_Hospital").innerHTML="";
+		
 		var str_Hospital='';
 		$(result).find('Table1').each(function(){	
 		   var syn_HosCode= $(this).find("Code").text();
@@ -382,7 +393,7 @@ function syn_initial()
 	beforeSend: function () {
 	},
 	success: function (result) {
-		
+		  document.getElementById("syn_ID").value="";
 		  document.getElementById("syn_ID").value=$(result).find('string').text();
 
 	},
