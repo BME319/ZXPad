@@ -64,7 +64,8 @@ $(document).ready(function (event) {
 function CheckPhone()
 {
 	var PhoneNo = document.getElementById("PhoneNo").value;
-	var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;
+	//var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;
+	var isMob = /^1[3|4|5|7|8][0-9]\d{8}$/;
 	if(!isMob.test(PhoneNo))
 	{
 		document.getElementById("AlertRegistPhone").style.display = "block";
@@ -228,7 +229,8 @@ function SaveInfo()
 	var lengthIDNo = $("#IDNo").val().length;
 	var reg = /^\d+(?=\.{0,1}\d+$|$)/;
 	var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;	//2015-5-22 ZCY增加
-	var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;	//2015-5-22 ZCY增加
+	//var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;	//2015-5-22 ZCY增加
+	var isMob = /^1[3|4|5|7|8][0-9]\d{8}$/;
 	document.getElementById("Loading").style.display = "block";
 		$.mobile.loading('show', {  
 			text: '保存信息中...', //加载器中显示的文字  
