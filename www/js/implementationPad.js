@@ -224,7 +224,7 @@ function showDetailInfo(event)
 			str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">体征测量</h3>';
 		for(var j=0;j<data.VitalTaskComList.length;j++)
 		{
-			if(data.VitalTaskComList[j].Status=="1"){
+			if(data.VitalTaskComList[j].TaskStatus=="1"){
 			str+='<p style="margin-left:10px;font-size:14px;white-space:pre-wrap;">✔ '+data.VitalTaskComList[j].SignName+'<span style="margin-left:10px;"> '+data.VitalTaskComList[j].Value+''+data.VitalTaskComList[j].Unit+'</span> <span style="margin-left:10px;">'+data.VitalTaskComList[j].Time+'</span></p>';
 			}
 			else
@@ -249,7 +249,7 @@ function showDetailInfo(event)
 				 for(var j=0;j<data.TaskComByTypeList[i].TaskComList.length;j++)
 				 {
 					 
-					 if(data.TaskComByTypeList[i].TaskComList[j].Status=="1")
+					 if(data.TaskComByTypeList[i].TaskComList[j].TaskStatus=="1")
 					{
 				  str+='<span style="margin-left:10px;">✔ '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'</span>';
 				  
@@ -268,7 +268,7 @@ function showDetailInfo(event)
 			
 				for(var j=0;j<data.TaskComByTypeList[i].TaskComList.length;j++)
 				{
-					if(data.TaskComByTypeList[i].TaskComList[j].Status=="1")
+					if(data.TaskComByTypeList[i].TaskComList[j].TaskStatus=="1")
 					{
 						str+='<p style="font-size:14px;white-space:pre-wrap;"><span style="margin-left:10px;">✔ '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'</span></p>';
 						
