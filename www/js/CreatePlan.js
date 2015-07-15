@@ -31,6 +31,13 @@
   } 
   
   
+  //同步时间控件清零
+    function Date_clear()
+  {
+	  document.getElementById("syn_StartDate").value="";
+  }
+  
+  
    //进入临床信息页面调取初始化函数
 function integration_initial()
 {   
@@ -47,6 +54,9 @@ function integration_initial()
 	beforeSend: function () {
 	},
 	success: function (result) {
+		
+		document.getElementById("syn_Hospital").innerHTML="";
+		
 		var str_Hospital='';
 		$(result).find('Table1').each(function(){	
 		   var syn_HosCode= $(this).find("Code").text();
@@ -78,6 +88,7 @@ function integration_initial()
 	},
 	success: function (result) {
 		
+		   document.getElementById("syn_ID").value="";
 		  document.getElementById("syn_ID").value=$(result).find('string').text();
 
 	},
