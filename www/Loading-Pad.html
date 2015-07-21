@@ -86,14 +86,14 @@
 												if (Role == "HealthCoach")
 												{
 													window.localStorage.setItem("AutoLogOn","Yes");
-													HealthCoach = 1;
+													isHealthCoach = 1;
 													//alert("登陆成功");	
 													setTimeout(function(){
 														location.href = "HomePage.html";
 													},1000)
 												}
 											});
-											if (HealthCoach == 0)
+											if (isHealthCoach == 0)
 											{
 												location.href = "LogOn-Pad.html";
 											}
