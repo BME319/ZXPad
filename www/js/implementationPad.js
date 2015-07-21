@@ -134,7 +134,7 @@
 			          createStockChart(data.ChartData);
 					  //监听下部图的bullet点 的点击事件
 					  
-					  setTimeout(function(){chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); },500);
+					  setTimeout(function(){chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); },1000);
 					  //chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); 
 					  //监听下部图的横坐标lable 的点击事件
 					 //chart.panels[1].categoryAxis.addListener("clickItem",showDetailInfo);
@@ -224,7 +224,7 @@ function showDetailInfo(event)
 			str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">体征测量</h3>';
 		for(var j=0;j<data.VitalTaskComList.length;j++)
 		{
-			if(data.VitalTaskComList[j].TaskStatus=="1"){
+			if(data.VitalTaskComList[j].Status=="1"){
 			str+='<p style="margin-left:10px;font-size:14px;white-space:pre-wrap;">✔ '+data.VitalTaskComList[j].SignName+'<span style="margin-left:10px;"> '+data.VitalTaskComList[j].Value+''+data.VitalTaskComList[j].Unit+'</span> <span style="margin-left:10px;">'+data.VitalTaskComList[j].Time+'</span></p>';
 			}
 			else
@@ -395,10 +395,11 @@ function showDetailInfo(event)
 							//type: "line",
 							id: "graph1",
                             valueField: "SignValue",
-							lineColor: "#7f8da9",
-							lineColorField:"SignColor",
-							lineThickness : 0,
-							lineAlpha:0,
+							lineColor: "#EA7500",
+							//lineColorField:"SignColor",
+							lineThickness : 3,
+							lineAlpha:1,
+							//connect:false,
 							bullet: "round",
 							bulletField:"SignShape",
 							bulletSize:12,
@@ -990,10 +991,12 @@ function rechange(loop){
 							//type: "line",
 							id: "graph1",
                             valueField: "SignValue",
-							lineColor: "#7f8da9",
-							lineColorField:"SignColor",
-							lineThickness : 0,
-							lineAlpha:0,
+							//lineColor: "#7f8da9",
+							lineColor: "#EA7500",
+							//lineColorField:"SignColor",
+							lineThickness : 3,
+							lineAlpha:1,
+							//connect:false,
 							bullet: "round",
 							bulletField:"SignShape",
 							bulletSize:12,

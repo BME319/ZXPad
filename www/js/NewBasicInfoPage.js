@@ -380,6 +380,9 @@ function SaveInfo()
 			
 		SetPhoneRole(PhoneNo, UserId, UserName);
 		SetBasicInfo(UserId, UserName, Birthday, Gender, BloodType, IDNo, DoctorId, InsuranceType, InvalidFlag, revUserId, TerminalName, TerminalIP, DeviceType);
+		//购买高血压模块
+	    SetDetailInfo(UserId, "M1", "InvalidFlag", 1, "0", "", 1, revUserId, TerminalName, TerminalIP, DeviceType);
+
 		var Flag = document.getElementById("Flag").value;
 		SetDetailInfo(UserId, "Contact", "Contact001_1", ItemSeq, IDNo, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
 		var Flag1 = document.getElementById("Flag").value;
