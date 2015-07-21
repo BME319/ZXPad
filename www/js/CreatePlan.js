@@ -292,6 +292,7 @@ url:'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_met
 	  return length;
   }
 
+
   function OpenClinicInfoDetail(keycode) {
 
 	  var keycode_split=keycode.split("|",3);
@@ -305,23 +306,23 @@ url:'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_met
 	  if(Type=="DrugRecord")
 	  {
 		  TypeStr+="用药信息";
-		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>长期医嘱标志</th><th data-priority='2'>药嘱类别</th><th>药嘱内容</th><th data-priority='4'>药品一次使用剂量</th><th data-priority='5'>剂量单位</th><th data-priority='6'>给药途径</th><th data-priority='7'>开始时间</th><th data-priority='8'>结束时间</th><th data-priority='9'>执行频率描述</th></tr>";
+		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>长期医嘱标志</th><th data-priority='1'>药嘱类别</th><th>药嘱内容</th><th data-priority='1'>药品一次使用剂量</th><th data-priority='1'>剂量单位</th><th data-priority='1'>给药途径</th><th data-priority='1'>开始时间</th><th data-priority='1'>结束时间</th><th data-priority='1'>执行频率描述</th></tr>";
 			   
 	  }
 	  else if(Type=="DiagnosisInfo")
 	  {
 		  TypeStr+="诊断信息";
-		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>诊断类型</th><th data-priority='2'>诊断种类</th><th>诊断名称</th><th data-priority='4'>描述</th><th  data-priority='5'>记录时间</th></tr>";
+		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>诊断类型</th><th data-priority='1'>诊断种类</th><th>诊断名称</th><th data-priority='1'>描述</th><th  data-priority='1'>记录时间</th></tr>";
 	  }
 	  else if(Type=="ExaminationInfo")
 	  {
 		  TypeStr+="检查信息";
-		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>检查类型</th><th data-priority='2'>检查日期</th><th>检查项目名称</th><th data-priority='4'>检查参数</th><th data-priority='5'>检查所见</th><th data-priority='6'>印象</th><th data-priority='7'>建议</th><th data-priority='8'>是否阳性</th><th data-priority='9'>检查结果状态</th><th data-priority='10'>报告日期</th><th data-priority='11'>图像地址</th></tr>";//<th data-priority='12'>具体参数</th>
+		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>检查类型</th><th data-priority='1'>检查日期</th><th>检查项目名称</th><th data-priority='1'>检查参数</th><th data-priority='1'>检查所见</th><th data-priority='1'>印象</th><th data-priority='1'>建议</th><th data-priority='1'>是否阳性</th><th data-priority='1'>检查结果状态</th><th data-priority='1'>报告日期</th><th data-priority='1'>图像地址</th></tr>";//<th data-priority='12'>具体参数</th>
 	  }
 	  else
 	  {
 		  TypeStr+="化验信息";
-		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>化验类型</th><th>化验项目名称</th><th data-priority='6'>化验日期</th><th data-priority='4'>化验结果状态</th><th data-priority='5'>报告日期</th><th data-priority='3'>具体参数</th></tr>";
+		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>化验类型</th><th>化验项目名称</th><th data-priority='1'>化验日期</th><th data-priority='1'>化验结果状态</th><th data-priority='1'>报告日期</th><th data-priority='1'>具体参数</th></tr>";
 	  }
 	  document.getElementById("DetailType").innerHTML=TypeStr;
 	  document.getElementById("NowDate").innerHTML=DateT.substr(0,10);
@@ -425,6 +426,20 @@ url:'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_met
 				  }); 
 			  }
 		  });
+		  
+		  /*
+		if(Type=="LabTestInfo")
+	  {
+		    document.getElementById("detail_detail_overflow").style.display = "block";
+			document.getElementById("detail_overflow").style.height=200;
+	  }
+	  else
+	  {
+		  document.getElementById("detail_detail_overflow").style.display = "none";
+		  document.getElementById("detail_overflow").style.height=160;
+	  }
+		  
+		  */
 	  $("#table-column-toggle").table("refresh");
 	  $( "#ClinicInfoDetail-form" ).trigger( "updatelayout" );
   }
@@ -506,6 +521,7 @@ url:'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_met
 	  $("#table-ClinicInfoDetailByType").table("refresh");
 	  $( "#ClinicInfoDetail-form" ).trigger( "updatelayout" );
   }
+  
   
   //从数据库中读取用户当前收缩压值
   function GetCurrentSBP(PatientId){
@@ -2777,10 +2793,13 @@ return ret;
 				  if(Status == 3)
 				  {
 					  //alert("Plan " + PlanNo + " starts");
-		alert("新建计划： " + PlanNo + " 成功！");
+		console.log("新建计划： " + PlanNo + " 成功！");
+		//popup dialog
+		
+//				$("#GoToInvitePage").removeAttr("disabled").parent().removeClass("ui-state-disabled");
+								$("#GoToInvitePage").removeAttr("disabled");
 
-					  //location.href = "HomePage.html?";	//ZAM 2015-5-4
-					  //location.href = "#InvitationInfoPage";
+
 				  }
 				  else
 				  {
@@ -2789,10 +2808,10 @@ return ret;
 			  }
 			  else
 			  {		
-				  alert("失败");
+				  alert("新建计划失败");
 			  }				    
 		 }, 
-		 error: function(msg) {alert("Error!");}
+		 error: function(msg) {alert("Error! SetPlan");}
      });	
   }
   
@@ -2929,7 +2948,7 @@ return ret;
 				  alert("该计划还没有目标");
 		 	  }				    
 		  }, 
-	      error: function(msg) {alert("Error!");}
+	      error: function(msg) {alert("Error! GetPsTarget");}
       });	
   }
 	
@@ -2957,7 +2976,7 @@ return ret;
 				  alert("计划读取失败");
 			  }				    
 		  }, 
-		  error: function(msg) {alert("Error!");}
+		  error: function(msg) {alert("Error! GetPlanInfo");}
 	  });	
   }
   
@@ -2981,7 +3000,7 @@ return ret;
 		  success: function(result) {
 			  var ret =  $(result).text();			    
 		 }, 
-		 error: function(msg) {alert("Error!");}
+		 error: function(msg) {alert("Error! SetCompliance");}
      });
   }
   

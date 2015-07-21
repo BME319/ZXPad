@@ -305,7 +305,6 @@ function InitialSMSBox()
 
 		for(var i in OverDueArr)
 		{
-			 // var trcontent = '<p id="'+OverDueArr[i].planNo+'" class="planlist" value="'+OverDueArr[i].patientId+'">'+OverDueArr[i].patientId+" "+OverDueArr[i].patientName+" "+OverDueArr[i].planNo+'</p>';
 			 var trcontent = '<li><a href="#"id="'+OverDueArr[i].planNo+'" class="planlist" value="'+OverDueArr[i].patientId+'">'+OverDueArr[i].patientId+" "+OverDueArr[i].patientName+" "+OverDueArr[i].planNo+'</a></li>';
 			$('#PlanOverDueList ul').append(trcontent);
 		}
@@ -317,11 +316,12 @@ function InitialSMSBox()
 				 localStorage.setItem("PatientId",$(this).attr("value"));
 				 localStorage.setItem("PlanNo",$(this).attr("id"));
 				 localStorage.setItem("PLType",4); //修改这个计划
+				 location.href = "HyperTension.html";
 				 
-				 console.log($(this).attr("value")); 		 
+/*				 console.log($(this).attr("value")); 		 
 				 console.log($(this).attr("id"));
 				 location.href='CreatePlan.html?';
-				 });
+*/				 });
 
 		},
 		error: function(msg) {
@@ -582,7 +582,7 @@ function DataTableLoad(arr)
 		var planstatus = 0;
 		if(arr[i].planstatus != "")
 			planstatus =arr[i].planstatus;
-		console.log(pid +'  '+ planstatus+'  '+arr[i].startDate);
+		//console.log(pid +'  '+ planstatus+'  '+arr[i].startDate);
 		//Days counting
 		if (arr[i].totalDays > 0) {
 			totalDays = arr[i].totalDays;
@@ -785,7 +785,7 @@ patientInfo = ' <div style="width: 300px;"><div style="width: 25%;float:left;mar
 		$('.points').parent().find('input').hide().css('margin-left','-9999px'); // Fix for some FF versions
             $('.points').parent().find('.ui-slider-track').css('margin','0 15px 0 15px').css('pointer-events','none');	//disable drag interaction
             $('.points').parent().find('.ui-slider-handle').hide();			
-		myScroll.refresh();	// 数据加载完成后，调用界面更新方法 Remember to refresh when contents are loaded (ie: on ajax completion) 
+		//myScroll.refresh();	// 数据加载完成后，调用界面更新方法 Remember to refresh when contents are loaded (ie: on ajax completion) 
 }
 
 
@@ -806,11 +806,11 @@ function onDeviceReady() {
 function BindEvent() {
 	 //SMSBOX & SMS Event binding
 	 $("[data-role='panel']").on( "panelclose", function( event, ui ) {
-		myScroll.enable();
+		//myScroll.enable();
 		//console.log('myScroll enable'); 
 		})
 	 .on("panelopen", function(event, ui){
-		 myScroll.disable();
+		 //myScroll.disable();
 		//console.log('myScroll disable');		 		 
 	 });
 

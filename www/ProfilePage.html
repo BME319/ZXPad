@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--    <meta name="viewport" content="user-scalable=no, initial-scale=1.5, maximum-scale=2, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 -->
-<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=2, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1.5, maximum-scale=2, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
@@ -33,9 +33,6 @@
 <title>患者建档</title>
 <style type="text/css">
 /*checkbox样式*/
-
-
-
 
 
 [data-role="header"] {
@@ -305,10 +302,10 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
   <div data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:45px"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a> 
     <!--<a href="HomePage.html"> <img src = "img/avatar.jpg" id="docimg" value="" style="height:30px"/> </a>-->
     <h3>基本信息</h3>
-    <div class="ui-btn-right">
+<!--    <div class="ui-btn-right">
       <div style="float:left;"> <a id="" href="#ClinicInfoPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
     </div>
-  </div>
+-->  </div>
   <!--<div data-role="popup" id="SaveInsure" data-theme="a" data-overlay-theme="b" class="ui-content" style="width:300px; height:150px; padding-bottom:2em;">
     <h3 align="center" style="font-size:20px; height:50px">保存确认</h3>
     <p align="center" style="font-size:16px; height:40px"">您确定保存基本信息吗？</p>
@@ -394,7 +391,7 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
                 <tr>
                   <td><label for="PId" style="width:100px">就诊号</label></td>
                   <td style="width:300px"><input type="text" name="PId" id="PId" style="height:40px"></td>
-                  <td><a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini" onClick="SynInfo()">同步信息</a></td>
+                  <td><a id="New" href="#" data-role="button" data-icon="recycle" data-iconpos="notext" onClick="SynInfo()">同步信息</a></td>
                 </tr>
               </table>
             </div>
@@ -563,9 +560,9 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
       <!--<div style="text-align:center" id="SaveButton"> <a href="#ResetInsure" data-inline="true" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop" onClick="ResetInfo()">重置</a> <a href="#SaveInsure" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop" onClick="SaveInfo()">保存</a> </div>-->
       <div style="text-align:center" id="SaveButton"> <a href="#ResetInsure" data-inline="true" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop" onClick="ResetInfo()">重置</a> <!--<a href="#" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop" onClick="	$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});SaveInfo(); $.mobile.changePage('#ClinicInfoPage');">保存</a> </div>--><a href="#" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop" onClick="SaveInfo();">保存</a> </div>
     </div>
-    <div data-theme="a" data-role="footer" data-position="fixed">
+<!--    <div data-theme="a" data-role="footer" data-position="fixed">
       <h3>copyright</h3>
-    </div>
+    </div>-->
   </div>
 </div>
 
@@ -573,9 +570,6 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
 <div data-role="page" id="ClinicInfoPage">
   <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
     <h1>临床信息</h1>
-<!--    <div class="ui-btn-right">
-      <div style="float:left;"> <a id="" href="#BasicInfoPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> <a id="" href="#ModuleInfoPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
-    </div>-->
   </div>
   <div data-role="content" data-theme="a">
     <div  data-role="fieldcontain" style = "margin:0;">
@@ -657,7 +651,9 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
       <div class="ui-block-c"> </div>
     </div>
   </div>
-  <div data-role="panel" data-position="right" data-position-fixed="true" data-display="push" data-theme="a" id="ClinicInfoDetail-form">
+  
+  
+  <div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" data-theme="a" id="ClinicInfoDetail-form">
     <div id="detailTitle" align="center">
       <h2 id = "DetailType"></h2>
     </div>
@@ -671,24 +667,29 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
         <td id= "NowDate" width="12%" style="border: 0;"></td>
       </tr>
     </table>
+    
+    <div style="height:200px;overflow:auto;" >
     <table data-role="table" id="table-column-toggle" data-mode="columntoggle" data-column-btn-text="显示\隐藏" class="ui-responsive table-stroke">
       <thead id = "table-column-toggle-thead">
       </thead>
       <tbody id = "table-column-toggle-tbody">
       </tbody>
     </table>
+    </div>
     <br />
     <br />
+    
+     <div style="height:200px;overflow:auto;">
     <table id="table-ClinicInfoDetailByType" class="dtypetable">
       <thead id = "table-ClinicInfoDetailByType-thead">
       </thead>
       <tbody id = "table-ClinicInfoDetailByType-tbody">
       </tbody>
     </table>
+    </div>
+    
   </div>
 </div>
-
-
 <div data-role="page" id="ModuleInfoPage">
   <div data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:45px"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
     <h1>慢病信息</h1>
@@ -732,9 +733,9 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
         </div>
       </div>
     </div>
-    <div data-theme="a" data-role="footer" data-position="fixed">
+<!--    <div data-theme="a" data-role="footer" data-position="fixed">
       <h3>copyright</h3>
-    </div>
+    </div>-->
   </div>
 </div>
 <div data-role="page" id="SetTargetPage">
@@ -747,6 +748,11 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
 --> 
   </div>
  <div data-role="content" data-theme="a" id="MainField">
+     <div  data-role="fieldcontain" style = "margin:0;">
+      <label for="points" style="margin-top:0px;">患者建档进度：</label>
+      <input type="range" name="points" class="points" value="60" min="0" max="100" data-highlight="true">
+    </div>
+
     <div class="ui-grid-b">
       <div class="ui-block-a">
         <h3 align="center">血压</h3>
@@ -797,7 +803,7 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
         <!--        <div id="chartdiv3" style="width:300px; height:400px;"> </div>
 -->
         <div id="chartdiv3" style="width:320px; height:325px;"> </div>
-        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#ClinicInfoPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
+        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#ModuleInfoPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
         <button class="ui-btn ui-btn-inline" onclick="if(InsertTarget()) {$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});}getGoalValue();">下一步</button>
       </div>
       
@@ -821,9 +827,12 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
       <input type="range" name="points" class="points" value="80" min="0" max="100" data-highlight="true">
     </div>
     <div align="left" style="width:60%; float:right" >
-    	<button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
-        <button class="ui-btn ui-btn-inline" onclick="setPsTask();startPlanPageInit();$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
-        <button class="ui-btn ui-btn-inline" onclick="GetPsTask();PlanStart();">开始计划</button>
+    	<button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: '', textVisible: true, textonly: false,});">上一步</button>
+<!--     <button class="ui-btn ui-btn-inline" onclick="$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});GetPsTask();PlanStart();">开始计划</button>
+--> 
+     <button class="ui-btn ui-btn-inline" onclick="GetPsTask();$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});setTimeout(function(){ console.log('ssss');PlanStart();$.mobile.loading( 'hide' );},1000);">开始计划</button>
+       <button class="ui-btn ui-btn-inline" disabled = "disabled"  id="GoToInvitePage" onclick="$.mobile.changePage('#InvitationInfoPage'); $.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,}); ">下一步</button>
+
     </div>
     <div id="CPPart1">
       <h4 style="color:#4BAACB">生活方式：</h4>
@@ -887,134 +896,14 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
     </div>
   </div>
 </div>
-<div data-role="page" id="StartPlanPage">
-  <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
-    <h1>开始计划</h1>
-    <!--            <div class="ui-btn-right">
-      <div style="float:left;"> <a id="" href="#CreatePlanPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> 
-      <a id="" href="#InvitationInfoPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
-    </div>
---> 
-  </div>
-  
-  <!--content --> 
-  
-  <!--<h1 align="center">开始计划</h1>-->
-  <div data-role="content" data-theme="a">
-    <div  data-role="fieldcontain" style = "margin:0;">
-      <label for="points" style="margin-top:5px;">患者建档进度：</label>
-      <input type="range" name="points" class="points" value="90" min="0" max="100" data-highlight="true">
-    </div>
-    <div class="ui-grid-a">
-      <div class="ui-block-a">
-        <p align="center"><b>计划目标</b></p>
-        <div style="float:left;width:65%">
-          <div class="ui-grid-a">
-            <div class="ui-block-a">
-              <div id="chart_SBP_2" style="float:left;margin-left:10px ; width: 150px; height: 340px;"></div>
-            </div>
-            <div class="ui-block-b">
-              <div id="chart_DBP_2" style="width: 150px; height: 340px;"></div>
-            </div>
-          </div>
-        </div>
-        <div style="float:right;width:35%;height:340px;">
-          <div style="height:95px;">
-            <div style="float:left;width:65%">
-              <p align="center">初始收缩压</p>
-            </div>
-            <div style="float:left;width:25%">
-              <p align="center">
-                <input name="textarea" type="text" id="OSBP" readonly/>
-              </p>
-            </div>
-          </div>
-          <div style="height:95px;">
-            <div style="float:left;width:65%">
-              <p align="center">目标收缩压</p>
-            </div>
-            <div style="float:left;width:25%">
-              <p align="center">
-                <input name="textarea" type="text" id="TSBP" readonly/>
-              </p>
-            </div>
-          </div>
-          <div style="height:95px;">
-            <div style="float:left;width:65%">
-              <p align="center">初始舒张压</p>
-            </div>
-            <div style="float:left;width:25%">
-              <p align="center">
-                <input name="textarea" type="text" id="ODBP" readonly/>
-              </p>
-            </div>
-          </div>
-          <div style="height:95px;">
-            <div style="float:left;width:65%">
-              <p align="center">目标舒张压</p>
-            </div>
-            <div style="float:left;width:25%">
-              <p align="center">
-                <input name="textarea" type="text" id="TDBP" readonly/>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div style="float:left;width:33%">
-          <p align="center">计划开始时间</p>
-          <p align="center">结束日期设置</p>
-        </div>
-        <div style="float:left;width:33%">
-          <p align="center" id="BeginDate"></p>
-          <p align="center">
-            <input name="textarea" id="EndDate" type="text" onclick="WdatePicker()" readonly/>
-          </p>
-          <p align="center"; style="color:#FF0000" id="Alert"></p>
-        </div>
-        <!--      <div style="float:left;width:33%">
-        <p align="center">
-          <button id= "btnToStart" style="width:100px; height:40px;" onclick="$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">返回修改</button>
-          <button id= "btnToStart" style="width:100px; height:40px;" onclick="btn1_listener_f()">确认开始</button>
-        </p>
-      </div>
---> 
-      </div>
-      <div class="ui-block-b">
-        <p align="center"><b>计划任务</b></p>
-        <table align="center" class="gridtable" id="PlanShow">
-          <thead id="L0">
-            <tr>
-              <th><div align="center" style="width:80px;">编号</div></th>
-              <th><div align="center" style="width:80px;">类型</div></th>
-              <th><div align="center" style="width:80px;">任务名</div></th>
-              <th><div align="center" style="width:185px;";>说明</div></th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-    </div>
-    <div class="ui-grid-b">
-      <div class="ui-block-a"> </div>
-      <div class="ui-block-b" style="text-align:center;">
-        <button id= "btnToStart"  class="ui-btn ui-btn-inline"  onclick="$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">返回修改</button>
-        <button id= "btnToStart"  class="ui-btn ui-btn-inline" onclick="btn1_listener_f()">确认开始</button>
-        <!--        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
-        <button class="ui-btn ui-btn-inline" onclick="setPsTask();startPlanPageInit();$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
---> <!-- startPlanPageInit()开始计划页面初始化 ZC 2015-05-11--> 
-      </div>
-      <div class="ui-block-c"> </div>
-    </div>
-  </div>
-</div>
 <div data-role="page" id="InvitationInfoPage">
   <div data-position="fixed" data-role="header" data-theme="a" data-tap-toggle="false" style="height:45px"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
     <h1>发送邀请</h1>
-    <div class="ui-btn-right">
-      <div style="float:left;"> <a id="" href="#StartPlanPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> 
-        <!--      <a id="" href="#ClinicInfoPage" data-role="button" data-icon="arrow-r" data-iconpos="notext" onClick="">Next</a> </div>
---> </div>
+<!--    <div class="ui-btn-right">
+      <div style="float:left;"> <a id="" href="#CreatePlanPage" data-role="button" data-icon="arrow-l" data-iconpos="notext">Previous</a> 
+</div>
     </div>
-  </div>
+-->  </div>
   <div data-role="content">
     <div  data-role="fieldcontain" style = "margin:0;">
       <label for="points" style="margin-top:5px;">患者建档进度：</label>
@@ -1042,7 +931,7 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
     <div class="ui-grid-b" id="InvitationInfoPage">
       <div class="ui-block-a"></div>
       <div class="ui-block-b">
-        <label style="alignment-adjust:central; display:none" id="download">下载地址</label>
+        <label style="alignment-adjust:central; display:none" id="download">下载地址：</label>
       </div>
       <div class="ui-block-c"></div>
       <div class="ui-block-d">
@@ -1056,9 +945,9 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
       <div id="Invitationcode" class="ui-block-d"></div>
     </div>
     <!--<div class="clearfloat"></div>--></div>
-  <div data-theme="a" data-role="footer" data-position="fixed">
+<!--  <div data-theme="a" data-role="footer" data-position="fixed">
     <h3>copyright</h3>
-  </div>
+  </div>-->
 </div>
 </div>
 </body>

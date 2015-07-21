@@ -9,40 +9,8 @@ var ImageAddressFile = "/PersonalPhoto";
 var ImageAddress = ImageAddressIP + ImageAddressFile + "/" + UserId + ".jpg";
 var DoctorId = localStorage.getItem('DoctorId');
 /**********************初始页面************************/
-$(document).on("pageshow", "#InvitationInfoPage", function () {
-	
-	/*document.getElementById("AlertUserName").style.display = "none";
-	//document.getElementById("SexStyle").style.display = "none";
-	document.getElementById("AlertSex").style.display = "none";
-	//document.getElementById("BirthStyle").style.display = "none";
-	document.getElementById("AlertBirth").style.display = "none";
-	//document.getElementById("IDStyle").style.display = "none";
-	document.getElementById("AlertID").style.display = "none";
-	//document.getElementById("PhoneStyle").style.display = "none";	//2015-5-22 ZCY增加
-	document.getElementById("AlertPhone").style.display = "none";	//2015-5-22 ZCY增加
-	document.getElementById("AlertHeight").style.display = "none";	//2015-6-3 ZCY增加
-	document.getElementById("AlertWeight").style.display = "none";	//2015-6-3 ZCY增加
-	document.getElementById("AlertEmergencyPhone").style.display = "none";//2015-6-3 ZCY增加
-	
-	
-	GetTypeList("SexType");
-	GetTypeList("AboBloodType");
-	GetTypeList("InsuranceType");
+$(document).on("pageshow", "#InvitationInfoPage", function () {	
 
-	if (localStorage.getItem("NewPatientFlag") == 'true') {
-		//alert('Get new PID.');
-		GetNewPatientID();
-		//localStorage.setItem('NewPatientFlag',true);
-	}
-	else {
-				
-		//localStorage.setItem('NewPatientFlag',false);
-		GetDetailInfo(UserId);
-		GetBasicInfo(UserId);
-		GetUserBasicInfo(UserId);
-	}*/
-	
-	
 	UserId = localStorage.getItem("PatientId");
 	var width1 = 0.25*($("#InvitationInfoPage").width());
 	var width2 = 0.25*($("#InvitationInfoPage").width());
@@ -218,417 +186,6 @@ function SetMstUser(UserId, UserName)
 		}
 	});	*/
 }
-
-////获取下拉框内容
-//function GetTypeList(Category) {
-//	$("#" + Category).append('<option value=0>--请选择--</option>');
-//
-//	$.ajax({
-//		type: "POST",
-//		dataType: "xml",
-//		timeout: 30000,
-//		url: 'http://' + serverIP + '/' + serviceName + '/GetTypeList',
-//		async: false,
-//		data:
-//		{
-//			Category: Category
-//		},
-//		beforeSend: function () {
-//		},
-//		success: function (result) {
-//			$(result).find('Table1').each(function () {
-//				var Type = $(this).find("Type").text();
-//				var Name = $(this).find("Name").text();
-//				$("#" + Category).append('<option value=' + Type + '>' + Name + '</option>');
-//			})
-//		},
-//		error: function (msg) {
-//			alert("GetTypeList出错啦！");
-//		}
-//	});
-//}
-//
-////获取病人基本信息
-//function GetBasicInfo(UserId) {
-//	$.ajax({
-//		type: "POST",
-//		dataType: "xml",
-//		timeout: 30000,
-//		url: 'http://' + serverIP + '/' + serviceName + '/GetPatBasicInfo',
-//		async: false,
-//		data:
-//		{
-//			UserId: UserId
-//		},
-//		beforeSend: function () {
-//		},
-//		success: function (result) {
-//			var UserId = $(result).find("PatientBasicInfo").find("UserId").text();
-//			var UserName = $(result).find("PatientBasicInfo").find("UserName").text();
-//			var Gender = $(result).find("PatientBasicInfo").find("Gender").text();
-//			var BloodType = $(result).find("PatientBasicInfo").find("BloodType").text();
-//			var InsuranceType = $(result).find("PatientBasicInfo").find("InsuranceType").text();
-//			var Birthday = $(result).find("PatientBasicInfo").find("Birthday").text();
-//			var BloodTypeText = $(result).find("PatientBasicInfo").find("BloodTypeText").text();
-//			var InsuranceTypeText = $(result).find("PatientBasicInfo").find("InsuranceTypeText").text();
-//			var Module = $(result).find("PatientBasicInfo").find("Module").text();
-//
-//			$('#UserId').attr('value', UserId);
-//			$('#UserName').attr('value', UserName);
-//			//document.getElementById('UserName').innerText = UserName;
-//			var Birthday = Birthday.substring(0, 4) + "-" + Birthday.substring(4, 6) + "-" + Birthday.substring(6, 8);
-//			$("#Birthday").val(Birthday);
-//			$("#SexType").val(Gender);
-//			$('#SexType').selectmenu('refresh');
-//			$("#AboBloodType").val(BloodType);
-//			$('#AboBloodType').selectmenu('refresh');
-//			$("#InsuranceType").val(InsuranceType);
-//			$('#InsuranceType').selectmenu('refresh');
-//		},
-//		error: function (msg) {
-//			alert("GetPatBasicInfo出错啦！");
-//		}
-//	});
-//}
-//
-////获取病人详细信息
-//function GetDetailInfo(UserId) {
-//	$.ajax({
-//		type: "POST",
-//		dataType: "xml",
-//		timeout: 30000,
-//		url: 'http://' + serverIP + '/' + serviceName + '/GetPatientDetailInfo',
-//		async: false,
-//		data:
-//		{
-//			UserId: UserId
-//		},
-//		beforeSend: function () {
-//		},
-//		success: function (result) {
-//			var UserId = $(result).find("PatientDetailInfo1").find("UserId").text();
-//			var PhoneNumber = $(result).find("PatientDetailInfo1").find("PhoneNumber").text();
-//			var HomeAddress = $(result).find("PatientDetailInfo1").find("HomeAddress").text();
-//			var Occupation = $(result).find("PatientDetailInfo1").find("Occupation").text();
-//			var Nationality = $(result).find("PatientDetailInfo1").find("Nationality").text();
-//			var EmergencyContact = $(result).find("PatientDetailInfo1").find("EmergencyContact").text();
-//			var EmergencyContactPhoneNumber = $(result).find("PatientDetailInfo1").find("EmergencyContactPhoneNumber").text();
-//			var PhotoAddress = $(result).find("PatientDetailInfo1").find("PhotoAddress").text();
-//			var Module = $(result).find("PatientDetailInfo1").find("Module").text();
-//			var IDNo = $(result).find("PatientDetailInfo1").find("IDNo").text();
-//			var Height = $(result).find("PatientDetailInfo1").find("Height").text();
-//			var Weight = $(result).find("PatientDetailInfo1").find("Weight").text();
-//
-//			if (PhotoAddress != ImageAddress) {
-//				PhotoAddress = ImageAddressIP + ImageAddressFile + '/add.jpg';
-//			}
-//			$("#Photo").attr("src", PhotoAddress);
-//			$("#PhoneNumber").val(PhoneNumber);
-//			$("#HomeAddress").val(HomeAddress);
-//			$("#Occupation").val(Occupation);
-//			$("#Nationality").val(Nationality);
-//			$("#EmergencyContact").val(EmergencyContact);
-//			$("#EmergencyContactPhoneNumber").val(EmergencyContactPhoneNumber);
-//			$("#IDNo").val(IDNo);
-//			$("#Height").val(Height);
-//			$("#Weight").val(Weight);
-//
-//		},
-//		error: function (msg) {
-//			alert("GetPatientDetailInfo出错啦！");
-//		}
-//	});
-//}
-//
-///**********************重置信息************************/
-//function ResetInfo() {
-//	document.getElementById("AlertUserName").style.display = "none";
-//	document.getElementById("AlertSex").style.display = "none";
-//	document.getElementById("AlertBirth").style.display = "none";
-//	document.getElementById("AlertID").style.display = "none";
-//	document.getElementById("AlertPhone").style.display = "none";
-//	document.getElementById("AlertHeight").style.display = "none";
-//	document.getElementById("AlertWeight").style.display = "none";
-//	document.getElementById("AlertEmergencyPhone").style.display = "none";
-//
-//	if (localStorage.getItem("NewPatientFlag") == 'true') {
-//		//alert('Get new PID.');
-//		GetNewPatientID();
-//		//localStorage.setItem('NewPatientFlag',true);
-//	}
-//	else {
-//				
-//		//localStorage.setItem('NewPatientFlag',false);
-//		GetDetailInfo(UserId);
-//		GetBasicInfo(UserId);
-//		GetUserBasicInfo(UserId);
-//	}
-//}
-//
-///**********************保存信息************************/
-//function SaveInfo() {
-//	var UserName = document.getElementById("UserName").value;
-//	var Gender = document.getElementById("SexType").value;
-//	var Birthday = document.getElementById("Birthday").value;
-//	var Height = document.getElementById("Height").value;
-//	var Weight = document.getElementById("Weight").value;
-//	var PhoneNumber = document.getElementById("PhoneNumber").value;
-//	var EmergencyContactPhoneNumber = document.getElementById("EmergencyContactPhoneNumber").value;
-//	var lengthIDNo = $("#IDNo").val().length;
-//	var reg = /^\d+(?=\.{0,1}\d+$|$)/
-//	var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;	//2015-5-22 ZCY增加
-//	var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;	//2015-5-22 ZCY增加
-// 
-//	if (Gender == "0" || Gender == "" || Birthday == "" || UserName == "")	//2015-5-22 ZCY更改
-//	{
-//		//alert("打*为必填信息，请完善基本信息！");
-//		if (UserName == "") {
-//			document.getElementById("AlertUserName").style.display = "block";
-//		}
-//		else {
-//			document.getElementById("AlertUserName").style.display = "none";
-//		}
-//		if (Gender == "0" || Gender == "") {
-//			//document.getElementById("SexStyle").style.display = "block";
-//			document.getElementById("AlertSex").style.display = "block";
-//		}
-//		else {
-//			//document.getElementById("SexStyle").style.display = "none";
-//			document.getElementById("AlertSex").style.display = "none";
-//		}
-//		if (Birthday == "") {
-//			//document.getElementById("BirthStyle").style.display = "block";
-//			document.getElementById("AlertBirth").style.display = "block";
-//		}
-//		else {
-//			//document.getElementById("BirthStyle").style.display = "none";
-//			document.getElementById("AlertBirth").style.display = "none";
-//		}
-//		return false;
-//	}
-//	else
-//	{
-//		document.getElementById("AlertUserName").style.display = "none";
-//		document.getElementById("AlertSex").style.display = "none";
-//		document.getElementById("AlertBirth").style.display = "none";
-//	}
-//	
-//	if(!reg.test(Height) && Height != ""){ 
-//        //alert("身高格式不正确，请重新输入!");
-//		document.getElementById("AlertHeight").style.display = "block";
-//    } 
-//	else 
-//	{
-//		document.getElementById("AlertHeight").style.display = "none";
-//	}
-//	
-//	if(!reg.test(Weight) && Weight != ""){
-//        //alert("体重格式不正确，请重新输入!");
-//		document.getElementById("AlertWeight").style.display = "block";
-//    } 
-//	else
-//	{
-//		document.getElementById("AlertWeight").style.display = "none";
-//	}
-//	
-//	if (lengthIDNo != 15 && lengthIDNo != 18 && lengthIDNo != 0)	//2015-5-22 ZCY更改
-//	{
-//		//alert("证件号码格式不正确，请重新输入！");
-//		//document.getElementById("IDStyle").style.display = "block";
-//		document.getElementById("AlertID").style.display = "block";
-//	}
-//	else
-//	{
-//		document.getElementById("AlertID").style.display = "none";
-//	}
-//	
-//	if (!isMob.test(PhoneNumber) && !isPhone.test(PhoneNumber) && PhoneNumber != "")
-//	{
-//		//alert("联系电话格式不正确，请重新输入！");
-//		document.getElementById("AlertPhone").style.display = "block";
-//	}
-//	else
-//	{
-//		document.getElementById("AlertPhone").style.display = "none";
-//	}
-//	
-//	if (!isMob.test(EmergencyContactPhoneNumber) && !isPhone.test(EmergencyContactPhoneNumber) && EmergencyContactPhoneNumber != "")
-//	{
-//		//alert("紧急联系电话格式不正确，请重新输入！");
-//		document.getElementById("AlertEmergencyPhone").style.display = "block";
-//	}
-//	else
-//	{
-//		document.getElementById("AlertEmergencyPhone").style.display = "none";
-//	}
-//	
-//	if (Gender != "0" && Gender != "" && Birthday != "" && UserName != "" && (reg.test(Height) || Height == "") && (reg.test(Weight) || Weight == "") && (lengthIDNo == 15 || lengthIDNo == 18 || lengthIDNo == 0) && (isMob.test(PhoneNumber) || isPhone.test(PhoneNumber) || PhoneNumber == "") && (isMob.test(EmergencyContactPhoneNumber) || isPhone.test(EmergencyContactPhoneNumber) || EmergencyContactPhoneNumber == ""))
-//	{
-//		var IDNo = document.getElementById("IDNo").value;
-//		var BloodType = document.getElementById("AboBloodType").value;
-//		//var Height = document.getElementById("Height").value;
-//		//var Weight = document.getElementById("Weight").value;
-//		var InsuranceType = document.getElementById("InsuranceType").value;
-//		//var InsuranceType = $("#InsuranceType").find("option:selected").text();
-//		if(InsuranceType == "")
-//		{
-//			InsuranceType = 0;
-//		}
-//		//var PhoneNumber = document.getElementById("PhoneNumber").value;
-//		var HomeAddress = document.getElementById("HomeAddress").value;
-//		var Nationality = document.getElementById("Nationality").value;
-//		var Occupation = document.getElementById("Occupation").value;
-//		var EmergencyContact = document.getElementById("EmergencyContact").value;
-//		//var EmergencyContactPhoneNumber = document.getElementById("EmergencyContactPhoneNumber").value;
-//		var DoctorId = localStorage.getItem("DoctorId");
-//		var InvalidFlag = document.getElementById("InvalidFlag").value;
-//		/*
-//		var revUserId = "zcy";
-//		var TerminalName = "zcy-PC";
-//		var TerminalIP = "10.12.43.35";
-//		var DeviceType = "1";*/
-//		var ItemSeq = "1";
-//		var Description = null;
-//		var SortNo = "1";
-//		var Birthday = Birthday.replace("-", "");
-//		var Birthday = Birthday.replace("-", "");
-//		UserId = localStorage.getItem("PatientId");
-//		//var UserName =$('#UserName').val();
-//		if (localStorage.getItem("NewPatientFlag") == 'true') {
-//
-//			InvalidFlag = 0;
-//			SetPsDoctorDetailOnPat("HM1", UserId,"",1);
-//			localStorage.setItem('NewPatientFlag',false);
-//		}
-//		SetMstUser(UserId, UserName);
-//		SetBasicInfo(UserId, UserName, Birthday, Gender, BloodType, IDNo, DoctorId, InsuranceType, InvalidFlag, revUserId, TerminalName, TerminalIP, DeviceType);
-//		
-//		var Flag = document.getElementById("Flag").value;
-//		SetDetailInfo(UserId, "Contact", "Contact001_1", ItemSeq, IDNo, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-//		var Flag1 = document.getElementById("Flag").value;
-//		SetDetailInfo(UserId, "Contact", "Contact001_2", ItemSeq, Occupation, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-//		var Flag2 = document.getElementById("Flag").value;
-//		SetDetailInfo(UserId, "Contact", "Contact001_3", ItemSeq, Nationality, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-//		var Flag3 = document.getElementById("Flag").value;
-//		SetDetailInfo(UserId, "Contact", "Contact002_1", ItemSeq, PhoneNumber, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-//		var Flag4 = document.getElementById("Flag").value;
-//		SetDetailInfo(UserId, "Contact", "Contact002_2", ItemSeq, HomeAddress, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-//		var Flag5 = document.getElementById("Flag").value;
-//		SetDetailInfo(UserId, "Contact", "Contact002_3", ItemSeq, EmergencyContact, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-//		var Flag6 = document.getElementById("Flag").value;
-//		SetDetailInfo(UserId, "Contact", "Contact002_4", ItemSeq, EmergencyContactPhoneNumber, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-//		var Flag7 = document.getElementById("Flag").value;
-//		SetDetailInfo(UserId, "BodySigns", "Height", ItemSeq, Height, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-//		var Flag8 = document.getElementById("Flag").value;
-//		SetDetailInfo(UserId, "BodySigns", "Weight", ItemSeq, Weight, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-//		var Flag9 = document.getElementById("Flag").value;
-//
-//		/*if (Flag == "true" && Flag1 == "true" && Flag2 == "true" && Flag3 == "true" && Flag4 == "true" && Flag5 == "true" && Flag6 == "true" && Flag7 == "true" && Flag8 == "true" && Flag9 == "true") {
-//			alert("基本信息保存成功！")
-//		}
-//		else {
-//			alert("基本信息保存失败！")
-//		}*/
-//	}
-//}
-//
-//
-//
-////获取全部基本信息
-//function GetUserBasicInfo(UserId) {
-//	$.ajax({
-//		type: "POST",
-//		dataType: "xml",
-//		timeout: 30000,
-//		url: 'http://' + serverIP + '/' + serviceName + '/GetUserBasicInfo',
-//		async: false,
-//		data:
-//		{
-//			UserId: UserId
-//		},
-//		beforeSend: function () {
-//		},
-//		success: function (result) {
-//			var DoctorId = $(result).find("PatientALLBasicInfo").find("DoctorId").text();
-//			var InvalidFlag = $(result).find("PatientALLBasicInfo").find("InvalidFlag").text();
-//			$("#DoctorId").val(DoctorId);
-//			$("#InvalidFlag").val(InvalidFlag);
-//		},
-//		error: function (msg) {
-//			alert("GetPatBasicInfo出错啦！");
-//		}
-//	});
-//}
-////保存基本信息到Ps.BasicInfo
-//function SetBasicInfo(UserId, UserName, Birthday, Gender, BloodType, IDNo, DoctorId, InsuranceType, InvalidFlag, revUserId, TerminalName, TerminalIP, DeviceType) {
-//	$.ajax({
-//		type: "POST",
-//		dataType: "xml",
-//		timeout: 30000,
-//		url: 'http://' + serverIP + '/' + serviceName + '/SetPatBasicInfo',
-//		async: false,
-//		data:
-//		{
-//			UserId: UserId,
-//			UserName: UserName,
-//			Birthday: Birthday,
-//			Gender: Gender,
-//			BloodType: BloodType,
-//			IDNo: IDNo,
-//			DoctorId: DoctorId,
-//			InsuranceType: InsuranceType,
-//			InvalidFlag: InvalidFlag,
-//			revUserId: revUserId,
-//			TerminalName: TerminalName,
-//			TerminalIP: TerminalIP,
-//			DeviceType: DeviceType
-//		},
-//		beforeSend: function () {
-//		},
-//		success: function (result) {
-//			var Flag = $(result).find("boolean ").text();
-//			$("#Flag").val(Flag);
-//		},
-//		error: function (msg) {
-//			alert("SetPatBasicInfo出错啦！");
-//		}
-//	});
-//}
-//
-////保存详细信息到PsDetailInfo
-//function SetDetailInfo(Patient, CategoryCode, ItemCode, ItemSeq, Value, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType) {
-//	$.ajax({
-//		type: "POST",
-//		dataType: "xml",
-//		timeout: 30000,
-//		url: 'http://' + serverIP + '/' + serviceName + '/SetPatBasicInfoDetail',
-//		async: false,
-//		data:
-//		{
-//			Patient: Patient,
-//			CategoryCode: CategoryCode,
-//			ItemCode: ItemCode,
-//			ItemSeq: ItemSeq,
-//			Value: Value,
-//			Description: Description,
-//			SortNo: SortNo,
-//			revUserId: revUserId,
-//			TerminalName: TerminalName,
-//			TerminalIP: TerminalIP,
-//			DeviceType: DeviceType
-//		},
-//		beforeSend: function () {
-//		},
-//		success: function (result) {
-//			Flag = $(result).find("boolean ").text();
-//			$("#Flag").val(Flag);
-//		},
-//		error: function (msg) {
-//			alert("SetPatBasicInfoDetail出错啦！");
-//		}
-//	});
-//}
-
 
 
 /**********************Send Invitation************************/
@@ -1152,11 +709,11 @@ function GetNewPatientID() {
 											HPDrugListDetail = OptionDetailList;
 											if(ItemSeq==1)
 											{
-												var ModuleInfo = '<div class="' + ItemCode + '" id="HypertensionDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="HypertensionOptionList1" onChange="GetHypertensionOptionDetailList(this.value, 1)">' + OptionList + '</select>' + '<select class="dropdownlist" id="HypertensionOptionDetailList1">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddHypertensionDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteHypertensionDrugList();" >删除</button></div>';	
+												var ModuleInfo = '<div class="' + ItemCode + '" id="HypertensionDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="HypertensionOptionList1" onChange="GetHypertensionOptionDetailList(this.value, 1)"  style="margin-right:8px;" data-role="none">' + OptionList + '</select>' + '<select class="dropdownlist" id="HypertensionOptionDetailList1" data-role="none">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddHypertensionDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteHypertensionDrugList();" >删除</button></div>';	
 											}
 											else
 											{
-												$("#HypertensionDrugList" + (ItemSeq - 1)).after('<div class="M1004_1 ui-field-contain" id="HypertensionDrugList' + ItemSeq + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="HypertensionOptionList' + ItemSeq + '" onChange="GetHypertensionOptionDetailList(this.value, ' + ItemSeq + ')">' + HPDrugList + '</select><select class="dropdownlist" id="HypertensionOptionDetailList' + ItemSeq + '">' + HPDrugListDetail + '</select></div>');
+												$("#HypertensionDrugList" + (ItemSeq - 1)).after('<div class="M1004_1 ui-field-contain" id="HypertensionDrugList' + ItemSeq + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="HypertensionOptionList' + ItemSeq + '" onChange="GetHypertensionOptionDetailList(this.value, ' + ItemSeq + ')"  style="margin-right:8px;" >' + HPDrugList + '</select><select class="dropdownlist" id="HypertensionOptionDetailList' + ItemSeq + '">' + HPDrugListDetail + '</select></div>');
 												HPNumber = ItemSeq;
 												localStorage.setItem('HPNumber', HPNumber);
 												$(".dropdownlist")
@@ -1172,11 +729,11 @@ function GetNewPatientID() {
 											DADrugListDetail = OptionDetailList;
 											if(ItemSeq==1)
 											{
-												var ModuleInfo = '<div class="' + ItemCode + '" id="DiabetesDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="DiabetesOptionList1" onChange="GetDiabetesOptionDetailList(this.value, 1)">' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList1">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddDiabetesDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteDiabetesDrugList();" >删除</button></div>';	
+												var ModuleInfo = '<div class="' + ItemCode + '" id="DiabetesDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="DiabetesOptionList1" onChange="GetDiabetesOptionDetailList(this.value, 1)"  style="margin-right:8px;" data-role="none">' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList1" data-role="none">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddDiabetesDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteDiabetesDrugList();" >删除</button></div>';	
 											}
 											else
 											{
-												$("#DiabetesDrugList" + (ItemSeq - 1)).after('<div class="M1004_2 ui-field-contain" id="DiabetesDrugList' + ItemSeq + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="DiabetesOptionList' + ItemSeq + '" onChange="GetDiabetesOptionDetailList(this.value, ' + ItemSeq + ')">' + DADrugList + '</select><select class="dropdownlist" id="DiabetesOptionDetailList' + ItemSeq + '">' + DADrugListDetail + '</select></div>');
+												$("#DiabetesDrugList" + (ItemSeq - 1)).after('<div class="M1004_2 ui-field-contain" id="DiabetesDrugList' + ItemSeq + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="DiabetesOptionList' + ItemSeq + '" onChange="GetDiabetesOptionDetailList(this.value, ' + ItemSeq + ')"  style="margin-right:8px;" data-role="none">' + DADrugList + '</select><select class="dropdownlist" id="DiabetesOptionDetailList' + ItemSeq + '" data-role="none">' + DADrugListDetail + '</select></div>');
 												DANumber = ItemSeq;
 												localStorage.setItem('DANumber', DANumber);
 												$(".dropdownlist")
@@ -1188,7 +745,7 @@ function GetNewPatientID() {
 										if (OptionCategory == "")
 										{
 										  //合并用药
-										  var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist">' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList">' + OptionDetailList + '</select></div>';	
+										  var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" data-role="none"  style="margin-right:8px;" >' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList" data-role="none">' + OptionDetailList + '</select></div>';	
 										}				
 									}
 									if(ControlType==2)		//复选框
@@ -1209,17 +766,17 @@ function GetNewPatientID() {
 						placeholder_text_multiple: ""
 					});
 					$(".chosen-container")
-						.attr("data-role", "none")
+						//.attr("data-role", "none")
 						.css("width", "78%")
 						.css("height", "40px");
 						
 					$(".chosen-container li input").attr("data-role", "none");
 					$(".dropdownlist")
-						.attr("data-role", "none")
+//						.attr("data-role", "none")
 						.css("width", "25%")
 						.css("height", "40px");
 					$(".dropdrowlist")
-						.attr("data-role", "none")
+						//.attr("data-role", "none")
 						.css("width", "78%")
 						.css("height", "40px");
 					$(".textbox")
@@ -1239,80 +796,7 @@ function GetNewPatientID() {
 		     });
 		  }
 		  
-		  //function GetItemInfoByPIdAndModule(UserId,CategoryCode,CategoryName){
-//			$.ajax({  
-//		        type: "POST",
-//		        dataType: "xml",
-//				timeout: 30000,  
-//				url: 'http://'+ serverIP +'/'+serviceName+'/GetItemInfoByPIdAndModule',
-//				async:false,
-//		        data: {PatientId:UserId,CategoryCode:CategoryCode},
-//				beforeSend: function(){},
-//		        success: function(result) { 
-//					
-//					 $(".mainInfo").append('<h2>' + CategoryName + '详细信息</h2>');
-//					 $(result).find('Table1').each(function() {
-//						 var ItemCode = $(this).find("ItemCode").text();
-//						 if(ItemCode!="InvalidFlag")
-//						 {
-//							 if(ItemCode=="Doctor")
-//							 {
-//								 var ItemName = $(this).find("ItemName").text(); //负责医生
-//								 //alert(ItemName);
-//								 var ParentCode = $(this).find("ParentCode").text(); //ParentCode：为空，没有父级标题
-//								 var Value = $(this).find("Value").text(); //暂时不用
-//								 var Description = $(this).find("Description").text(); //负责医生姓名，不可编辑
-//								 var DoctorInfo = '<div data-role="fieldcontain"><label>' + ItemName + '</label><label>' + Description + '</label></div>';
-//								 $(".mainInfo").append(DoctorInfo);
-//							 }
-//							 else
-//							 {
-//								 var ItemName = $(this).find("ItemName").text(); //问卷内容
-//								 var ParentCode = $(this).find("ParentCode").text(); //ParentCode
-//								 var ControlType = $(this).find("ControlType").text(); //
-//								 var OptionCategory = $(this).find("OptionCategory").text(); //
-//								 //alert(OptionCategory);
-//								 var Value = $(this).find("Value").text(); //
-//								 var Content = $(this).find("Content").text(); //
-//								 //增加下拉框  
-//								 if(OptionCategory!="")
-//								 {
-//								 	var OptionList = GetOptionList(OptionCategory,Value);
-//								 }
-//								 
-//								 
-//								 if(ParentCode=="")
-//								 {
-//									 var ModuleInfo = '<label><strong>' + ItemName + '</strong></label>';
-//									 $(".mainInfo").append(ModuleInfo);
-//		
-//								 }
-//								 else
-//								 {	
-//								 	if(ControlType==1)	//下拉框
-//									{
-//										var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdrowlist">' + OptionList + '</select></div>';							
-//									}
-//									else		//自由文本
-//									{	
-//									 	var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<input type="text" class="textbox" value=' + Content + '></div>';
-//									}
-//									$(".mainInfo").append(ModuleInfo);
-//								 }
-//							
-//							 
-//						 }	
-//					 }
-//					});	
-//					$(".dropdrowlist").attr("disabled","disabled");
-//					$(".textbox").attr("disabled","disabled");
-//					$("#saveModuleInfo").attr("disabled","disabled");			    				
-//					$(".mainInfo").trigger("create");  //jquery mobile渲染	
-//				
-//			   }, 
-//		       error: function(msg) {alert("Error!");}
-//		     });
-//		  }
+
 		
 		//生成带值的下拉框
 			function GetOptionList(Type,Value){
@@ -1990,7 +1474,7 @@ function GetNewPatientID() {
 				beforeSend: function(){},
 		        success: function(result) { 
 
-					 $(".mainInfo").append('<h2>' + CategoryName + '详细信息</h2>');
+					 $(".mainInfo").append('<h2>' + CategoryName + '详细信息</h2><button style="float:right;" class="ui-btn ui-btn-inline" onclick="SynBasicInfoDetail();" >从临床信息中同步数据</button>');
 					 $(result).find('Table1').each(function() {
 						 var GroupHeaderFlag = $(this).find("GroupHeaderFlag").text();
 						 var ItemCode = $(this).find("Code").text();
@@ -2074,7 +1558,7 @@ function GetNewPatientID() {
 										  //高血压药物
 										  	HPDrugList = OptionList;
 											HPDrugListDetail = OptionDetailList;
-											var ModuleInfo = '<div class="' + ItemCode + '" id="HypertensionDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="HypertensionOptionList1" onChange="GetHypertensionOptionDetailList(this.value, 1)">' + OptionList + '</select>' + '<select class="dropdownlist" id="HypertensionOptionDetailList1">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddHypertensionDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteHypertensionDrugList();" >删除</button></div>';	
+											var ModuleInfo = '<div class="' + ItemCode + '" id="HypertensionDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="HypertensionOptionList1" onChange="GetHypertensionOptionDetailList(this.value, 1)" style="margin-right:8px;" >' + OptionList + '</select>' + '<select class="dropdownlist" id="HypertensionOptionDetailList1">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddHypertensionDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteHypertensionDrugList();" >删除</button></div>';	
 											localStorage.setItem('HPNumber', 1);	
 										}
 										if (OptionCategory == "Cm.MstDiabetesDrug")
@@ -2082,18 +1566,18 @@ function GetNewPatientID() {
 										  //糖尿病药物
 										    DADrugList = OptionList;
 											DADrugListDetail = OptionDetailList;
-											var ModuleInfo = '<div class="' + ItemCode + '" id="DiabetesDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="DiabetesOptionList1" onChange="GetDiabetesOptionDetailList(this.value, 1)">' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList1">' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddDiabetesDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteDiabetesDrugList();" >删除</button></div>';
+											var ModuleInfo = '<div class="' + ItemCode + '" id="DiabetesDrugList1" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" id="DiabetesOptionList1" onChange="GetDiabetesOptionDetailList(this.value, 1)" style="margin-right:8px;" >' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList1" style="margin-right:8px;" > ' + OptionDetailList + '</select><button style="float:right;" class="ui-btn ui-btn-inline" onclick="AddDiabetesDrugList();" >添加</button><button style="float:right;" class="ui-btn ui-btn-inline" onclick="DeleteDiabetesDrugList();" >删除</button></div>';
 											localStorage.setItem('DANumber', 1);		
 										}
 										if (OptionCategory == "")
 										{
 										  //合并用药
-										  var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist">' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList">' + OptionDetailList + '</select></div>';	
+										  var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdownlist" style="margin-right:8px;" >' + OptionList + '</select>' + '<select class="dropdownlist" id="DiabetesOptionDetailList" style="margin-right:8px;" >' + OptionDetailList + '</select></div>';	
 										}
 									}
 									if(ControlType==2)		//复选框
 									{	
-									 	var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="chzn-select" multiple data-role="none">' + OptionList + '</select></div>';
+									 	var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="chzn-select" multiple data-role="none" style="margin-right:8px;" >' + OptionList + '</select></div>';
 										//var ModuleInfo = '<div class="' + ItemCode + '" data-role="fieldcontain"><label>' + ItemName + '</label>' + '<select class="dropdrowlist" multiple="multiple">' + OptionList + '</select></div>';
 									}
 									$(".mainInfo").append(ModuleInfo);
@@ -2114,7 +1598,7 @@ function GetNewPatientID() {
 						placeholder_text_multiple: ""
 					});
 					$(".chosen-container")
-						.attr("data-role", "none")
+						//.attr("data-role", "none")
 						.css("width", "78%")
 						.css("height", "40px");
 					$(".dropdownlist")
@@ -2122,7 +1606,7 @@ function GetNewPatientID() {
 						.css("width", "25%")
 						.css("height", "40px");
 					$(".dropdrowlist")
-						.attr("data-role", "none")
+						//.attr("data-role", "none")
 						.css("width", "78%")
 						.css("height", "40px");
 					$(".textbox")
@@ -2155,7 +1639,7 @@ function GetNewPatientID() {
 		  
 		  function AddHypertensionDrugList()
 		  {
-			$("#HypertensionDrugList" + HPNumber).after('<div class="M1004_1 ui-field-contain" id="HypertensionDrugList' + (HPNumber + 1) + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="HypertensionOptionList' + (HPNumber + 1) + '" onChange="GetHypertensionOptionDetailList(this.value, ' + (HPNumber + 1) + ')">' + HPDrugList + '</select><select class="dropdownlist" id="HypertensionOptionDetailList' + (HPNumber + 1) + '">' + HPDrugListDetail + '</select></div>');
+			$("#HypertensionDrugList" + HPNumber).after('<div class="M1004_1 ui-field-contain" id="HypertensionDrugList' + (HPNumber + 1) + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="HypertensionOptionList' + (HPNumber + 1) + '" onChange="GetHypertensionOptionDetailList(this.value, ' + (HPNumber + 1) + ')" style="margin-right:8px;" >' + HPDrugList + '</select><select class="dropdownlist" id="HypertensionOptionDetailList' + (HPNumber + 1) + '" style="margin-right:8px;" >' + HPDrugListDetail + '</select></div>');
           	HPNumber = HPNumber + 1;
 			localStorage.setItem('HPNumber', HPNumber);
 			$(".dropdownlist")
@@ -2176,7 +1660,7 @@ function GetNewPatientID() {
 		  
 		  function AddDiabetesDrugList()
 		  {
-			$("#DiabetesDrugList" + DANumber).after('<div class="M1004_2 ui-field-contain" id="DiabetesDrugList' + (DANumber + 1) + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="DiabetesOptionList' + (DANumber + 1) + '" onChange="GetDiabetesOptionDetailList(this.value, ' + (DANumber + 1) + ')">' + DADrugList + '</select><select class="dropdownlist" id="DiabetesOptionDetailList' + (DANumber + 1) + '">' + DADrugListDetail + '</select></div>');
+			$("#DiabetesDrugList" + DANumber).after('<div class="M1004_2 ui-field-contain" id="DiabetesDrugList' + (DANumber + 1) + '" data-role="fieldcontain"><label></label><select class="dropdownlist" id="DiabetesOptionList' + (DANumber + 1) + '" onChange="GetDiabetesOptionDetailList(this.value, ' + (DANumber + 1) + ')" style="margin-right:8px;" >' + DADrugList + '</select><select class="dropdownlist" id="DiabetesOptionDetailList' + (DANumber + 1) + '" style="margin-right:8px;" >' + DADrugListDetail + '</select></div>');
           	DANumber = DANumber + 1;
 			localStorage.setItem('DANumber', DANumber);
 			$(".dropdownlist")
@@ -2194,3 +1678,58 @@ function GetNewPatientID() {
 			DANumber = DANumber - 1;
 			localStorage.setItem('DANumber', DANumber);
 		  }
+		  
+		  	
+
+		  function SynBasicInfoDetail(){
+			  $.ajax({  								
+		        	type: "POST",
+		        	dataType: "xml",
+					timeout: 30000,  
+					url: 'http://'+ serverIP +'/'+serviceName+'/SynBasicInfoDetail',
+					async:false,
+		        	data: {UserId:UserId},
+					beforeSend: function(){},
+		        	success: function(result) { 
+						//alert("2");
+						 $(result).find('Table1').each(function() {
+							//var Name1 = $(this).find("Name1").text();
+							 var Value1 = $(this).find("Value1").text();
+								 $(".M1001_09").find("select").val(Value1);
+								 $(".M1001_09").find("select").css("background-color","#95CACA");
+								 
+							  var Value2 = $(this).find("Value2").text();			 			 
+								 $(".M1001_05").find("select").val(Value2);
+								 	 $(".M1001_05").find("select").css("background-color","#95CACA");
+									 
+								  var Value3 = $(this).find("Value3").text();
+								 $(".M1001_06").find("select").val(Value3);
+							 $(".M1001_06").find("select").css("background-color","#95CACA");
+							 
+						 });
+						  $(result).find('Table2').each(function() {
+							 var Code = $(this).find("Code").text();
+							 //alert(Code);
+							 var Name = $(this).find("Name").text();
+						 	 if(Code=="62.00028"){
+								 $(".M1006_10").find("input").val(Name);
+								  $(".M1006_10").find("input").css("background-color","#95CACA");
+							 }
+							 if(Code=="62.2713"){
+								 $(".M1006_08").find("input").val(Name);
+								 $(".M1006_08").find("input").css("background-color","#95CACA");
+							 }
+							  if(Code=="62.63704"){
+								 $(".M1006_09").find("input").val(Name);
+								 $(".M1006_09").find("input").css("background-color","#95CACA");
+							 }
+							  if(Code=="JY0277"){
+								 $(".M1006_11").find("input").val(Name);
+								 $(".M1006_11").find("input").css("background-color","#95CACA");
+							 }
+						 });
+						 								 
+		      		}, 
+		       		error: function(msg) {alert("SynBasicInfoDetailError!");}
+		     	});
+			  }

@@ -1,4 +1,6 @@
   
+  var mark_ClinicInfoPanel=0;
+  
     //同步时间控件清零
   function Date_clear()
   {
@@ -14,12 +16,17 @@
     //弹出临床信息页面
  function OpenClinicInfoPanel()
 {
+	 $( "#ClinicInfoPanel" ).panel("open");
+	if( mark_ClinicInfoPanel==0)
+	{
+	
 	//弹出框，正在加载中
-   $( "#ClinicInfoPanel" ).panel("open");
+  
    document.getElementById("historyButton").style.display = "none";
     document.getElementById("history_loading").style.display = "block";
     setTimeout(function(){Clinic_initialization();},200);
-	
+	 mark_ClinicInfoPanel=1;
+	}
 	/*
 	var opt = {
         preset: 'date', //日期
@@ -97,7 +104,7 @@
 		  type: "GET",
 		  dataType: "json",
 		  async: false,
-		  data: { UserId: localStorage.getItem('PatientId'), AdmissionDate: admissionDateMark, ClinicDate: clinicDateMark, Num: 1},//localStorage.getItem('PatientId')
+		  data: { UserId: localStorage.getItem('PatientId'), AdmissionDate: admissionDateMark, ClinicDate: clinicDateMark, Num: 10},//localStorage.getItem('PatientId')
 		  success: function (res) {
 
 			  document.getElementById("AdmissionDateMark").value = res.AdmissionDateMark;  
@@ -175,25 +182,25 @@
 	  if(Type=="DrugRecord")
 	  {
 		  TypeStr+="用药信息";
-		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>长期医嘱标志</th><th data-priority='2'>药嘱类别</th><th>药嘱内容</th><th data-priority='4'>药品一次使用剂量</th><th data-priority='5'>剂量单位</th><th data-priority='6'>给药途径</th><th data-priority='7'>开始时间</th><th data-priority='8'>结束时间</th><th data-priority='9'>执行频率描述</th></tr>";
+		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>长期医嘱标志</th><th data-priority='1'>药嘱类别</th><th>药嘱内容</th><th data-priority='1'>药品一次使用剂量</th><th data-priority='1'>剂量单位</th><th data-priority='1'>给药途径</th><th data-priority='1'>开始时间</th><th data-priority='1'>结束时间</th><th data-priority='1'>执行频率描述</th></tr>";
 			   
 	  }
 	  else if(Type=="DiagnosisInfo")
 	  {
 		  TypeStr+="诊断信息";
-		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>诊断类型</th><th data-priority='2'>诊断种类</th><th>诊断名称</th><th data-priority='4'>描述</th><th  data-priority='5'>记录时间</th></tr>";
+		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>诊断类型</th><th data-priority='1'>诊断种类</th><th>诊断名称</th><th data-priority='1'>描述</th><th  data-priority='1'>记录时间</th></tr>";
 	  }
 	  else if(Type=="ExaminationInfo")
 	  {
 		  TypeStr+="检查信息";
 		  
-		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='2'>检查类型</th><th data-priority='2'>检查日期</th><th>检查项目名称</th><th data-priority='4'>检查参数</th><th data-priority='5'>检查所见</th><th data-priority='6'>印象</th><th data-priority='7'>建议</th><th data-priority='8'>是否阳性</th><th data-priority='9'>检查结果状态</th><th data-priority='10'>报告日期</th><th data-priority='11'>图像地址</th></tr>";
+		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>检查类型</th><th data-priority='1'>检查日期</th><th>检查项目名称</th><th data-priority='1' style='display: none'>检查参数</th><th data-priority='1' style='display: none'>检查所见</th><th data-priority='1' style='display: none'>印象</th><th data-priority='1' style='display: none'>建议</th><th data-priority='1'>是否阳性</th><th data-priority='1'>检查结果状态</th><th data-priority='1'>报告日期</th><th data-priority='1'>图像地址</th></th><th data-priority='1'>详细</th></tr>";
 
 	  }
 	  else
 	  {
 		  TypeStr+="化验信息";
-		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>化验类型</th><th>化验项目名称</th><th data-priority='6'>化验日期</th><th data-priority='4'>化验结果状态</th><th data-priority='5'>报告日期</th><th data-priority='3'>具体参数</th></tr>";
+		  document.getElementById("table-column-toggle-thead").innerHTML="<tr><th data-priority='1'>化验类型</th><th>化验项目名称</th><th data-priority='1'>化验日期</th><th data-priority='1'>化验结果状态</th><th data-priority='1'>报告日期</th><th data-priority='1'>具体参数</th></tr>";
 	  }
 	  document.getElementById("DetailType").innerHTML=TypeStr;
 	  
@@ -255,7 +262,7 @@
 						  //var SortNo=$(this).find("SortNo").text();
 						  //var ItemCode=$(this).find("ItemCode").text();
 						  
-						 var trcontent="<tr><td>"+ExamTypeName+"</td><td>"+ExamDate+"</td><td>"+ItemName+"</td><td>"+ExamPara+"</td><td>"+Description+"</td><td>"+Impression+"</td><td>"+Recommendation+"</td><td>"+IsAbnormal+"</td><td>"+Status+"</td><td>"+ReportDate+"</td><td>"+ImageURL+"</td></tr>";
+						 var trcontent="<tr><td>"+ExamTypeName+"</td><td>"+ExamDate+"</td><td>"+ItemName+"</td><td style='display: none'>"+ExamPara+"</td><td style='display: none'>"+Description+"</td><td style='display: none'>"+Impression+"</td><td style='display: none'>"+Recommendation+"</td><td>"+IsAbnormal+"</td><td>"+Status+"</td><td>"+ReportDate+"</td><td>"+ImageURL+"</td><td><a id='a_readDetail'>查看</a></td></tr>";
 						 //<td id='ClinicInfoDetailByType-ExaminationInfo'><a id = "+localStorage//.getItem('PatientId')+"|"+VisitId+"|"+SortNo+"|"+ItemCode+' onclick="OpenClinicInfoDetailExam(this.id);">详细</a></td>
 			  
 						  $("#table-column-toggle-tbody").append(trcontent);
@@ -284,15 +291,27 @@
 		  });
 	  $("#table-column-toggle").table("refresh");
 	  
+	 
 	  if(Type=="LabTestInfo")
 	  {
 		    document.getElementById("detail_detail_overflow").style.display = "block";
+			document.getElementById("exam_detail_overflow").style.display = "none";
 			document.getElementById("detail_overflow").style.height=200;
+			document.getElementById("exam_detail_white").style.display = "none";
+	  }
+	  else if(Type=="ExaminationInfo")
+	  {
+		  document.getElementById("detail_detail_overflow").style.display = "none";
+		  document.getElementById("detail_overflow").style.height=200;
+		  document.getElementById("exam_detail_overflow").style.display = "none";
+		  document.getElementById("exam_detail_white").style.display = "block";
 	  }
 	  else
 	  {
 		  document.getElementById("detail_detail_overflow").style.display = "none";
-		  document.getElementById("detail_overflow").style.height=160;
+		  document.getElementById("detail_overflow").style.height=200;
+		  document.getElementById("exam_detail_overflow").style.display = "none";
+		  document.getElementById("exam_detail_white").style.display = "none";
 	  }
 	  //$( "#ClinicInfoDetail-form" ).panel("open");
 	  //$( "#ClinicInfoDetail-form" ).trigger( "updatelayout" );
@@ -300,6 +319,31 @@
 	  //
 	  $("#ClinicalDetailPop").popup("open");
   }
+  
+  
+  $(document).on("click","#a_readDetail",function(){
+	  
+	  document.getElementById("exam_detail_white").style.display = "none";
+	  
+	   var trSeq = $(this).parent().parent().parent().find("tr").index($(this).parent().parent());
+            //$(this).parent().css("color","red");
+			//alert(trSeq);
+            var ExamPara = $("#table-column-toggle-tbody tr:eq(" + trSeq + ") td:eq(3)").text().trim();
+			
+            var Description = $("#table-column-toggle-tbody tr:eq(" + trSeq + ") td:eq(4)").text().trim();
+            var Impression = $("#table-column-toggle-tbody tr:eq(" + trSeq + ") td:eq(5)").text().trim();
+            var Recommendation = $("#table-column-toggle-tbody tr:eq(" + trSeq + ") td:eq(6)").text().trim();
+           
+            $("#readExamPara").val(ExamPara);
+            $("#readDescription").val(Description);
+            $("#readImpression").val(Impression);
+            $("#readRecommendation").val(Recommendation);
+			
+			document.getElementById("exam_detail_overflow").style.display = "block";
+	   
+   });
+  
+  
   
   
   
