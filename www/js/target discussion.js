@@ -1,48 +1,48 @@
-$(document).on("pageinit", "#SetTargetPage", function(){
-    if (localStorage.getItem('EditEnable') == 0) {
-      $('#Targetbutton').css('display','none');
-      //console.log('targetPage');
-    }
-	  $("#TextInput1").css("width","80px").parent().css("width","80px");
-	  $("#TextInput2").css("width","80px").parent().css("width","80px");
-	  $("#TextInput3").css("width","80px").parent().css("width","80px");
-	  $("#TextInput4").css("width","80px").parent().css("width","80px");
-	  var ContentTxt1 = document.getElementById('TextInput1');
-	  var ContentTxt2 = document.getElementById('TextInput2');
-	  var ContentTxt3 = document.getElementById('TextInput3');
-	  var ContentTxt4 = document.getElementById('TextInput4');
-	  ContentTxt1.addEventListener("focus", InTxt, false);
-	  ContentTxt1.addEventListener("blur", OutOfTxt, false);
-	  ContentTxt2.addEventListener("focus", InTxt, false);
-	  ContentTxt2.addEventListener("blur", OutOfTxt, false);
-	  ContentTxt3.addEventListener("focus", InTxt, false);
-	  ContentTxt3.addEventListener("blur", OutOfTxt, false);
-	  ContentTxt4.addEventListener("focus", InTxt, false);
-	  ContentTxt4.addEventListener("blur", OutOfTxt, false);
-	  //先对NewPlanNo置为空，以对“下一步”按钮点击状态进行判断 ZC 2015-05-07
-	  localStorage.setItem('NewPlanNo', "");
-	  GetBPGrades();
-	  //读取血压值，包括当前和前一个计划的目标
-	  GetCurrentSBP(localStorage.getItem('PatientId'));
-	  GetCurrentDBP(localStorage.getItem('PatientId'));
-	  
-	  GetTargetSBP(localStorage.getItem('PLType'), localStorage.getItem('PlanNo'), "1");
-	  GetTargetDBP(localStorage.getItem('PLType'), localStorage.getItem('PlanNo'), "2");
-
-/*	  SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);
-	  DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);
-	  Risk();*/
-
-   	   setTimeout(function(){
-		  SBPBar($("#TextInput1").val(), $("#TextInput3").val(), SBPlist, chart_SBP_1);
-		  },200);
-	   setTimeout(function(){
-		  DBPBar($("#TextInput2").val(), $("#TextInput4").val(), DBPlist, chart_DBP_1);
-		  },200);
-	   setTimeout(function(){
-		  Risk();
-		  },200); 
-  });
+//$(document).on("pageinit", "#SetTargetPage", function(){
+//    if (localStorage.getItem('EditEnable') == 0) {
+//      $('#Targetbutton').css('display','none');
+//      //console.log('targetPage');
+//    }
+//	  $("#TextInput1").css("width","80px").parent().css("width","80px");
+//	  $("#TextInput2").css("width","80px").parent().css("width","80px");
+//	  $("#TextInput3").css("width","80px").parent().css("width","80px");
+//	  $("#TextInput4").css("width","80px").parent().css("width","80px");
+//	  var ContentTxt1 = document.getElementById('TextInput1');
+//	  var ContentTxt2 = document.getElementById('TextInput2');
+//	  var ContentTxt3 = document.getElementById('TextInput3');
+//	  var ContentTxt4 = document.getElementById('TextInput4');
+//	  ContentTxt1.addEventListener("focus", InTxt, false);
+//	  ContentTxt1.addEventListener("blur", OutOfTxt, false);
+//	  ContentTxt2.addEventListener("focus", InTxt, false);
+//	  ContentTxt2.addEventListener("blur", OutOfTxt, false);
+//	  ContentTxt3.addEventListener("focus", InTxt, false);
+//	  ContentTxt3.addEventListener("blur", OutOfTxt, false);
+//	  ContentTxt4.addEventListener("focus", InTxt, false);
+//	  ContentTxt4.addEventListener("blur", OutOfTxt, false);
+//	  //先对NewPlanNo置为空，以对“下一步”按钮点击状态进行判断 ZC 2015-05-07
+//	  localStorage.setItem('NewPlanNo', "");
+//	  GetBPGrades();
+//	  //读取血压值，包括当前和前一个计划的目标
+//	  GetCurrentSBP(localStorage.getItem('PatientId'));
+//	  GetCurrentDBP(localStorage.getItem('PatientId'));
+//	  
+//	  GetTargetSBP(localStorage.getItem('PLType'), localStorage.getItem('PlanNo'), "1");
+//	  GetTargetDBP(localStorage.getItem('PLType'), localStorage.getItem('PlanNo'), "2");
+//
+///*	  SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);
+//	  DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);
+//	  Risk();*/
+//
+//   	   setTimeout(function(){
+//		  SBPBar($("#TextInput1").val(), $("#TextInput3").val(), SBPlist, chart_SBP_1);
+//		  },200);
+//	   setTimeout(function(){
+//		  DBPBar($("#TextInput2").val(), $("#TextInput4").val(), DBPlist, chart_DBP_1);
+//		  },200);
+//	   setTimeout(function(){
+//		  Risk();
+//		  },200); 
+//  });
 
   function InTxt() //开始输入，避免输入框被键盘遮挡
 {
@@ -55,8 +55,11 @@ function OutOfTxt() //输入完成
 	$('#MainField').attr("class", "NormalField");	
 	
 }
-  
-  
+//点击后清空文本框  
+function clearContent(txt)
+	{
+		txt.value="";
+	}  
   //CreatePlanPage自运行
   $(document).on("pageinit", "#CreatePlanPage", function(){ 
       //当PlanNo状态为暂存时，把NewPlanNo=PlanNo，只要PLType不变，则不影响页面逻辑
@@ -978,7 +981,7 @@ function Risk()
                SetRiskResult(Hyper,Harvard,Framingham,Stroke,Heart);
 			   RiskBar(Hyper,Harvard,Framingham,Stroke,Heart);
           	}, 
-            error: function(msg) {alert("RiskInput");}
+            error: function(msg) {alert("获取评估输入");}
    });
    
 	  function SetRiskResult(Hyper,Harvard,Framingham,Stroke,Heart)

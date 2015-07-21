@@ -2,9 +2,9 @@
 
 *{list-style-type:none;}
 a,img{border:0;}
-.demo{width:960px;margin:60px auto 0 auto;}
+.demo{width:600px;margin:40px auto 0 auto;}
 /*history*/
-.history{background:url(../img/clinicInfo-line.gif) repeat-y 187px 0;overflow:hidden;position:relative;}
+.history{background:url(../img/clinicInfo-line.gif) repeat-y 140px 0;overflow:hidden;position:relative;}
 .history-date{overflow:hidden;position:relative;}
 .history-date ul li h2{font-size:22px;font-family:Î¢ÈíÑÅºÚ;font-weight:normal;}
 
@@ -16,10 +16,10 @@ a,img{border:0;}
 .history-date h2 img{vertical-align:-5px;}
 .history-date h2.date02{background:none;}
 
-.history-date ul li{background:url(../img/clinicInfo-icon.gif) no-repeat 180px 0;padding-bottom:50px;zoom:1;}
+.history-date ul li{background:url(../img/clinicInfo-icon.gif) no-repeat 134px 0;padding-bottom:20px;zoom:1;}
 .history-date ul li.last{padding-bottom:0;}
 .history-date ul li:after{content:" ";display:block;height:0;clear:both;visibility:hidden;}
-.history-date ul li h3{float:left;width:168px;text-align:right;padding-right:18px;color:#000;font-weight:bold;font-size:18px;font-family:Î¢ÈíÑÅºÚ;}
+.history-date ul li h3{float:left;width:130px;text-align:right;padding-right:18px;color:#000;font-weight:bold;font-size:16px;font-family:Î¢ÈíÑÅºÚ;}
 .history-date ul li h3 span{display:block;color:#000;font-size:12px;}
 .history-date ul li dl{float:left;padding-left:41px;margin-top:-5px;font-family:Î¢ÈíÑÅºÚ;}
 .history-date ul li dl dt{font:20px/22px Î¢ÈíÑÅºÚ;color:#737373;margin-top:5px;}
@@ -41,9 +41,9 @@ a,img{border:0;}
 *body .history-date ul li.green dl dt a{_background:transparent!important;*background:transparent!important;*font-size:12px!important;_font-weight:normal!important;}
 
 .Itemhref {color:#000;font-size:16px;font-family:Î¢ÈíÑÅºÚ;font-weight:normal;text-decoration:none;}
-.Item {color:#000;font-size:20px;font-family:Î¢ÈíÑÅºÚ;font-weight:normal;text-decoration:none;font-weight:bold;}
+.Item {color:#000;font-size:18px;font-family:Î¢ÈíÑÅºÚ;font-weight:normal;text-decoration:none;font-weight:bold;}
 .cbp_tmlabel {
-	margin: 0 0 15px 25%;
+	margin: 0 0 5px 160px;
 	color: #000000;
 	padding: 2em;
 	font-size: 1.2em;
@@ -54,7 +54,10 @@ a,img{border:0;}
     border-style:solid; 
     border-width:3px; 
     border-color:#00DB00;
-    width:450px;
+    width:330px;
+	padding-bottom: 20px;
+    padding-left: 20px;
+
 }
 
 

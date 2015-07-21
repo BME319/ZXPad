@@ -55,13 +55,6 @@ function ResetInfo()
 /**********************保存信息************************/
 function SaveInfo()
 {
-	$.mobile.loading('show', {  
-		text: '保存信息中...', //加载器中显示的文字  
-		textVisible: true, //是否显示文字  
-		theme: 'a',        //加载器主题样式a-e  
-		textonly: false,   //是否只显示文字  
-		html: ""           //要显示的html内容，如图片等  
-	}); 
 	var UserId = localStorage.getItem("PatientId");
 	var UserName = document.getElementById("UserName").value;
 	var Gender = document.getElementById("SexType").value;
@@ -73,11 +66,11 @@ function SaveInfo()
 	var lengthIDNo = $("#IDNo").val().length;
 	var reg = /^\d+(?=\.{0,1}\d+$|$)/
 	var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;	//2015-5-22 ZCY增加
-	var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;	//2015-5-22 ZCY增加
+	//var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;	//2015-5-22 ZCY增加
+	var isMob = /^1[3|4|5|7|8][0-9]\d{8}$/;
  
 	if (Gender == "0" || Gender == "" || Birthday == "" || UserName == "")	//2015-5-22 ZCY更改
 	{
-		$.mobile.loading('hide');
 		if (UserName == "") {
 			document.getElementById("AlertUserName").style.display = "block";
 		}
@@ -110,7 +103,6 @@ function SaveInfo()
 	}
 	
 	if(!reg.test(Height) && Height != ""){ 
-        $.mobile.loading('hide');
 		document.getElementById("AlertHeight").style.display = "block";
     } 
 	else 
@@ -119,7 +111,6 @@ function SaveInfo()
 	}
 	
 	if(!reg.test(Weight) && Weight != ""){
-        $.mobile.loading('hide');
 		document.getElementById("AlertWeight").style.display = "block";
     } 
 	else
@@ -129,7 +120,6 @@ function SaveInfo()
 	
 	if (lengthIDNo != 15 && lengthIDNo != 18 && lengthIDNo != 0)	//2015-5-22 ZCY更改
 	{
-		$.mobile.loading('hide');
 		document.getElementById("AlertID").style.display = "block";
 	}
 	else
@@ -139,7 +129,6 @@ function SaveInfo()
 	
 	if (!isMob.test(PhoneNumber) && !isPhone.test(PhoneNumber) && PhoneNumber != "")
 	{
-		$.mobile.loading('hide');
 		document.getElementById("AlertPhone").style.display = "block";
 	}
 	else
@@ -149,7 +138,6 @@ function SaveInfo()
 	
 	if (!isMob.test(EmergencyContactPhoneNumber) && !isPhone.test(EmergencyContactPhoneNumber) && EmergencyContactPhoneNumber != "")
 	{
-		$.mobile.loading('hide');
 		document.getElementById("AlertEmergencyPhone").style.display = "block";
 	}
 	else
@@ -159,6 +147,13 @@ function SaveInfo()
 	
 	if (Gender != "0" && Gender != "" && Birthday != "" && UserName != "" && (reg.test(Height) || Height == "") && (reg.test(Weight) || Weight == "") && (lengthIDNo == 15 || lengthIDNo == 18 || lengthIDNo == 0) && (isMob.test(PhoneNumber) || isPhone.test(PhoneNumber) || PhoneNumber == "") && (isMob.test(EmergencyContactPhoneNumber) || isPhone.test(EmergencyContactPhoneNumber) || EmergencyContactPhoneNumber == ""))
 	{
+		$.mobile.loading('show', {  
+			text: '保存信息中...', //加载器中显示的文字  
+			textVisible: true, //是否显示文字  
+			theme: 'a',        //加载器主题样式a-e  
+			textonly: false,   //是否只显示文字  
+			html: ""           //要显示的html内容，如图片等  
+		}); 
 		var IDNo = document.getElementById("IDNo").value;
 		var BloodType = document.getElementById("AboBloodType").value;
 		//var Height = document.getElementById("Height").value;
@@ -227,44 +222,46 @@ function SaveInfo()
 		else {
 			alert("基本信息保存失败！")
 		}*/
-		$.ajax({
-		  type: "POST",
-		  dataType: "xml",
-		  timeout: 30000,
-		  url: 'http://' + serverIP + '/' + serviceName + '/GetAllRoleMatch',
-		  async: false,
-		  data:
-		  {
-			  UserId: UserId
-		  },
-		  beforeSend: function () {
-		  },
-		  success: function (result) {
-			  $(result).find('Table1').each(function () {
-				  var RoleClass = $(this).find("RoleClass").text();
-				  if(RoleClass != 'Patient')
-				  {
-					  SetDoctorInfo(UserId, UserName, Birthday, Gender, IDNo, InvalidFlag, revUserId, TerminalName, TerminalIP, DeviceType);
-					  SetDoctorInfoDetail(UserId, "Contact", "Contact001_1", ItemSeq, IDNo, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-					  SetDoctorInfoDetail(UserId, "Contact", "Contact001_2", ItemSeq, Occupation, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-					  SetDoctorInfoDetail(UserId, "Contact", "Contact001_3", ItemSeq, Nationality, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-					  SetDoctorInfoDetail(UserId, "Contact", "Contact002_1", ItemSeq, PhoneNumber, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-					  SetDoctorInfoDetail(UserId, "Contact", "Contact002_2", ItemSeq, HomeAddress, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-					  SetDoctorInfoDetail(UserId, "Contact", "Contact002_3", ItemSeq, EmergencyContact, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-					  SetDoctorInfoDetail(UserId, "Contact", "Contact002_4", ItemSeq, EmergencyContactPhoneNumber, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-					  SetDoctorInfoDetail(UserId, "BodySigns", "Height", ItemSeq, Height, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-					  SetDoctorInfoDetail(UserId, "BodySigns", "Weight", ItemSeq, Weight, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
-					  
-				  }
-			  })
-		  },
-		  error: function (msg) {
-			  $.mobile.loading('hide');
-			  alert("GetAllRoleMatch出错啦！");
-		  }
-	  });
+		setTimeout(function(){
+			$.ajax({
+			  type: "POST",
+			  dataType: "xml",
+			  timeout: 30000,
+			  url: 'http://' + serverIP + '/' + serviceName + '/GetAllRoleMatch',
+			  async: false,
+			  data:
+			  {
+				  UserId: UserId
+			  },
+			  beforeSend: function () {
+			  },
+			  success: function (result) {
+				  $(result).find('Table1').each(function () {
+					  var RoleClass = $(this).find("RoleClass").text();
+					  if(RoleClass != 'Patient')
+					  {
+						  SetDoctorInfo(UserId, UserName, Birthday, Gender, IDNo, InvalidFlag, revUserId, TerminalName, TerminalIP, DeviceType);
+						  SetDoctorInfoDetail(UserId, "Contact", "Contact001_1", ItemSeq, IDNo, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+						  SetDoctorInfoDetail(UserId, "Contact", "Contact001_2", ItemSeq, Occupation, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+						  SetDoctorInfoDetail(UserId, "Contact", "Contact001_3", ItemSeq, Nationality, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+						  SetDoctorInfoDetail(UserId, "Contact", "Contact002_1", ItemSeq, PhoneNumber, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+						  SetDoctorInfoDetail(UserId, "Contact", "Contact002_2", ItemSeq, HomeAddress, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+						  SetDoctorInfoDetail(UserId, "Contact", "Contact002_3", ItemSeq, EmergencyContact, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+						  SetDoctorInfoDetail(UserId, "Contact", "Contact002_4", ItemSeq, EmergencyContactPhoneNumber, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+						  SetDoctorInfoDetail(UserId, "BodySigns", "Height", ItemSeq, Height, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+						  SetDoctorInfoDetail(UserId, "BodySigns", "Weight", ItemSeq, Weight, Description, SortNo, revUserId, TerminalName, TerminalIP, DeviceType);
+						  
+					  }
+				  })
+				  $.mobile.loading('hide');
+			  },
+			  error: function (msg) {
+				  $.mobile.loading('hide');
+				  alert("GetAllRoleMatch出错啦！");
+			  }
+		  });
+		},1000);
 	}
-	$.mobile.loading('hide');
 }
 
 //获取病人基本信息

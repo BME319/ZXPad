@@ -1,19 +1,69 @@
-	 function editPlan(){
-		 var id = 'thumb_'+ index;
-		 var name=$("#"+id).attr("name");
-		 if(name==""){
-			//
-		 }
-		 else{
-			//传入
-			PlanNo = name;
-		 }
-		 getTargetInfo();
-			
+
+	//var PatientId;
+	//var Module = "M1";
+
+		 //传入值
+        var PatientId = localStorage.getItem("PatientId");
+        var Module = localStorage.getItem("ModuleType");
+        var PlanStatus = localStorage.getItem("PlanStatus");
+
+        var piUserId = localStorage.getItem('UserId');
+        var piTerminalName = localStorage.getItem('TerminalName');
+        var piTerminalIP = localStorage.getItem('TerminalIp');
+        var piDeviceType = localStorage.getItem('DeviceType');
+        var DoctorId = localStorage.getItem('UserId');
+
+        //初始值 全局变量
+        var chart_imp = ""; ;
+        var NowPlanNo = "";
+        var StartDate = 0;
+        var EndDate = 0;
+		
+	//写死
+	var PLType = 1;
+	var Status = 3;
+	
+	var PlanNo;
+ 	function editPlan(){
+		
+		PlanNo = GetExecutingPlanNoByModule(PatientId,Module);
+		
+		getTargetInfo();
+		
 		
 	  }
 	  
+	  //从数据库中获取患者某个模块下正在执行的计划
+	 function GetExecutingPlanNoByModule(PatientId,Module){
+      var option = "";
+	  $.ajax({  
+		type: "POST",
+		dataType: "xml",
+		timeout: 30000,  
+		url: 'http://'+ serverIP +'/'+serviceName+'/GetExecutingPlanByModule',
+		async:false,
+		data: {PatientId:PatientId,
+			   Module:Module},//输入变量
+		beforeSend: function(){},
+		success: function(result) { 
+			 //存在正在执行的计划，则直接读取
+			option=$(result).text();
+			if (option != "")
+			{
+				//
+			}
+			else 
+			{
+				option = "";
+			}					    
+	    }, 
+	    error: function(msg) {alert("获取正在执行的计划出错！");}
+	  });
+      return option;	
+  }	
+  
 	function getTargetInfo(){
+	
 		$("#SBPValue").val(GetTargetBP(PLType,PlanNo,1));
 		$("#DBPValue").val(GetTargetBP(PLType,PlanNo,2));
 		
@@ -36,8 +86,17 @@
 	
 	function saveTarget(){
 		//不进行数据库操作，只跳转到下一个界面
-		panelnav2();
-		$("#nav1").addClass("ui-btn-active");
+		//panelnav2();
+//		$("#nav1").addClass("ui-btn-active");
+		var curSBPValue = $("#curSBPValue").val();
+		var curDBPValue = $("#curDBPValue").val();
+		if(curSBPValue==""||curDBPValue==""){
+			alert("当前收缩压和舒张压必填！");
+		}
+		else{
+			panelnav2();
+			$("#nav1").addClass("ui-btn-active");
+		}
 	}
 	
 	function gotoTarget(){
@@ -83,6 +142,7 @@
 	 
 	 //从数据库中读取用户当前收缩压值
   function GetCurrentSBP(PatientId){
+	
       var option = "";
 	  $.ajax({  
 		type: "POST",
@@ -106,7 +166,7 @@
 				option = "请输入";
 			}					    
 	    }, 
-	    error: function(msg) {alert("Get Current Sbp Error!");}
+	    error: function(msg) {alert("获取当前收缩压出错 为什么!");}
 	  });
       return option;	
   }	
@@ -431,19 +491,26 @@
 		var StartDate = new Date().Format("yyyyMMdd");
 		var EndDate = $("#EndDate").val().replace(/-/g,"");
 		
-		editPlanStatus(PlanNo);		
-				
+		if(PlanNo == "")
+		{
+		}
+		else
+		{
+			editPlanStatus(PlanNo);
+		}
 		NewPlanNo = GetNewPlanNo();
-		
 		SetPlan(NewPlanNo, PatientId, StartDate, EndDate, Module, Status, DoctorId, piUserId, piTerminalName, piTerminalIP, piDeviceType);
 		
 		InsertTargetBP(NewPlanNo,1,"Bloodpressure","Bloodpressure_1",SBPValue,curSBPValue);
 		InsertTargetBP(NewPlanNo,2,"Bloodpressure","Bloodpressure_2",DBPValue,curDBPValue);
 		//alert(NewPlanNo);
-		
+		InsertCurBP(curSBPValue,"Bloodpressure_1");
+			InsertCurBP(curDBPValue,"Bloodpressure_2");
 	  
 	var task_str = "";
-	task_str += 'VitalSign#Bloodpressure|Bloodpressure_1#@' + 'VitalSign#Bloodpressure|Bloodpressure_2#@';
+	//task_str += 'VitalSign#Bloodpressure|Bloodpressure_1#@' + 'VitalSign#Bloodpressure|Bloodpressure_2#@';
+	task_str += 'VitalSign#Bloodpressure|Bloodpressure_1#@' + 'VitalSign#Bloodpressure|Bloodpressure_2#@'+ 'VitalSign#Pulserate|Pulserate_1#@';
+
 	$("input[name='LifeStyle']:checked").each(function () {
 		task_str = task_str + this.name.toString() + '#' + this.value.toString() + '#@'; 
 	});
@@ -492,9 +559,19 @@
 					 //SetComplianceDetail
 					 var Parent = PatientId + "||" + StartDate + "||" + NewPlanNo;
 					 var i;
-					 for (i=1;i<=taskLength;i++){
-						 SetComplianceDetail(Parent,i,0);
+					 //for (i=1;i<=taskLength;i++){
+//						 SetComplianceDetail(Parent,i,0);
+//					 }
+
+					for (i=1;i<=taskLength;i++){
+						 if(i==1||i==2){
+							SetComplianceDetail(Parent,i,1);
+						 }
+						 else{							 
+						 	SetComplianceDetail(Parent,i,0);
+						 }
 					 }
+					 	
 					 	
 					 $("#nav3").addClass("ui-btn-active");				 
 					 location.reload();
@@ -553,6 +630,7 @@
 		  	//ret = $(result).text();
 		  },
 		  error: function(msg) {alert("SetComplianceError!");}
+
 	  });
   }
   
@@ -577,7 +655,6 @@
   }
   
   function editPlanStatus(PlanNo){
-	  //var ret;
 	  $.ajax({  	  
 		  type: "POST",
 		  dataType: "xml",
@@ -615,3 +692,60 @@
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
+
+//插入当前收缩压 Ps.VitalSign
+    function InsertCurBP(CurSbp,ItemCode)
+    {
+		var ret = false;
+	  //var CurSbp=$('#TextInput1').val();
+
+		  var RecordDate ="";
+		  var RecordTime = "";
+		  
+		  $.ajax({  
+			  type: "POST",
+			  dataType: "xml",
+			  timeout: 30000,  
+			  url: 'http://'+ serverIP +'/'+serviceName+'/GetServerTime',
+			  async:false,
+			  data: {},
+			  beforeSend: function(){},
+			  success: function(result) {
+				  RecordDate =  $(result).text().slice(0,10).replace(/-/g,"");	
+				  RecordTime = $(result).text().slice(11,16).replace(/:/g,"");	 
+			  }, 
+			  error: function(msg) {alert("GetServerTimeError!");}
+		  });
+	  
+		  $.ajax({  
+			  type: "POST",
+			  dataType: "xml",
+			  timeout: 30000,  
+			  url: 'http://'+ serverIP +'/'+serviceName+'/SetPatientVitalSigns',
+			  async:false,
+			  data: {UserId:localStorage.getItem('PatientId'),
+					 RecordDate:RecordDate,
+					 RecordTime:RecordTime,
+					 ItemType:"Bloodpressure",
+					 ItemCode:ItemCode,
+					 Value:CurSbp,
+					 Unit:"mmHg",
+					 revUserId:localStorage.getItem('UserId'),
+					 TerminalName:localStorage.getItem('TerminalName'),
+					 TerminalIp:localStorage.getItem('TerminalIp'),
+					 DeviceType:localStorage.getItem('DeviceType')
+					 },//输入变量
+			  beforeSend: function(){},
+			  success: function(result) {
+				 ret =  $(result).text();
+//				  //alert(RecordDate);
+//				  var SBP = CurSbp;
+//				  GetDescription(SBP); 
+		 
+			 },
+			 error: function(msg) {alert("InsertcurBPError!");
+			 
+			 ret =false;} 
+		  });
+	  return ret;
+    }  

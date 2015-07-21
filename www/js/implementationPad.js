@@ -15,7 +15,7 @@
         dataType: "json",
 		timeout: 30000,  
 		url: 'http://'+ serverIP +'/'+serviceName+'/GetImplementationForPadFirst',
-		//async:false,
+		async:false,
         data: {PatientId:PatientId, 
 		        Module:Module,
 			  },
@@ -134,7 +134,7 @@
 			          createStockChart(data.ChartData);
 					  //监听下部图的bullet点 的点击事件
 					  
-					  setTimeout(function(){chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); },500);
+					  setTimeout(function(){chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); },1000);
 					  //chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); 
 					  //监听下部图的横坐标lable 的点击事件
 					 //chart.panels[1].categoryAxis.addListener("clickItem",showDetailInfo);
@@ -177,6 +177,7 @@ function showDetailInfo(event)
 	//清空弹框内内容
 	//$("#ul_targetDetial li").remove();
 	$('#ul_targetDetial').find("li").remove();
+	document.getElementById("ul_targetDetial").innerHTML="";
 	
 	//获取被点击的bullet的时间值，事件格式，许处理成string"20150618"格式传到webservice
 	var dateSelected=event.item.category;
@@ -205,7 +206,7 @@ function showDetailInfo(event)
         dataType: "json",
 		//timeout: 30000,  
 	url: 'http://'+ serverIP +'/'+serviceName+'/GetImplementationByDate',
-		//async:false,
+		async:false,
         data: {PatientId:PatientId, 
 		        PlanNo:NowPlanNo,
 				DateSelected:theDate
@@ -224,11 +225,11 @@ function showDetailInfo(event)
 		for(var j=0;j<data.VitalTaskComList.length;j++)
 		{
 			if(data.VitalTaskComList[j].Status=="1"){
-			str+='<p style="margin-left:10px;font-size:14px;">✔ '+data.VitalTaskComList[j].SignName+'<span style="margin-left:10px;"> '+data.VitalTaskComList[j].Value+''+data.VitalTaskComList[j].Unit+'</span> <span style="margin-left:10px;">'+data.VitalTaskComList[j].Time+'</span></p>';
+			str+='<p style="margin-left:10px;font-size:14px;white-space:pre-wrap;">✔ '+data.VitalTaskComList[j].SignName+'<span style="margin-left:10px;"> '+data.VitalTaskComList[j].Value+''+data.VitalTaskComList[j].Unit+'</span> <span style="margin-left:10px;">'+data.VitalTaskComList[j].Time+'</span></p>';
 			}
 			else
 			{
-				str+='<p style="margin-left:10px;font-size:14px;color:red;"><b>✘ '+data.VitalTaskComList[j].SignName+'</b></p>';
+				str+='<p style="margin-left:10px;font-size:14px;color:red;white-space:pre-wrap;"><b>✘ '+data.VitalTaskComList[j].SignName+'</b></p>';
 			}
 		}
 		str+='</li>'; 
@@ -242,13 +243,13 @@ function showDetailInfo(event)
 		    {
 				if(data.TaskComByTypeList[i].TaskType =="生活方式aa")
 				{
-				  str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;">'+data.TaskComByTypeList[i].TaskType+'</h3><p style="font-size:14px;">';
+				  str+=' <li ><h3 style="margin-top:-5px;margin-left:-5px;white-space:pre-wrap;">'+data.TaskComByTypeList[i].TaskType+'</h3><p style="font-size:14px;">';
 			  
 			 
 				 for(var j=0;j<data.TaskComByTypeList[i].TaskComList.length;j++)
 				 {
 					 
-					 if(data.TaskComByTypeList[i].TaskComList[j].Status=="1")
+					 if(data.TaskComByTypeList[i].TaskComList[j].TaskStatus=="1")
 					{
 				  str+='<span style="margin-left:10px;">✔ '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'</span>';
 				  
@@ -267,14 +268,14 @@ function showDetailInfo(event)
 			
 				for(var j=0;j<data.TaskComByTypeList[i].TaskComList.length;j++)
 				{
-					if(data.TaskComByTypeList[i].TaskComList[j].Status=="1")
+					if(data.TaskComByTypeList[i].TaskComList[j].TaskStatus=="1")
 					{
-						str+='<p style="font-size:14px;"><span style="margin-left:10px;">✔ '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'</span></p>';
+						str+='<p style="font-size:14px;white-space:pre-wrap;"><span style="margin-left:10px;">✔ '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'</span></p>';
 						
 					}
 					else
 					{
-						str+='<p style="font-size:14px;"><b><span style="margin-left:10px;color:red;">✘ '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'</span></b></p>';
+						str+='<p style="font-size:14px;white-space:pre-wrap;"><b><span style="margin-left:10px;color:red;">✘ '+data.TaskComByTypeList[i].TaskComList[j].TaskName+'</span></b></p>';
 					}
 				}
 				str+='</li>'; 
@@ -394,10 +395,11 @@ function showDetailInfo(event)
 							//type: "line",
 							id: "graph1",
                             valueField: "SignValue",
-							lineColor: "#7f8da9",
-							lineColorField:"SignColor",
-							lineThickness : 0,
-							lineAlpha:0,
+							lineColor: "#EA7500",
+							//lineColorField:"SignColor",
+							lineThickness : 3,
+							lineAlpha:1,
+							//connect:false,
 							bullet: "round",
 							bulletField:"SignShape",
 							bulletSize:12,
@@ -480,7 +482,7 @@ function showDetailInfo(event)
 				},
 				chartCursorSettings:{
 					zoomable:false,
-					pan:true,
+					//pan:true,
 					usePeriod: "7DD",
 					//pan:false,
 				    //zoomable:true,
@@ -535,7 +537,7 @@ function showDetailInfo(event)
         dataType: "json",
 		//timeout: 30000,  
 		url: 'http://'+ serverIP +'/'+serviceName+'/GetSignInfoByCode',
-		//async:false,
+		async:false,
         data: {PatientId:PatientId, 
 		        PlanNo:NowPlanNo,
 				ItemCode:ItemCode, 
@@ -755,7 +757,7 @@ function rechange(loop){
 		//timeout: 30000,  
 		//url: 'http://localhost:58895/Services.asmx/GetImplementationForPadSecond',
 		url: 'http://'+ serverIP +'/'+serviceName+'/GetImplementationForPadSecond',
-		//async:false,
+		async:false,
         data: {PatientId:PatientId, 
 		        PlanNo:PlanNo,
 			  },
@@ -803,7 +805,8 @@ function rechange(loop){
 			         createStockChart(data.ChartData);
 					  
 					   //监听下部图的bullet点 的点击事件
-					  chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); 
+					   setTimeout(function(){chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); },500);
+					 // chart_imp.panels[1].addListener("clickGraphItem",showDetailInfo); 
 					  //监听下部图的横坐标lable 的点击事件
 					 //chart.panels[1].categoryAxis.addListener("clickItem",showDetailInfo);
 				  }
@@ -988,10 +991,12 @@ function rechange(loop){
 							//type: "line",
 							id: "graph1",
                             valueField: "SignValue",
-							lineColor: "#7f8da9",
-							lineColorField:"SignColor",
-							lineThickness : 0,
-							lineAlpha:0,
+							//lineColor: "#7f8da9",
+							lineColor: "#EA7500",
+							//lineColorField:"SignColor",
+							lineThickness : 3,
+							lineAlpha:1,
+							//connect:false,
 							bullet: "round",
 							bulletField:"SignShape",
 							bulletSize:12,
@@ -1031,7 +1036,7 @@ function rechange(loop){
 				chartCursorSettings:{
 					usePeriod: "7DD",
 				    zoomable:false,
-					pan:true,
+					//pan:true,
 					//leaveCursor:"false",
 					//cursorPosition:"middle",
 					categoryBalloonEnabled:false,
