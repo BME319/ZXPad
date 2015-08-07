@@ -233,12 +233,12 @@ url:'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_met
 
 
   
-  //获取患者就诊信息 WF
+   //获取时间轴信息
   function GetMoreClinic() {
 	  var length=0;
-	  var target = document.getElementById("history_loading");
-	  target.style.display = "block";
-	  $("#historyButton").hide();
+	 document.getElementById("history_loading").style.display = "block";
+	// $("#pop_historyLoading").popup("open");
+	  document.getElementById("historyButton").style.display = "none";
 
 	  var admissionDateMark = document.getElementById("AdmissionDateMark").value;
 	  var clinicDateMark = document.getElementById("ClinicDateMark").value;
@@ -249,11 +249,8 @@ url:'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_met
 		  type: "GET",
 		  dataType: "json",
 		  async: false,
-		  data: { UserId: localStorage.getItem('PatientId'), AdmissionDate: admissionDateMark, ClinicDate: clinicDateMark, Num: 10 },
+		  data: { UserId: localStorage.getItem('PatientId'), AdmissionDate: admissionDateMark, ClinicDate: clinicDateMark, Num: 10},//localStorage.getItem('PatientId')
 		  success: function (res) {
-
-			  var target = document.getElementById("history_loading");
-			  target.style.display = "none";
 
 			  document.getElementById("AdmissionDateMark").value = res.AdmissionDateMark;  
 			  document.getElementById("ClinicDateMark").value = res.ClinicDateMark;
@@ -270,27 +267,99 @@ url:'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_met
 								  str += ' <p class="Item" id="">' + res.History[i].ItemGroup[j].Time + '<span style="margin-left:20px;">' + res.History[i].ItemGroup[j].Event + '</span></p>';
 							  }
 							  else {
-							  str += '<p><a href="#ClinicInfoDetail-form"  class="Itemhref" id=' + res.History[i].ItemGroup[j].KeyCode +' onclick="OpenClinicInfoDetail(this.id);">' + res.History[i].ItemGroup[j].Time + '&nbsp;&nbsp;' + res.History[i].ItemGroup[j].Event + '</a></p>';
+							  //str += '<p><a href="javascript:void(0);"  class="Itemhref" id=' + res.History[i].ItemGroup[j].KeyCode +' onclick="OpenClinicInfoDetail(this.id);">' + res.History[i].ItemGroup[j].Time + '&nbsp;&nbsp;' + res.History[i].ItemGroup[j].Event + '</a></p>';
+                                //不同类型的标注
+                                var type_class = "";
+                                if (res.History[i].ItemGroup[j].Type == "诊断") {
+                                    type_class = "Itemhref_Diagnosis";
+                                }
+                                else if (res.History[i].ItemGroup[j].Type == "检查") {
+                                    type_class = "Itemhref_Examination";
+                                }
+                                else if (res.History[i].ItemGroup[j].Type == "化验") {
+                                    type_class = "Itemhref_LabTest";
+                                }
+                                else if (res.History[i].ItemGroup[j].Type == "用药") {
+                                    type_class = "Itemhref_Drug";
+                                }
+                                str += '<p class="' + type_class + '" ><a href="javascript:void(0)" id="' + res.History[i].ItemGroup[j].KeyCode + '" onclick="OpenClinicInfoDetail(this.id);">' + res.History[i].ItemGroup[j].Time + '&nbsp;&nbsp;' + res.History[i].ItemGroup[j].Event + '</a></p>';
+                            
+							  
 							  }
 						  }
 						  str += '</li>';
 					  }
+					  
+					  document.getElementById("history_loading").style.display = "none";
 					  $("#historyUl").append(str);
+					 //setTimeout(function(){$("#pop_historyLoading").popup("close");},50); 
+					 
+					if (res.mark_contitue == "1") {
+                        //$("#historyButton").show();
+                        document.getElementById("historyButton").style.display = "block";
+                    }
+                    else {
+                        //$("#historyButton").hide();
+                        document.getElementById("historyButton").style.display = "none";
+                    }
+					
+					//只显示选择的类型
+                    TypeChange();
+					  //document.getElementById("historyButton").style.display = "block";
 					  //$("#historyButton").show();
-					  document.getElementById("historyButton").style.display = "block";
 				  }
 				  
 				  else {
 					  //$("#historyButton").hide();
 		              document.getElementById("historyButton").style.display = "none";
 				  }
-
-			  }
-
-	  });
+                      document.getElementById("history_loading").style.display = "none";
+			 	},
+	error: function (msg) {
+		alert("GetMoreClinic 出错啦！");
+	}
+   });
 
 	  return length;
   }
+
+
+    //不同类型信息额才显示与隐藏（检查/化验等）
+  function TypeChange() {
+    $('#historyUl').find('li').each(function () {
+        $(this).css({ display: 'block' });
+    });
+
+    //var type_selected = $("#type_chose").val();
+	var type_selected = $("#type_chose").children('option:selected').val()
+    if (type_selected == "all") {
+        $('.Itemhref_Diagnosis ').css({ display: 'block' });
+        $('.Itemhref_Examination ').css({ display: 'block' });
+        $('.Itemhref_LabTest ').css({ display: 'block' });
+        $('.Itemhref_Drug ').css({ display: 'block' });
+    }
+    else {
+        $('.Itemhref_Diagnosis').css({ display: 'none' });
+        $('.Itemhref_Examination').css({ display: 'none' });
+        $('.Itemhref_LabTest').css({ display: 'none' });
+        $('.Itemhref_Drug').css({ display: 'none' });
+        $('.' + type_selected).css({ display: 'block' });
+    }
+
+    //空框被隐藏
+    $('#historyUl').find('li').each(function () {
+        var mark = 0;
+        $(this).find('p').each(function () {
+            if ($(this).css("display") == "block") {
+                mark = 1;
+            }
+        });
+        if (mark == 0) {
+            $(this).css({ display: 'none' });
+        }
+    });
+
+    }
 
 
   function OpenClinicInfoDetail(keycode) {
