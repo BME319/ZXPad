@@ -618,6 +618,21 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
           <p style="font-size:24px;color:blue;" id="AlertSynInfoText"><b>同步中...</b></p>
       </div>
     
+<div data-role="fieldcontain" style="margin-bottom:0px;margin-top: 0px;">
+      <table>
+        <tr>
+           <td><label for="type_chose" style="width:160px">临床信息按类型筛选</label></td>
+          <td width="200px"><select name="type_chose" size="" id="type_chose" style="height:40px" data-native-menu="false" >
+                        <option value="all">所有</option>
+                        <option value="Itemhref_Diagnosis">诊断</option>
+                        <option value="Itemhref_Examination">检查</option>
+                        <option value="Itemhref_LabTest">化验</option>
+                        <option value="Itemhref_Drug">用药</option>
+            </select></td>
+          <td width="50px"></td>
+        </tr>
+      </table>
+    </div>
 
     <div id="ClinicInfoContent" >
       <input id="AdmissionDateMark" name="AdmissionDateMark" type="hidden" value="1897-01-01 00:00:00" />
@@ -1134,6 +1149,11 @@ $.mobile.loading( "hide" );
 	  $('#syn_Hospital').change(function(){ 
 	      HospitalChange($(this).children('option:selected').val());  //下拉框切换体征
 	   });
+	   
+	  //临床信息时间轴的类型切换
+	  $('#type_chose').change(function(){ 
+	     TypeChange();
+	  }); 
   });
   
   //SetTargetPage自运行
