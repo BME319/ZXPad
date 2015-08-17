@@ -14,11 +14,11 @@ var InitialHt = $("#SMSContent").height(); //初始高度
 var InitialTop = $("#OutField").position().top; //初始位置
 var MaxHt = 0; //输入框最大高度
 
-//ws
+/*//ws
 var ws; //websocket
 var wsServerIP = serverIP.substring(0, 11) + ":4141/chat"; 
 var SocketCreated = false;
-var isUserloggedout = false;
+var isUserloggedout = false;*/
 
 $(document).ready(function(event){
   $('#SMSHeader').html(localStorage.getItem("PatientName"));
@@ -31,7 +31,8 @@ $(document).ready(function(event){
   SMSBtn.addEventListener("mouseout", ChangeFlagToT, false);
   $('#SMSContent').val("");
   document.getElementById('SMSContent').style.height = "47px"; //设定文本域初始高度
-  WsPush(); //websocket
+  //WsPush(); //websocket
+  CHAT.usernameSubmit();
 })
 
 document.getElementById('SMSbtn').onclick = submitSMS;
@@ -80,7 +81,103 @@ function AddFunction(obj)
 	$('#SMSHeader').html(PatientName);		
 }
 
-//消息推送
+
+//************************************
+var WsUserId = window.localStorage.getItem("DoctorId");
+var WsUserName = window.localStorage.getItem("UserName");
+var wsServerIP = "ws://" + IP + ":4141"; 
+//var wsServerIP = "ws://" + "10.12.43.61" + ":4141";
+ 
+  //消息推送改进
+ (function () {	
+	window.CHAT = {
+		socket:null,
+
+	usernameSubmit:function(){
+			this.init();
+			return false;
+		},
+		//提交聊天消息内容
+		submit:function(WsContent){
+			
+				var obj = {
+					userid: WsUserId,
+					username: WsUserName,
+					content: WsContent
+				};
+				this.socket.emit('message', obj);
+			return false;
+		},
+		genUid:function(){
+			return new Date().getTime()+""+Math.floor(Math.random()*899+100);
+		},
+		
+		init:function(){		
+			this.socket = io.connect(wsServerIP);
+			
+			//告诉服务器由用户登陆
+			this.socket.emit('login', {userid:WsUserId, username:WsUserName});		
+			
+			//监听用户退出
+			this.socket.on('logout', function(o){
+				CHAT.updateSysMsg(o, 'logout');
+			});
+			
+			//监听消息
+			this.socket.on('message', function(obj){
+				var DataArry = obj.content.split("||");
+				
+				flag = localStorage.getItem("PanelFlag");
+				if ((flag == "Panel")&&(DataArry[0] == localStorage.getItem("PatientId")))
+				{	
+					CreateSMS("Receive", DataArry[1], DataArry[2]);
+					document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
+					SetSMSRead(ThisUserId, localStorage.getItem("PatientId"));//改写阅读状态
+				}
+				else
+				{
+					if (DataArry[0].substring(0, 3) != "log")
+					{
+						$('#PatientListTbody').find('tr').each(function() 
+						{
+							var piPatientId = $(this).find('td:first').find('div').find('ul').find('li:eq(1)').find('p').attr("value");
+							if (piPatientId == DataArry[0])
+							{
+								var Arry = GetLatestSMS(localStorage.getItem("DoctorId"), DataArry[0]);
+								var Count;
+								var piCount = $(this).find('td:last').find('div').find('ul').find('li:first').find('span').find('font').html();
+								if (typeof(piCount) == "undefined")
+								{
+									Count = "1";									
+								}
+								else
+								{
+									Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), DataArry[0]);
+									$(this).find('td:last').find('div').empty();
+								}
+								var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li onclick = "AddFunction(this)"><a href="" class="SMS"  value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
+								$(this).find('td:last').find('div').append(Str); 
+								$(this).parent().trigger('create');
+								
+								//总收件箱
+								var TotalCount = GetSMSCountForAll(localStorage.getItem("DoctorId"));
+								$('#SMSBox').find('span').find('font').html(TotalCount);
+							}
+						});
+					}
+				}
+			});
+		}
+	};
+})();
+ //************************************
+
+
+
+
+
+
+/*//消息推送
 window.onunload = function () //断开连接
 {
 	SocketCreated = false;
@@ -177,7 +274,7 @@ function WsPush ()
  function WSonError() {
 	console.log("远程连接中断。", "ERROR");
  };
-
+*/
 //autogrow初始化
 $("#SMSContent").textinput({
 	autogrow: true
@@ -361,7 +458,8 @@ function submitSMS()
 					document.getElementById('SMSContent').value = "";
 					document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
 					//console.log("点击发送");
-					ws.send(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);
+					//ws.send(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);
+					CHAT.submit(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);				
 				}
 				else
 				{

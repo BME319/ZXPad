@@ -1,10 +1,13 @@
 ﻿/**********************全局变量************************/
  //var serverIP = '10.12.43.94:8089';
  //var serverIP = '10.12.43.66:8088';
- var serverIP = '10.13.22.66:8088';
+ //var serverIP = '10.13.22.66:8088';
 //var serverIP = '10.12.43.101:8088'; //backupservice
 //var serverIP = '10.12.43.101:8085';
 //var serverIP = '10.12.43.101:8098';	//mulitiple-users
+ var IP = "10.12.43.67";
+ var Port = "8088";
+ var serverIP = IP + ":" + Port;
  var serviceName = 'Services.asmx';
  var imgStoreFile="PersonalPhoto";
  
