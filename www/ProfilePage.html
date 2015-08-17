@@ -296,6 +296,23 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
 	font-weight: bold;
 }
 </style>
+</style>
+<!--Panel in SetTargetPage-->
+<style type="text/css"> 
+  
+#SetTargetPage #panelForDetailInfo.ui-panel {
+    width: 750px;
+}
+#SetTargetPage #panelForDetailInfo.ui-panel-closed {
+    width: 0;
+}
+#SetTargetPage .ui-panel-page-content-position-left,
+.ui-panel-dismiss-open.ui-panel-dismiss-position-right {
+    left: 0em;/*panel左边页面关闭触发范围*/
+    right: 750px;/*panel页面关闭触发范围*/
+}
+</style>
+
 </head>
 <body>
 <div data-role="page" id="BasicInfoPage">
@@ -739,7 +756,7 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
             <!--        <button class="ui-btn ui-btn-inline"  onclick="GetMoreClinic();" id="historyButton">加载更多</button>
 -->
             <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#ClinicInfoPage'); $.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
-            <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage'); $.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
+            <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#SetTargetPage'); $.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});SetTargerPageinitialize()">下一步</button>
           </div>
           <div class="ui-block-c"></div>
           <div class="mainInfo" data-role="listview"> 
@@ -766,7 +783,7 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
  <div data-role="content" data-theme="a" id="MainField">
      <div  data-role="fieldcontain" style = "margin:0;">
       <label for="points" style="margin-top:0px;">患者建档进度：</label>
-      <input type="range" name="points" class="points" value="60" min="0" max="100" data-highlight="true">
+      <input type="range" name="points" class="points" value="60" min="0" max="100" data-highlight="true" >
     </div>
 
     <div class="ui-grid-b">
@@ -779,19 +796,14 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
           <div class="ui-block-b">
             <div  id="chart_DBP_1" style="width: 150px; height: 300px;"></div>
           </div>
-          <div data-role="fieldcontain" id="test1">
-            <label style="width:50%">当前收缩压</label>
-            <input  type="text" id="TextInput1" onkeyup="this.value=this.value.replace(/\D/g,'') ;GetDescription();SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);Risk() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onfocus="clearContent(this);"/>
-            <label style="width:50%">当前舒张压</label>
-            </br>
-            </br>
-            <input type="text" id="TextInput2" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);Risk() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onfocus="clearContent(this);"/>
-            </br>
-            </br>
-            </br>
-            </br>
-            </br>
+          <div data-role="fieldcontain" id="test1" style="margin-left:30px;font-size:12px;">
+          <table>
+          <tr><td>当前收缩压：</td><td id= "PageCurrentSBP"></td><td width="10%"></td><td>当前舒张压：</td><td id= "PageCurrentDBP"></td></tr>
+           <tr><td>目标收缩压：</td><td id= "PageTargetSBP"></td><td width="10%"></td><td>目标舒张压：</td><td id= "PageTargetDBP"></td></tr>  
+            <tr><td>腹围：</td><td id= "PageAbdominalGirth"></td><td width="10%"></td><td>BMI：</td><td id= "PageBMI"></td></tr>
+           </table> 
           </div>
+          <a  href="#panelForDetailInfo" style="margin-left:50px;">查看详细信息</a>
         </div>
       </div>
       
@@ -800,14 +812,15 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
         <h3 align="center">高血压等级说明</h3>
         <textarea data-role="none" id="hyperclass" name="" cols="" rows=""  readonly="readonly" ></textarea>
        </div>
+                
         <div data-role="fieldcontain" id="test2">
-          <label style="width:50%">目标收缩压</label>
+<!--          <label style="width:50%">目标收缩压</label>
           <input type="text" id="TextInput3" onkeyup="this.value=this.value.replace(/\D/g,'') ;SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1)  ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onfocus="clearContent(this);"/>
           <label style="width:50%">目标舒张压</label>
+ -->         </br>
           </br>
-          </br>
-          <input type="text" id="TextInput4" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1) ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onfocus="clearContent(this);"/>
-          </br>
+<!--          <input type="text" id="TextInput4" onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1) ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onfocus="clearContent(this);"/>
+-->          </br>
           </br>
           </br>
           </br>
@@ -818,13 +831,176 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
         <h3 align="center">风险评估</h3>
         <!--        <div id="chartdiv3" style="width:300px; height:400px;"> </div>
 -->
-        <div id="chartdiv3" style="width:320px; height:325px;"> </div>
+        <div id="chartdiv3" style="width:320px; height:325px;"> 
+        <table style="font-size:15px;font-weight:bold;color:white;border-spacing:5px 5px;margin-left:35px;">
+        <tr style="height:50px;"><td>高血压发生率：</td><td id = "Hyper" align="center" width="80px"></td></tr>
+        <tr style="height:50px;"><td>高血压五年死亡率：</td><td id = "Harvard" align="center"></td></tr>
+        <tr style="height:50px;"><td>心血管十年发病率：</td><td id = "Framingham" align="center"></td></tr>
+        <tr style="height:50px;"><td>中风十年发生率：</td><td id = "Strokee" align="center"></td></tr>
+        <tr style="height:50px;"><td>心衰发生率：</td><td id = "Heart" align="center"></td></tr>
+        </table>
+        </div>
         <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#ModuleInfoPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">上一步</button>
-        <button class="ui-btn ui-btn-inline" onclick="if(InsertTarget()) {$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});}getGoalValue();">下一步</button>
+        <button class="ui-btn ui-btn-inline" onclick="$.mobile.changePage('#CreatePlanPage');$.mobile.loading( 'show', {text: 'loading', textVisible: true, textonly: false,});">下一步</button>
       </div>
       
     </div>
   </div>
+  
+  <div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" data-theme="a" id="panelForDetailInfo">
+
+        <form class="userform">
+
+        	<h2>详细信息</h2>
+           <table width="100%" cellpadding="10px">
+			<tr>
+            <td>
+            <label>年龄:</label>
+            <input type="text" name="Age" id="Age" value="" data-clear-btn="true" data-mini="true" disabled= "true">
+			</td><td>
+            <label>性别:</label>
+            <input type="text" name="Gender" id="Gender" value="" data-clear-btn="true" data-mini="true" disabled= "true">
+			</td><td>
+            <label>心率(次/分):<font color='red' style='visibility:hidden' id='Heartrate_x'></font></label>
+            <input type="text" name="Heartrate" id="Heartrate" value="" data-clear-btn="true" data-mini="true" onkeyup="JugeFormate(this.id)" onBlur="JugeFormate(this.id)">            
+			</td>
+            </tr><tr>
+            <td>
+            <label>身高cm）:<font color='red' style='visibility:hidden' id='syfHeight_x'></font></label>
+            <input type="text" name="syfHeight" id="syfHeight" value="" data-clear-btn="true" data-mini="true" onBlur="GetBMI();JugeFormate(this.id);" onkeyup="JugeFormate(this.id)">
+			</td><td>
+           <label>体重（kg）:<font color='red' style='visibility:hidden' id='syfWeight_x'></font></label>
+            <input type="text" name="syfWeight" id="syfWeight" value="" data-clear-btn="true" data-mini="true" onBlur="GetBMI();JugeFormate(this.id);" onkeyup="JugeFormate(this.id)">
+			</td><td>
+            <label>BMI:</label>
+            <input type="text" name="BMI" id="BMI" value="" data-clear-btn="true" data-mini="true" disabled= "true">
+			</td>
+            </tr><tr>
+            <td>
+             <label>腹围（cm）:<font color='red' style='visibility:hidden' id='AbdominalGirth_x'></font></label>
+            <input type="text" name="AbdominalGirth" id="AbdominalGirth" value="" data-clear-btn="true" data-mini="true" onkeyup="JugeFormate(this.id)" onBlur="JugeFormate(this.id)">
+			</td><td>
+            <label>总胆固醇浓度（mg/dL）:<font color='red' style='visibility:hidden' id='Tcho_x'></font></label>
+            <input type="text" name="Tcho" id="Tcho" value="" data-clear-btn="true" data-mini="true" onkeyup="JugeFormate(this.id)" onBlur="JugeFormate(this.id)">
+			</td><td>
+            <label>肌酐浓度（μmoI/L）:<font color='red' style='visibility:hidden' id='Creatinine_x'></font></label>
+            <input type="text" name="Creatinine" id="Creatinine" value="" data-clear-btn="true" data-mini="true" onkeyup="JugeFormate(this.id)" onBlur="JugeFormate(this.id)">
+			</td>
+            </tr><tr>
+            <td>
+            <label>当前收缩压（mmhg）:<font color='red' style='visibility:hidden' id='CurrentSBP_x'></font></label>
+            <input type="text" name="CurrentSBP" id="CurrentSBP" value="" data-clear-btn="true" data-mini="true" onkeyup="JugeFormate(this.id)" onBlur="JugeFormate(this.id)">
+			</td><td>
+             <label>目标收缩压（mmhg）:<font color='red' style='visibility:hidden' id='TargetSBP_x'></font></label>
+            <input type="text" name="TargetSBP" id="TargetSBP" value="" data-clear-btn="true" data-mini="true" onkeyup="JugeFormate(this.id)" onBlur="JugeFormate(this.id)">
+			</td><td>           
+			<label>高密度脂蛋白胆固醇（mg/dL）:<font color='red' style='visibility:hidden' id='Hdlc_x'></font></label>
+            <input type="text" name="Hdlc" id="Hdlc" value="" data-clear-btn="true" data-mini="true" onkeyup="JugeFormate(this.id)" onBlur="JugeFormate(this.id)">
+            </td>
+            </tr><tr>
+            <td>
+            <label>当前舒张压（mmhg）:<font color='red' style='visibility:hidden' id='CurrentDBP_x'></font></label>
+            <input type="text" name="CurrentDBP" id="CurrentDBP" value="" data-clear-btn="true" data-mini="true" onkeyup="JugeFormate(this.id)" onBlur="JugeFormate(this.id)">
+			</td><td>
+            <label>目标舒张压（mmhg）:<font color='red' style='visibility:hidden' id='TargetDBP_x'></font></label>
+            <input type="text" name="TargetDBP" id="TargetDBP" value="" data-clear-btn="true" data-mini="true" onkeyup="JugeFormate(this.id)" onBlur="JugeFormate(this.id)">
+			</td><td>
+            <label>高血压家族史:</label>
+            <select name="Parent" id="Parent">
+				<option value="">——请选择——</option>
+				<option value="1">父母中至少有一方有高血压</option>
+				<option value="2">父母双方无高血压</option>
+				<option value="3">未知</option>
+			</select>
+			</td>
+            </tr><tr>
+            <td>
+            <label>是否抽烟:</label>
+            <select name="Smoke" id="Smoke">
+				<option value="">——请选择——</option>
+				<option value="1">是</option>
+				<option value="2">否</option>
+				<option value="3">未知</option>
+			</select>
+			</td><td>
+            <label>是否中风:</label>
+            <select name="Stroke" id="Stroke">
+				<option value="">——请选择——</option>
+				<option value="1">是</option>
+				<option value="2">否</option>
+				<option value="3">未知</option>
+			</select>
+			</td><td>
+            <label>是否左心室肥大:</label>
+            <select name="Lvh" id="Lvh">
+				<option value="">——请选择——</option>
+				<option value="1">是</option>
+				<option value="2">否</option>
+				<option value="3">未知</option>
+			</select>
+			</td>
+            </tr><tr>
+            <td>
+            <label>是否伴随糖尿病:</label>
+            <select name="Diabetes" id="Diabetes">
+				<option value="">——请选择——</option>
+				<option value="1">是</option>
+				<option value="2">否</option>
+				<option value="3">未知</option>
+			</select>
+			</td><td>
+            <label>高血压是否在治疗（接受过）:</label>
+            <select name="Treat" id="Treat">
+				<option value="">——请选择——</option>
+				<option value="1">是</option>
+				<option value="2">否</option>
+				<option value="3">未知</option>
+			</select>
+			</td><td>
+            <label>是否有过心脏事件（心血管疾病）:</label>
+            <select name="Heartattack" id="Heartattack">
+				<option value="">——请选择——</option>
+				<option value="1">是</option>
+				<option value="2">否</option>
+				<option value="3">未知</option>
+			</select>
+			</td>
+            </tr><tr>
+            <td>
+            <label>是否有过房颤:</label>
+            <select name="Af" id="Af">
+				<option value="">——请选择——</option>
+				<option value="1">是</option>
+				<option value="2">否</option>
+				<option value="3">未知</option>
+			</select>
+			</td><td>
+            <label>是否有冠心病(心肌梗塞):</label>
+             <select name="Chd" id="Chd">
+				<option value="">——请选择——</option>
+				<option value="1">是</option>
+				<option value="2">否</option>
+				<option value="3">未知</option>
+			</select>
+			</td><td>
+            <label>是否有心脏瓣膜病:</label>
+             <select name="Valve" id="Valve">
+				<option value="">——请选择——</option>
+				<option value="1">是</option>
+				<option value="2">否</option>
+				<option value="3">未知</option>
+			</select>
+            <td>
+            </tr>
+			</table>
+            <div class="ui-grid-a"> 
+                <div class="ui-block-a"><input type="button" onclick="CloseTSPanel()" value="取消"></div>
+                <div class="ui-block-b"><input type="button" id="DeInfoSave" onclick="CloseTSPanel();SaveData();" value="保存"></div>
+			</div>
+        </form>
+
+	</div><!-- /panel -->
+ 
 </div>
 <div data-role="page" id="CreatePlanPage">
   <div data-role="header" data-position="fixed" data-theme="a" data-tap-toggle="false"> <a href="javascript: location.href='HomePage.html?';" data-icon="home" data-iconpos="notext" data-shadow="false" data-iconshadow="false">主页</a>
@@ -1156,7 +1332,7 @@ $.mobile.loading( "hide" );
 	  }); 
   });
   
-  //SetTargetPage自运行
+  /*//SetTargetPage自运行
   $(document).on("pageshow", "#SetTargetPage", function(){
     if (localStorage.getItem('EditEnable') == 0) {
       $('#Targetbutton').css('display','none');
@@ -1198,7 +1374,7 @@ $.mobile.loading( "hide" );
 	   setTimeout(function(){
 		  Risk();
 		  },200); 
-  });
+  });*/
   
  
  
