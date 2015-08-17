@@ -13,12 +13,12 @@ var InitialHt = $("#SMSContent").height(); //初始高度
 var InitialTop = $("#OutField").position().top; //初始位置
 var MaxHt = 0; //输入框最大高度
 
-//ws
+/*//ws
 var ws; //websocket
 var wsServerIP = serverIP.substring(0, 11) + ":4141/chat"; 
 var SocketCreated = false;
 var isUserloggedout = false;
-
+*/
 $(document).ready(function(event){
 	var newModuleType = 'H'+ localStorage.getItem("ModuleType"	);
 	GetSMSList(ThisUserId, newModuleType);
@@ -30,7 +30,8 @@ $(document).ready(function(event){
 	SMSBtn.addEventListener("mouseover", ChangeFlagToF, false);
 	SMSBtn.addEventListener("mouseout", ChangeFlagToT, false);
 	document.getElementById('SMSContent').style.height = "47px"; //设定文本域初始高度
-	WsPush(); //websocket
+	//WsPush(); //websocket
+	CHAT.usernameSubmit();
 })
 
 
@@ -240,7 +241,96 @@ function SetSMSRead (Reciever, SendBy)
 
 document.getElementById('SMSbtn').onclick = submitSMS;
 
-//消息推送
+
+//************************************
+var WsUserId = window.localStorage.getItem("DoctorId");
+var WsUserName = window.localStorage.getItem("UserName");
+var wsServerIP = "ws://" + IP + ":4141"; 
+//var wsServerIP = "ws://" + "10.12.43.61" + ":4141"; 
+ 
+  //消息推送改进
+ (function () {	
+	window.CHAT = {
+		socket:null,
+
+	usernameSubmit:function(){
+			this.init();
+			return false;
+		},
+		//提交聊天消息内容
+		submit:function(WsContent){
+			
+				var obj = {
+					userid: WsUserId,
+					username: WsUserName,
+					content: WsContent
+				};
+				this.socket.emit('message', obj);
+			return false;
+		},
+		genUid:function(){
+			return new Date().getTime()+""+Math.floor(Math.random()*899+100);
+		},
+		
+		init:function(){		
+			this.socket = io.connect(wsServerIP);
+			
+			//告诉服务器由用户登陆
+			this.socket.emit('login', {userid:WsUserId, username:WsUserName});		
+			
+			//监听用户退出
+			this.socket.on('logout', function(o){
+				CHAT.updateSysMsg(o, 'logout');
+			});
+			
+			//监听消息
+			this.socket.on('message', function(obj){
+				var DataArry = obj.content.split("||");
+				if ((DataArry[1] != "") && (DataArry[1] != null))
+				{
+					if (TheOtherId == DataArry[0]) //若为当前Id，直接推送
+					{
+						SetSMSRead(ThisUserId, DataArry[0]);//改写阅读状态
+						CreateSMS("Receive", DataArry[1], DataArry[2]);
+						document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
+						$("#SMSListUl").find("li").each(function() //跟新列表信息
+						{
+							var Id = $(this).find("tr:first").find("td:eq(1)").attr("id");
+							if (Id == DataArry[0])
+							{
+								$(this).find("tr:first").find("td:last").text(DataArry[3].substring(1, 11)); //时间
+								$(this).find("tr:last").find("td:first").text(DataArry[2]);//内容			
+							}
+						});
+					}
+					else //若不是当前Id，找到对应Id
+					{
+			
+						$("#SMSListUl").find("li").each(function()
+						{ 
+							if ($(this).find("tr:first").find("td:eq(1)").attr("id") == DataArry[0])
+							{
+								//$(this).trigger("click");
+								var Count = GetSMSCountForOne(ThisUserId, DataArry[0]);	
+								if (Count > 1)
+								{
+									$(this).find("tr:first").find("td:first").empty();
+								}					
+								$(this).find("tr:first").find("td:first").append('<div class="circle" id="CountTd">' + Count + '</div>');	
+								$('#SMSListUl').listview("refresh");												
+								$(this).find("tr:first").find("td:last").text(DataArry[3].substring(1, 11)); //时间
+								$(this).find("tr:last").find("td:first").text(DataArry[2]);//内容
+							}	
+						});
+					}
+				}							
+			});
+		}
+	};
+})();
+ //************************************
+
+/*//消息推送
 window.onunload = function () //断开连接
 {
 	SocketCreated = false;
@@ -334,7 +424,7 @@ function WsPush ()
 	console.log("远程连接中断。", "ERROR");
  };
 
-	
+*/	
 //获取短信对话
 function GetSMSDialogue(Reciever, SendBy)
 {
@@ -426,7 +516,8 @@ function submitSMS()
 					CreateSMS("Send", GetLatestSMS(TheOtherId, ThisUserId)[4], Content);
 					document.getElementById('SMSContent').value = "";
 					document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
-					ws.send(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);
+					//ws.send(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);
+					CHAT.submit(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);
 				}
 				else
 				{
