@@ -23,6 +23,14 @@
                         {
                             "xml": "<feature name=\"FileTransfer\"><param name=\"android-package\" value=\"org.apache.cordova.filetransfer.FileTransfer\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Vibration\"><param name=\"android-package\" value=\"org.apache.cordova.vibration.Vibration\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -37,6 +45,12 @@
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
                             "count": 3
+                        }
+                    ],
+                    "/manifest": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.VIBRATE\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -55,6 +69,12 @@
         },
         "org.apache.cordova.file-transfer": {
             "PACKAGE_NAME": "com.workspace.cdmis"
+        },
+        "org.apache.cordova.vibration": {
+            "PACKAGE_NAME": "com.workspace.xPad"
+        },
+        "org.apache.cordova.dialogs": {
+            "PACKAGE_NAME": "com.workspace.xPad"
         }
     },
     "dependent_plugins": {}

@@ -128,22 +128,24 @@ var wsServerIP = "ws://" + IP + ":4141";
 				var DataArry = obj.content.split("||");
 				
 				flag = localStorage.getItem("PanelFlag");
-				if ((flag == "Panel")&&(DataArry[0] == localStorage.getItem("PatientId")))
+				if ((flag == "Panel")&&(DataArry[4] == localStorage.getItem("PatientId")))
 				{	
+					playBeep();
 					CreateSMS("Receive", DataArry[1], DataArry[2]);
 					document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
 					SetSMSRead(ThisUserId, localStorage.getItem("PatientId"));//改写阅读状态
 				}
 				else
 				{
-					if (DataArry[0].substring(0, 3) != "log")
+					if (DataArry[0] == ThisUserId)
 					{
 						$('#PatientListTbody').find('tr').each(function() 
 						{
 							var piPatientId = $(this).find('td:first').find('div').find('ul').find('li:eq(1)').find('p').attr("value");
-							if (piPatientId == DataArry[0])
+							if (piPatientId == DataArry[4])
 							{
-								var Arry = GetLatestSMS(localStorage.getItem("DoctorId"), DataArry[0]);
+								playBeep();
+								var Arry = GetLatestSMS(localStorage.getItem("DoctorId"), DataArry[4]);
 								var Count;
 								var piCount = $(this).find('td:last').find('div').find('ul').find('li:first').find('span').find('font').html();
 								if (typeof(piCount) == "undefined")
@@ -152,10 +154,10 @@ var wsServerIP = "ws://" + IP + ":4141";
 								}
 								else
 								{
-									Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), DataArry[0]);
+									Count = GetSMSCountForOne(localStorage.getItem("DoctorId"), DataArry[4]);
 									$(this).find('td:last').find('div').empty();
 								}
-								var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li onclick = "AddFunction(this)"><a href="" class="SMS"  value="'+DataArry[0]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
+								var Str = '<ul  data-role="listview" data-inset="true"><li data-role="list-divider">'+Arry[2]+' <span class="ui-li-count" style="background-color:#C00"><font color="white">' + Count + '</font></span></li><li onclick = "AddFunction(this)"><a href="" class="SMS"  value="'+DataArry[4]+'"><p>'+Arry[1]+'</p></a> </li></ul>';					
 								$(this).find('td:last').find('div').append(Str); 
 								$(this).parent().trigger('create');
 								
@@ -432,6 +434,7 @@ function submitSMS()
 	var Content = $("#SMSContent").val();
 	if ((Content != "")&&(Content != null))//短信内容不能为空
 	{
+		TheOtherId = localStorage.getItem("PatientId");
 		$.ajax({
 			type: "POST",
 			dataType: "xml",
@@ -459,7 +462,7 @@ function submitSMS()
 					document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
 					//console.log("点击发送");
 					//ws.send(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);
-					CHAT.submit(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);				
+					CHAT.submit(TheOtherId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2] + ThisUserId);				
 				}
 				else
 				{
@@ -754,3 +757,9 @@ function GetSMSCountForOne (Reciever, SendBy)
    });
    return Count;
 }
+
+// 蜂鸣一次，震动1秒
+function playBeep() { 
+    navigator.notification.beep(1); 
+	navigator.notification.vibrate(1000);
+} 

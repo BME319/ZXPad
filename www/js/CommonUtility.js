@@ -5,7 +5,7 @@
 //var serverIP = '10.12.43.101:8088'; //backupservice
 //var serverIP = '10.12.43.101:8085';
 //var serverIP = '10.12.43.101:8098';	//mulitiple-users
- var IP = "10.12.43.67";
+ var IP = "10.12.43.61";
  var Port = "8088";
  var serverIP = IP + ":" + Port;
  var serviceName = 'Services.asmx';
