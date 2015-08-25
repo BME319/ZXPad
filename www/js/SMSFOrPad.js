@@ -286,17 +286,18 @@ var wsServerIP = "ws://" + IP + ":4141";
 			//监听消息
 			this.socket.on('message', function(obj){
 				var DataArry = obj.content.split("||");
-				if ((DataArry[1] != "") && (DataArry[1] != null))
+				if (DataArry[0] == ThisUserId)
 				{
-					if (TheOtherId == DataArry[0]) //若为当前Id，直接推送
+					if (TheOtherId == DataArry[4]) //若为当前Id，直接推送
 					{
-						SetSMSRead(ThisUserId, DataArry[0]);//改写阅读状态
+						playBeep();
+						SetSMSRead(ThisUserId, DataArry[4]);//改写阅读状态
 						CreateSMS("Receive", DataArry[1], DataArry[2]);
 						document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
 						$("#SMSListUl").find("li").each(function() //跟新列表信息
 						{
 							var Id = $(this).find("tr:first").find("td:eq(1)").attr("id");
-							if (Id == DataArry[0])
+							if (Id == DataArry[4])
 							{
 								$(this).find("tr:first").find("td:last").text(DataArry[3].substring(1, 11)); //时间
 								$(this).find("tr:last").find("td:first").text(DataArry[2]);//内容			
@@ -308,10 +309,11 @@ var wsServerIP = "ws://" + IP + ":4141";
 			
 						$("#SMSListUl").find("li").each(function()
 						{ 
-							if ($(this).find("tr:first").find("td:eq(1)").attr("id") == DataArry[0])
+							if ($(this).find("tr:first").find("td:eq(1)").attr("id") == DataArry[4])
 							{
+								playBeep();
 								//$(this).trigger("click");
-								var Count = GetSMSCountForOne(ThisUserId, DataArry[0]);	
+								var Count = GetSMSCountForOne(ThisUserId, DataArry[4]);	
 								if (Count > 1)
 								{
 									$(this).find("tr:first").find("td:first").empty();
@@ -517,7 +519,7 @@ function submitSMS()
 					document.getElementById('SMSContent').value = "";
 					document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
 					//ws.send(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);
-					CHAT.submit(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);
+					CHAT.submit(TheOtherId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2] + "||" + ThisUserId);
 				}
 				else
 				{
@@ -723,4 +725,8 @@ function GetSMSCountForOne (Reciever, SendBy)
 	return ret;
 }
 
-
+// 蜂鸣一次，震动1秒
+function playBeep() { 
+    navigator.notification.beep(1); 
+	navigator.notification.vibrate(1000);
+} 
