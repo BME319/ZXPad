@@ -12,7 +12,7 @@ function SetTargerPageinitialize()
 	setTimeout(function(){DBPBar($('#PageCurrentDBP').text(), $('#PageTargetDBP').text(), DBPlist, chart_DBP_1);},2000); 
 }
 
-/*//调试用
+//调试用
 $(document).ready(function(event){
 	GetData();
 	GetDescription();
@@ -20,7 +20,7 @@ $(document).ready(function(event){
 	setTimeout(function(){SBPBar($('#PageCurrentSBP').text(), $('#PageTargetSBP').text(), SBPlist, chart_SBP_1);},2000); 
 	setTimeout(function(){DBPBar($('#PageCurrentDBP').text(), $('#PageTargetDBP').text(), DBPlist, chart_DBP_1);},2000); 
 	
-})*/
+})
 
 //页面加载后获取数据
 function GetData()
@@ -55,6 +55,17 @@ function GetData()
 	  
 	  var SBP = "";
 	  var DBP = "";
+	  
+	  var piParent  = ""; 
+	  var piSmoke  = ""; 
+	  var piStroke  = ""; 
+	  var piLvh  = ""; 
+	  var piDiabetes  = ""; 
+	  var piTreat  = ""; 
+	  var piHeartattack  = ""; 
+	  var piAf  = ""; 
+	  var piChd  = ""; 
+	  var piValve  = "";
 	  
 	  var Hyperother = "";
 	  var HarvardRiskInfactor = "";
@@ -102,6 +113,17 @@ function GetData()
 					
 					SBP = parseInt($(this).find("SBP").text());
 					DBP = parseInt($(this).find("DBP").text());
+					
+					piParent = parseInt($(this).find("piParent").text());
+					piSmoke = parseInt($(this).find("piSmoke").text());
+					piStroke = parseInt($(this).find("piStroke").text());
+					piLvh = parseInt($(this).find("piLvh").text());
+					piDiabetes = parseInt($(this).find("piDiabetes").text());
+					piTreat = parseInt($(this).find("piTreat").text());
+					piHeartattack = parseInt($(this).find("piHeartattack").text());
+					piAf = parseInt($(this).find("piAf").text());
+					piChd = parseInt($(this).find("piChd").text());
+					piValve = parseInt($(this).find("piValve").text());
 			});	
 			
 			//var CurrentSBP_ = GetCurrentSBP(PatientId);
@@ -192,16 +214,16 @@ function GetData()
 			}
 						
 						
-		    $("#Parent").val(Parent);
-		    $("#Smoke").val(Smoke);
-		    $("#Stroke").val(Stroke);
-		    $("#Lvh").val(Lvh);
-		    $("#Diabetes").val(Diabetes);
-		    $("#Treat").val(Treat);
-		    $("#Heartattack").val(Heartattack);
-		    $("#Af").val(Af);
-		    $("#Chd").val(Chd);
-		    $("#Valve").val(Valve);
+		    $("#Parent").val(piParent);
+		    $("#Smoke").val(piSmoke);
+		    $("#Stroke").val(piStroke);
+		    $("#Lvh").val(piLvh);
+		    $("#Diabetes").val(piDiabetes);
+		    $("#Treat").val(piTreat);
+		    $("#Heartattack").val(piHeartattack);
+		    $("#Af").val(piAf);
+		    $("#Chd").val(piChd);
+		    $("#Valve").val(piValve);
 			
 			if (Tcho != "0")
 			{
@@ -1425,4 +1447,18 @@ function GetHeartFailureRate(Gender, HeartFailureRiskInfactor, SBP)
 	} 
 	return ret;	
 } 
-  
+
+//下拉框赋值后刷新
+function RefreshSelect()
+{
+	$("#Parent").selectmenu("refresh");
+	$("#Smoke").selectmenu("refresh");
+	$("#Stroke").selectmenu('refresh');
+	$("#Lvh").selectmenu("refresh");
+	$("#Diabetes").selectmenu("refresh");
+	$("#Treat").selectmenu("refresh");
+	$("#Heartattack").selectmenu("refresh");
+	$("#Af").selectmenu("refresh");
+	$("#Chd").selectmenu("refresh");
+	$("#Valve").selectmenu("refresh");		
+}

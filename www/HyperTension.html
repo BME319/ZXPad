@@ -584,52 +584,38 @@ primary" onclick="GetMoreClinic();" value="加载更多" />
       <div  id="RiskPanel">
         <div data-theme="a" id="MainField1">
           <div class="ui-grid-b" >
-            <div class="ui-block-a" style="width:33%">
+            <div class="ui-block-a" style="width:35%;margin-left:-10px;" >
               <h3 align="center">血压</h3>
               <div class="ui-grid-a">
                 <div class="ui-block-a">
-                  <div  id="chart_SBP_1" style="float:left;margin-left:10px ; width: 150px; height: 300px;"></div>
+                  <div id="chart_SBP_1" style="float:left; width: 130px; height: 300px;"></div>
                 </div>
                 <div class="ui-block-b">
-                  <div  id="chart_DBP_1" style="width: 150px; height: 300px;"></div>
+                  <div  id="chart_DBP_1" style="width: 130px; height: 300px;"></div>
                 </div>
-                <div data-role="fieldcontain" id="test1">
-                  <label style="width:50%">当前收缩压</label>
-                  <input  type="text" id="TextInput1" readonly onkeyup="this.value=this.value.replace(/\D/g,'') ;GetDescription();SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1);Risk() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" />
-                  <label style="width:50%">当前舒张压</label>
-                  </br>
-                  </br>
-                  <input type="text" id="TextInput2" readonly onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1);Risk() ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}"/>
-                  </br>
-                  </br>
-                  </br>
-                  </br>
-                  </br>
+                <div data-role="fieldcontain" id="test1">               
+                    <table style="font-size:10px;margin-left:12px;">
+          			<tr><td>当前收缩压：</td><td id= "PanelCurrentSBP"></td><td width="10%"></td><td>当前舒张压：</td><td id= "PanelCurrentDBP"></td></tr>
+           			<tr><td>目标收缩压：</td><td id= "PanelTargetSBP"></td><td width="10%"></td><td>目标舒张压：</td><td id= "PanelTargetDBP"></td></tr>  
+           			</table>
                 </div>
               </div>
             </div>
-            <div class="ui-block-b" style="width:29%">
+            <div class="ui-block-b" style="width:30%">
               <div align="center">
                 <h3 >高血压等级说明</h3>
                 <textarea data-role="none" id="hyperclass"  readonly="readonly" ></textarea>
-              </div>
-              <div data-role="fieldcontain" id="test2" style="display:none;">
-                <label style="width:50%">目标收缩压</label>
-                <input type="text" id="TextInput3" readonly onkeyup="this.value=this.value.replace(/\D/g,'') ;SBPBar($('#TextInput1').val(), $('#TextInput3').val(), SBPlist, chart_SBP_1)  ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>200){this.value=200;}"/>
-                <label style="width:50%">目标舒张压</label>
-                </br>
-                </br>
-                <input type="text" id="TextInput4" readonly onkeyup="this.value=this.value.replace(/\D/g,'') ;DBPBar($('#TextInput2').val(), $('#TextInput4').val(), DBPlist, chart_DBP_1) ; javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}" onchange="javascript:this.value=this.value.replace(/[^\d]/g,'');if(this.value<0){this.value=0;};if(this.value>140){this.value=140;}"/>
-                </br>
-                </br>
-                </br>
-                </br>
-              </div>
+              </div>           
             </div>
-            <div class="ui-block-c" style="width:38%">
+            <div class="ui-block-c" style="width:35%;" >
               <h3 align="center">风险评估</h3>
-              <!--        <div id="chartdiv3" style="width:300px; height:400px;"> </div>
--->
+              <table style="font-size:15px;font-weight:bold;color:white;border-spacing:5px 5px;">
+        	  <tr style="height:50px;"><td>高血压发生率：</td><td id = "Hyper" align="center" width="80px"></td></tr>
+              <tr style="height:50px;"><td>高血压五年死亡率：</td><td id = "Harvard" align="center"></td></tr>
+              <tr style="height:50px;"><td>心血管十年发病率：</td><td id = "Framingham" align="center"></td></tr>
+              <tr style="height:50px;"><td>中风十年发生率：</td><td id = "Strokee" align="center"></td></tr>
+              <tr style="height:50px;"><td>心衰发生率：</td><td id = "Heart" align="center"></td></tr>
+              </table>
               <div id="chartdiv3" style="width:300px; height:400px;"> </div>
             </div>
           </div>
@@ -724,7 +710,7 @@ primary" onclick="GetMoreClinic();" value="加载更多" />
           <div align="center">
             <h> <b>患者综合信息管理</b> </h>
           </div>
-          <div data-role="controlgroup" data-corners="false"> <a id="navBasicInfo" href="#BasicInfoPanel" data-role="button">基本信息</a> <a id='navClinicInfo' href="#" data-role="button" onclick="OpenClinicInfoPanel()">临床信息</a><a id="navModuleInfo" href="#ModuleInfoPanel" data-role="button">慢病信息</a><a id='navRisk' href="#RiskPanel" data-role="button">风险评估</a><a id='navPlan' href="#editPlan" data-role="button" onclick="editPlan()">创建与调整计划</a> <a id="navSMS" href="#SMSPanel" data-role="button" onclick = "HyperSetSMS()">即时消息</a> <a id="navInvite" href="#InvitationInfoPage" data-role="button" onClick="showInvitationInfoPage()">发送邀请</a></div>
+          <div data-role="controlgroup" data-corners="false"> <a id="navBasicInfo" href="#BasicInfoPanel" data-role="button">基本信息</a> <a id='navClinicInfo' href="#" data-role="button" onclick="OpenClinicInfoPanel()">临床信息</a><a id="navModuleInfo" href="#ModuleInfoPanel" data-role="button">慢病信息</a><a id='navRisk' href="#RiskPanel" data-role="button" onClick="RiskPanelInit();">风险评估</a><a id='navPlan' href="#editPlan" data-role="button" onclick="editPlan()">创建与调整计划</a> <a id="navSMS" href="#SMSPanel" data-role="button" onclick = "HyperSetSMS()">即时消息</a> <a id="navInvite" href="#InvitationInfoPage" data-role="button" onClick="showInvitationInfoPage()">发送邀请</a></div>
         </div>
       </div>
       <div  style="width:80%;float:left;margin-top:0px;">

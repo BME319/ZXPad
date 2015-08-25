@@ -803,7 +803,7 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
             <tr><td>腹围：</td><td id= "PageAbdominalGirth"></td><td width="10%"></td><td>BMI：</td><td id= "PageBMI"></td></tr>
            </table> 
           </div>
-          <a  href="#panelForDetailInfo" style="margin-left:50px;">查看详细信息</a>
+          <a  href="#panelForDetailInfo" style="margin-left:50px;" onClick="RefreshSelect();">查看详细信息</a>
         </div>
       </div>
       
@@ -905,9 +905,9 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
             <label>目标舒张压（mmhg）:<font color='red' style='visibility:hidden' id='TargetDBP_x'></font></label>
             <input type="text" name="TargetDBP" id="TargetDBP" value="" data-clear-btn="true" data-mini="true" onkeyup="JugeFormate(this.id)" onBlur="JugeFormate(this.id)">
 			</td><td>
-            <label>高血压家族史:</label>
+            <label>父母是否有高血压:</label>
             <select name="Parent" id="Parent">
-				<option value="">——请选择——</option>
+				<option value="0">——请选择——</option>
 				<option value="1">父母中至少有一方有高血压</option>
 				<option value="2">父母双方无高血压</option>
 				<option value="3">未知</option>
@@ -915,25 +915,25 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
 			</td>
             </tr><tr>
             <td>
-            <label>是否抽烟:</label>
+            <label>近期是否抽烟:</label>
             <select name="Smoke" id="Smoke">
-				<option value="">——请选择——</option>
+				<option value="0">——请选择——</option>
 				<option value="1">是</option>
 				<option value="2">否</option>
 				<option value="3">未知</option>
 			</select>
 			</td><td>
-            <label>是否中风:</label>
+            <label>是否有中风史:</label>
             <select name="Stroke" id="Stroke">
-				<option value="">——请选择——</option>
+				<option value="0">——请选择——</option>
 				<option value="1">是</option>
 				<option value="2">否</option>
 				<option value="3">未知</option>
 			</select>
 			</td><td>
-            <label>是否左心室肥大:</label>
+            <label>是否有左室高血压:</label>
             <select name="Lvh" id="Lvh">
-				<option value="">——请选择——</option>
+				<option value="0">——请选择——</option>
 				<option value="1">是</option>
 				<option value="2">否</option>
 				<option value="3">未知</option>
@@ -941,25 +941,25 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
 			</td>
             </tr><tr>
             <td>
-            <label>是否伴随糖尿病:</label>
+            <label>是否有糖尿病家族史:</label>
             <select name="Diabetes" id="Diabetes">
-				<option value="">——请选择——</option>
+				<option value="0">——请选择——</option>
 				<option value="1">是</option>
 				<option value="2">否</option>
 				<option value="3">未知</option>
 			</select>
 			</td><td>
-            <label>高血压是否在治疗（接受过）:</label>
+            <label>是否正在接收高血压治疗:</label>
             <select name="Treat" id="Treat">
-				<option value="">——请选择——</option>
+				<option value="0">——请选择——</option>
 				<option value="1">是</option>
 				<option value="2">否</option>
 				<option value="3">未知</option>
 			</select>
 			</td><td>
-            <label>是否有过心脏事件（心血管疾病）:</label>
+            <label>是否有过心脏骤停史:</label>
             <select name="Heartattack" id="Heartattack">
-				<option value="">——请选择——</option>
+				<option value="0">——请选择——</option>
 				<option value="1">是</option>
 				<option value="2">否</option>
 				<option value="3">未知</option>
@@ -967,25 +967,25 @@ div#InvitationInfoPage.ui-grid-b .ui-block-e {
 			</td>
             </tr><tr>
             <td>
-            <label>是否有过房颤:</label>
+            <label>是否有房颤史:</label>
             <select name="Af" id="Af">
-				<option value="">——请选择——</option>
+				<option value="0">——请选择——</option>
 				<option value="1">是</option>
 				<option value="2">否</option>
 				<option value="3">未知</option>
 			</select>
 			</td><td>
-            <label>是否有冠心病(心肌梗塞):</label>
+            <label>是否有冠心病病史:</label>
              <select name="Chd" id="Chd">
-				<option value="">——请选择——</option>
+				<option value="0">——请选择——</option>
 				<option value="1">是</option>
 				<option value="2">否</option>
 				<option value="3">未知</option>
 			</select>
 			</td><td>
-            <label>是否有心脏瓣膜病:</label>
+            <label>是否有心脏瓣膜病史:</label>
              <select name="Valve" id="Valve">
-				<option value="">——请选择——</option>
+				<option value="0">——请选择——</option>
 				<option value="1">是</option>
 				<option value="2">否</option>
 				<option value="3">未知</option>
