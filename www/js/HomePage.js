@@ -13,7 +13,8 @@ var OverDueArr = new Array();
 var loadersArr = new Array();
 var rowArr = new Array();
 //var ImageAddressIP = "http://10.12.43.63:8088";  //webserviceIP
-var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
+//var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
+var ImageAddressIP = "http://121.43.107.106:8088";  //webserviceIP
 //var ImageAddressFile = window.localStorage.getItem("PatientFile");
 var ImageAddressFile = "/PersonalPhoto";
 localStorage.setItem('PanelFlag',"Homepage"); //Panel调用flag

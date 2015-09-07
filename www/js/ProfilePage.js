@@ -1,10 +1,11 @@
 ﻿/**********************全局变量************************/
 //var UserId = "PID201505210002";
 //var serverIP = '10.12.43.94:8089';
-localStorage.setItem('DownloadAddress',"http://10.13.22.66:8011/cdmisAPP-debug.apk") ;
+//localStorage.setItem('DownloadAddress',"http://10.13.22.66:8011/cdmisAPP-debug.apk") ;
+localStorage.setItem('DownloadAddress',"http://121.43.107.106:8011/cdmisAPP-debug.apk") ;
 var UserId = localStorage.getItem("PatientId");
 var serviceName = 'Services.asmx';
-var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
+var ImageAddressIP = "http://121.43.107.106:8088";  //webserviceIP
 var ImageAddressFile = "/PersonalPhoto";
 var ImageAddress = ImageAddressIP + ImageAddressFile + "/" + UserId + ".jpg";
 var DoctorId = localStorage.getItem('DoctorId');
