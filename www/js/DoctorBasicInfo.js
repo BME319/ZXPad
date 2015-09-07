@@ -3,7 +3,8 @@
  //var serverIP = '10.12.43.94:8089';
  //var serviceName = 'Services.asmx';
  var DoctorId = localStorage.getItem("DoctorId");
- var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
+ //var ImageAddressIP = "http://10.13.22.66:8088";  //webserviceIP
+ var ImageAddressIP = "http://121.43.107.106:8088";  //webserviceIP
  var ImageAddressFile = "/PersonalPhoto";
  var ImageAddress = ImageAddressIP + ImageAddressFile + "/" + DoctorId + ".jpg";
  var pictureSource;   // picture source
