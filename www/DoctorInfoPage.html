@@ -45,12 +45,40 @@
             <img id="Photo" name="Photo" style="height:200px; width:200px" />
           </a>
         </div>
+        <div data-role="collapsible" id="changepassword" style="width:250px; margin-left:200px">
+      	  <h1>修改密码</h1>
+          <div>
+          	  <div>
+                    <input class="form-control" data-val="true" data-val-required="The NewPassword field is required." id="OldPassword" name="OldPassword" type="password" placeholder="填写旧密码"/>
+              </div>
+              <div>
+                    <input class="form-control" data-val="true" data-val-required="The NewPassword field is required." id="NewPassword" name="NewPassword" type="password" placeholder="填写新密码"/>
+              </div>
+              <div>
+                    <input class="form-control" data-val="true" data-val-required="The ConfirmPassword field is required." id="ConfirmPassword" name="ConfirmPassword" type="password" placeholder="再次填写新密码"/>
+              </div>
+              <div>
+                <button type="button" id="CompleteBtn" class="btn btn-primary btn-lg btn-block" onclick="ChangePassword();">
+                        修改密码</button>
+            </div>  
+            <div>
+                <p style="display: none; color: Red; font-weight: bold;" id="showlabel">
+                密码重置成功，即将返回主页</p>
+            </div>
+          </div>
       </div>
-    
+      </div>
       <div class="ui-block-b">  
         <div class="ui-grid-a" id="BasicInfoDiv">
           <div class="ui-block-a"></div>
           <div class="ui-block-b">
+          	<div>
+            	<button id="EditInfo" onclick="EditInfo()" style="width:100px" data-inline="true" data-transition="turn" data-theme="a">编辑</button>
+                <button id="SaveInfo" onclick="SaveInfo()" style="width:100px" disabled="disabled" data-inline="true" data-transition="turn" data-theme="a">保存</button>
+            </div> 
+            <div>
+            
+            </div>
             <div data-role="fieldcontain">
               <table>
                 <tr>
@@ -67,50 +95,62 @@
               <table>
                 <tr>
                   <td>
-                    <label for="DoctorName" style="font-size:24px; width:130px">姓名:</label>
+                    <label for="DoctorName" style="font-size:24px; width:130px">*姓名:</label>
                   </td>
                   <td>
-                    <label for="DoctorName" id="DoctorName" style="font-size:24px"></label>
+                    <input for="DoctorName" id="DoctorName" style="font-size:24px" readonly="readonly"></input>
                   </td>
                 </tr>
               </table>
             </div>
+            <div>
+                <label for="DoctorName" id="AlertName" style="color:red; display:none">姓名必填</label>
+              </div>
             <div data-role="fieldcontain">
               <table>
                 <tr>
                   <td>
-                    <label for="SexType" style="font-size:24px; width:130px">性别:</label>
+                    <label for="SexType" style="font-size:24px; width:130px">*性别:</label>
                   </td>
-                  <td>
-                    <label for="SexType" id="SexType" style="font-size:24px"></label>
+                  <td  width="300px">
+                    <select name="SexType" id="SexType" style="height:40px" disabled="disabled"></select>
                   </td>
                 </tr>
               </table>
             </div>
+            <div>
+                <label for="SexType" id="AlertSex" style="color:red; display:none">性别必填</label>
+              </div>
             <div data-role="fieldcontain">
               <table>
                 <tr>
                   <td>
-                    <label for="Birthday" style="font-size:24px; width:130px">出生日期:</label> 
+                    <label for="Birthday" style="font-size:24px; width:130px">*出生日期:</label> 
                   </td>
                   <td>
-                    <label for="Birthday" id="Birthday" style="font-size:24px"></label>
+                    <input type="date" for="Birthday" id="Birthday" style="font-size:24px" readonly="readonly"></input>
                   </td>
                 </tr>
               </table>
             </div>
+            <div>
+                <label for="Birthday" id="AlertBirth" style="color:red; display:none">生日必填</label>
+              </div>
             <div data-role="fieldcontain">
               <table>
                 <tr>
                   <td>
-                    <label for="IDNo" style="font-size:24px; width:130px">身份证号:</label>
+                    <label for="IDNo" style="font-size:24px; width:130px">*身份证号:</label>
                   </td>
                   <td>
-                    <label for="IDNo" id="IDNo" style="font-size:24px"></label>
+                    <input for="IDNo" id="IDNo" style="font-size:24px" readonly="readonly"></input>
                   </td>
                 </tr>
               </table>
             </div>
+            <div>
+                <label for="IDNo" id="AlertID" style="color:red; display:none">身份证号码必须为15位或18位</label>
+              </div>
             <div data-role="fieldcontain">
               <table>
                 <tr>
@@ -118,7 +158,7 @@
                     <label for="UnitName" style="font-size:24px; width:130px">工作单位:</label>
                   </td>
                   <td>
-                    <label for="UnitName" id="UnitName" style="font-size:24px"></label>
+                    <input for="UnitName" id="UnitName" style="font-size:24px" readonly="readonly"></input>
                   </td>
                 </tr>
               </table>
@@ -130,7 +170,7 @@
                     <label for="JobTitle" style="font-size:24px; width:130px">职务:</label>
                   </td>
                   <td>
-                    <label for="JobTitle" id="JobTitle" style="font-size:24px"></label>
+                    <input for="JobTitle" id="JobTitle" style="font-size:24px" readonly="readonly"></input>
                   </td>
                 </tr>
               </table>
@@ -142,11 +182,16 @@
                     <label for="Level" style="font-size:24px; width:130px">级别:</label>
                   </td>
                   <td>
-                    <label for="Level" id="Level" style="font-size:24px"></label>
+                    <input for="Level" id="Level" style="font-size:24px" readonly="readonly"></input>
                   </td>
                 </tr>
               </table>
-            </div>     
+            </div>  
+            
+            <div>
+            	<p style="display: none; color: Red; font-weight: bold;" id="showlabel1">
+                </p>
+            </div> 
           </div> 
         </div> 
       </div>   
@@ -168,6 +213,12 @@
       <a href="#MainPage" data-role="button">取消</a>
     </div>
   </div> 
+  <div id="popdiv" data-role="popup" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:250px">
+    <div style="text-align:center">
+        	<p style="font-size:20px" id="alert"></p>
+            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a" data-rel="back" style="vertical-align:middle">确定</a>
+   	</div>
+    </div>
 </body>
 
 </html>
