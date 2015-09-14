@@ -462,7 +462,7 @@ function submitSMS()
 					document.getElementById('MainField').scrollTop = document.getElementById('MainField').scrollHeight;
 					//console.log("点击发送");
 					//ws.send(ThisUserId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2]);
-					CHAT.submit(TheOtherId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2] + ThisUserId);				
+					CHAT.submit(TheOtherId + "||" + GetLatestSMS(TheOtherId, ThisUserId)[4] + "||" + Content + "||" + GetLatestSMS(TheOtherId, ThisUserId)[2] + "||" + ThisUserId);				
 				}
 				else
 				{

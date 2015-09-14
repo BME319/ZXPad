@@ -16,7 +16,7 @@
    	<link rel="stylesheet" type="text/css" href="css/scroll.css">
    	<script type="application/javascript" src="js/iscroll.js"></script>
     <script type="text/javascript" src="js/LogOnRelated-Pad.js"></script>
-    <!--<script type="text/javascript" src="http://l2.io/ip.js?var=myip"></script>-->
+    <script type="text/javascript" src="http://l2.io/ip.js?var=myip"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="cordova_plugins.js"></script>
     <script type="text/javascript">
@@ -26,9 +26,9 @@
 	</script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		localStorage.setItem('TerminalIP', '127.0.0.1');
-		localStorage.setItem('TerminalName',"X-pc");
-		localStorage.setItem('DeviceType',1);
+		localStorage.setItem('TerminalIP', myip);
+		localStorage.setItem('TerminalName',"Android");
+		localStorage.setItem('DeviceType',21);
 		var width = $(document).width();
 		var height = $(document).height();
 		var isHealthCoach = 0;

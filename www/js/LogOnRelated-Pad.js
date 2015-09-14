@@ -736,6 +736,93 @@ function ResetPassword() {
 			}
 		}
 		
+		/**********************修改密码***********************/	
+function ChangePassword() {
+			var OldPassword = $("#OldPassword").val();
+			var NewPassword = $("#NewPassword").val();
+			var ConfirmPassword = $("#ConfirmPassword").val();
+			var UserId = window.localStorage.getItem("ID");
+			//alert(UserId);
+			//var Key = window.localStorage.getItem("Key");
+			var Device = window.localStorage.getItem("Device");
+			//alert(Key);
+			//alert(Device);
+			//var OldPassword = "#*bme319*#";
+			
+			if (OldPassword != "" && NewPassword != "" && ConfirmPassword != "" && NewPassword == ConfirmPassword)
+			{
+				$.ajax({
+					type: "POST",
+					timeout: 30000,
+						//contentType: "application/json;charset=utf-8",
+					url: 'http://'+ serverIP +'/'+serviceName+'/ChangePassword',
+					data: { UserId: UserId, OldPassword: OldPassword, NewPassword: NewPassword, revUserId: revUserId, TerminalName: TerminalName, TerminalIP: TerminalIP, DeviceType: DeviceType},
+					dataType: 'xml',
+					async: false,
+					beforeSend: function() {},
+					success: function(result) {
+						var test = $(result).find("int").text();
+						window.localStorage.setItem("AutoLogOn","No");
+						if (test == 1)
+						{
+							document.getElementById("showlabel").style.display = "block";
+							setTimeout(function () {
+								if (Device == "Pad")
+								{
+									location.href = "HomePage.html";
+								}
+								else if (Device == "Phone")
+								{
+									location.href = "TaskMenu.html";
+								} 
+							},3000)	
+						}
+						else if (test == 2)
+						{
+							document.getElementById("showlabel").innerHTML = "新密码设置失败，请联系管理员重置密码";
+							document.getElementById("showlabel").style.display = "block";
+						}
+						else if (test == 3)
+						{
+							document.getElementById("showlabel").innerHTML = "旧密码错误，请输入正确的旧密码";
+							document.getElementById("showlabel").style.display = "block";
+						}
+						else if (test == 4)
+						{
+							document.getElementById("showlabel").innerHTML = "密码已过期，请联系管理员重置密码";
+							document.getElementById("showlabel").style.display = "block";
+						}
+					},
+					error: function(msg) {
+							alert("Error: ChangePassword");	
+						}
+				});
+			}
+			else if (OldPassword == "")
+			{
+				document.getElementById("alert").innerHTML = "旧密码不能为空！";
+				$("#popdiv").popup("open");
+                $("#OldPassword").focus();
+			}
+			else if (NewPassword == "")
+			{
+				document.getElementById("alert").innerHTML = "新密码不能为空！";
+				$("#popdiv").popup("open");
+                $("#NewPassword").focus();
+			}
+			else if (ConfirmPassword == "")
+			{
+				document.getElementById("alert").innerHTML = "请再次输入新密码！";
+				$("#popdiv").popup("open");
+                $("#ConfirmPassword").focus();
+			}
+			else if (NewPassword != ConfirmPassword)
+			{
+				document.getElementById("alert").innerHTML = "两次输入的密码不同，请再次确认新密码！";
+				$("#popdiv").popup("open");
+				$("#ConfirmPassword").focus();
+			}
+		}
 		
 /**********************手机号码正则验证***********************/	
 $(document).ready(function() {
