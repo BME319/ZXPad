@@ -177,7 +177,7 @@ function integration_synchronization_continue(syn_ID,syn_StartDate,syn_Hospital)
 	dataType: "xml",
 	timeout: 30000,
 url:'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_method=GetPatient',
-	//url: 'http://10.13.22.139:57772/csp/hz_mb/Bs.WebService.cls?soap_method=GetPatient',
+	//url: 'http://10.0.0.110:57772/csp/hz_mb/Bs.WebService.cls?soap_method=GetPatient',
 	async: false,
 	data:
 	{ 

@@ -14,7 +14,7 @@
   var DeviceType = window.localStorage.getItem("DeviceType");
   var revUserId  = window.localStorage.getItem("UserId");
   
-  var SynserverAddress = "http://10.13.22.139:57772/csp/hz_mb/Bs.WebService.cls"
+  var SynserverAddress = "http://10.0.0.110:57772/csp/hz_mb/Bs.WebService.cls"
 
 /**********************初始页面************************/
 $(document).ready(function (event) {
@@ -154,10 +154,15 @@ function SynInfo()
 				type: "POST",
 				dataType: "xml",
 				timeout: 30000,
-				url: SynserverAddress + '?soap_method=GetBasicInfo&UserId=' + UserId + '&PatientId=' + PatientId + '&HospitalCode=' + HospitalCode,
+				url: 'http://' + synInfoIP + '/csp/' + synInfoSpace +'/Bs.WebService.cls?soap_method=GetBasicInfo',
+				//url: SynserverAddress + '?soap_method=GetBasicInfo&UserId=' + UserId + '&PatientId=' + PatientId + '&HospitalCode=' + HospitalCode,
 				async: false,
 				data:
 				{
+					UserId:localStorage.getItem('PatientId'),
+					PatientId:syn_ID,   //实际是医院就诊号
+					StartDateTime:syn_StartDate,
+					HospitalCode:syn_Hospital,
 				},
 				beforeSend: function () {
 				},
