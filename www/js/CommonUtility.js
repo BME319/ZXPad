@@ -12,7 +12,7 @@
  var serviceName = 'Services.asmx';
  var imgStoreFile="PersonalPhoto";
  
- var synInfoIP='10.13.22.139:57772'; //同步的ip等变量设置
+ var synInfoIP='10.0.0.110:57772'; //同步的ip等变量设置
  var synInfoSpace='hz_mb';
 
 /**********************CheckNetwork************************/
